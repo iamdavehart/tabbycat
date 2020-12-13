@@ -1,0 +1,193 @@
+{
+    "header": [
+        "/** ",
+        " * This file was automatically generated from the Tableau REST API Reference.",
+        " * DO NOT MODIFY THIS FILE BY HAND. instead edit the metadata and/or code generator",
+        " * and regenerate any files",
+        " */",
+        "",
+        ""
+    ],
+    "code": {
+    },
+    "reference": {
+        "overrides" : {
+            "appendToFileUpload" : {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+                "requestContentType": "multipart/mixed"
+            }
+        },
+        "linkReplacements": {
+            "#query_database_perms_default": "#query-default-database-permissions",
+            "#delete_tags_database": "#delete-tag-from-database",
+            "#delete_tags_table": "#delete-tag-from-table",
+            "#delete_tags_column": "#delete-tag-from-column",
+            "#delete_tags_batch": "#batch-delete-tags",
+            "#add_tags_batch": "#batch-add-tags",
+            "#Reencrypt_Extracts": "#reencrypt_extracts",
+            "#get_workbook_downgrade_info": "skip",
+            "#add_group_database": "skip",
+            "#delete_group_database": "skip",
+            "#analytics-extensions-settings": "skip",
+            "#dashboard--extensions-settings": "skip"
+        },
+        "pathReplacements": {
+            "#publish_workbook": [
+                {
+                    "type": "query",
+                    "value": "bool",
+                    "replacements": [
+                        {
+                            "type": "query",
+                            "value": "overwrite-flag"
+                        }
+                    ]
+                }
+            ],
+            "#delete_flow_permission": [
+                {
+                    "type": "text",
+                    "value": "/capability-name/capability-mode",
+                    "replacements": [
+                        {
+                            "type": "text",
+                            "value": "/"
+                        },
+                        {
+                            "type": "path",
+                            "value": "capability-name"
+                        },
+                        {
+                            "type": "text",
+                            "value": "/"
+                        },
+                        {
+                            "type": "path",
+                            "value": "capability-mode"
+                        }
+                    ]
+                }
+            ],
+            "#query_flows_for_user": [
+                {
+                    "type": "text",
+                    "value": "GET /api/api-version/sites/site-id/users/user-id/flows",
+                    "replacements": [
+                        { "type": "text", "value": "GET /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/users/" },
+                        { "type": "path", "value": "user-id" },
+                        { "type": "text", "value": "/flows" }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "value": "GET /api/api-version/sites/site-id/users/user-id/flows?ownedBy=isOwner&pageSize=page-size&pageNumber=page-number",
+                    "replacements": [
+                        { "type": "text", "value": "GET /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/users/" },
+                        { "type": "path", "value": "user-id" },
+                        { "type": "text", "value": "/flows?ownedBy=" },
+                        {
+                            "type": "query",
+                            "value": "isOwner",
+                            "qsKey": "isOwner"
+                        },
+                        { "type": "text", "value": "&pageSize=" },
+                        {
+                            "type": "query",
+                            "value": "page-size",
+                            "qsKey": "pageSize"
+                        },
+                        { "type": "text", "value": "&pageNumber=" },
+                        {
+                            "type": "query",
+                            "value": "page-number",
+                            "qsKey": "pageNumber"
+                        }
+                    ]
+                }
+            ],
+            "#add_default_permissions": [
+                {
+                    "type": "text",
+                    "value": "PUT /api/api-version/sites/site-id/projects/project-id/default-permissions/flows",
+                    "replacements": [
+                        { "type": "text", "value": "PUT /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/projects/" },
+                        { "type": "path", "value": "project-id" },
+                        {
+                            "type": "text",
+                            "value": "/default-permissions/flows"
+                        }
+                    ]
+                }
+            ]
+        },
+        "urlToMethodMapping": {
+            "#delete_site": {
+                "/api/${apiVersion}/sites/${siteId}": "Delete Site By ID",
+                "/api/${apiVersion}/sites/${siteName}": "Delete Site By Name",
+                "/api/${apiVersion}/sites/${contentUrl}": "Delete Site By Content Url"
+            },
+            "#query_site": {
+                "/api/${apiVersion}/sites/${siteId}": "Query Site By ID",
+                "/api/${apiVersion}/sites/${siteName}": "Query Site By Name",
+                "/api/${apiVersion}/sites/${contentUrl}": "Query Site By Content Url"
+            },
+            "#delete_flow_permission": {
+                "/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Flow Permissions For Group",
+                "/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Flow Permissions For User"
+            },
+            "#delete_database_perms": {
+                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group",
+                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For User"
+            },
+            "#delete_database_perms_default": {
+                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}": "Delete Default Database Permissions For User",
+                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}": "Delete Default Database Permissions For Group"
+            },
+            "#add_default_permissions": {
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks": "Add Default Permissions For Workbooks",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources": "Add Default Permissions For Datasources",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Add Default Permissions For Flows"
+            },
+            "#query_default_permissions": {
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources": "Query Default Permissions For Datasources",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks": "Query Default Permissions For Workbooks",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Query Default Permissions For Flows"
+            },
+            "#delete_data_source_permission": {
+                "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Data Source Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Data Soruce Permission For User"
+            },
+            "#delete_project_permission": {
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Project Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Project Permission For User"
+            },
+            "#delete_default_permission": {
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Workbook Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Workbook Permission For User",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Datasource Permissions For Group",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For User"
+            },
+            "#delete_view_permission": {
+                "/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete View Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete View Permission For User"
+            },
+            "#delete_workbook_permission": {
+                "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For Group",
+                "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For User"
+            }
+        }
+    }
+}

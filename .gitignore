@@ -1,0 +1,8 @@
+node_modules/
+dist/
+lib/
+generator/out
+generator/examples
+generator/reference
+generator/schema
+.vscode/
