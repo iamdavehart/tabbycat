@@ -13,7 +13,7 @@ const HTTP_METHODS = {
  * Execute an Http GET request
  * @param {TableauRestRequest} request the TableauRestRequest that is being called
  * @param {Function} callback An optional callback to run after the request has been made
- * @param {AxiosInstance} [axios] A specific axios instance to process the request
+ * @param {AxiosInstance} [axiosInstance] A specific axios instance to process the request
  * @returns {Promise<AxiosResponse>} an axios response 
  */
 export function get(request, callback, axiosInstance) {
@@ -24,7 +24,7 @@ export function get(request, callback, axiosInstance) {
  * Execute an Http POST request
  * @param {TableauRestRequest} request the TableauRestRequest that is being called
  * @param {Function} callback An optional callback to run after the request has been made
- * @param {AxiosInstance} [axios] A specific axios instance to process the request
+ * @param {AxiosInstance} [axiosInstance] A specific axios instance to process the request
  * @returns {Promise<AxiosResponse>} an axios response 
  */
 export function post(request, callback, axiosInstance) {
@@ -35,7 +35,7 @@ export function post(request, callback, axiosInstance) {
  * Execute an Http PUT request
  * @param {TableauRestRequest} request the TableauRestRequest that is being called
  * @param {Function} callback An optional callback to run after the request has been made
- * @param {AxiosInstance} [axios] A specific axios instance to process the request
+ * @param {AxiosInstance} [axiosInstance] A specific axios instance to process the request
  * @returns {Promise<AxiosResponse>} an axios response 
  */
 export function put(request, callback, axiosInstance) {
@@ -46,7 +46,7 @@ export function put(request, callback, axiosInstance) {
  * Execute an Http DELETE request
  * @param {TableauRestRequest} request the TableauRestRequest that is being called
  * @param {Function} callback An optional callback to run after the request has been made
- * @param {AxiosInstance} [axios] A specific axios instance to process the request
+ * @param {AxiosInstance} [axiosInstance] A specific axios instance to process the request
  * @returns {Promise<AxiosResponse>} an axios response 
  */
 export function del(request, callback, axiosInstance) {
@@ -58,7 +58,7 @@ export function del(request, callback, axiosInstance) {
  * @param {string} method HTTP method to use in the request
  * @param {TableauRestRequest} request The Tableau Rest Request definition
  * @param {Function} callback An optional callback that may have been requested instead of a promise-based
- * @param {AxiosInstance} [axios] A specific axios instance to process the request
+ * @param {AxiosInstance} [axiosInstance] A specific axios instance to process the request
  * @returns {Promise<AxiosResponse>} an axios response 
  */
 function execute(method, request, callback, axiosInstance) {

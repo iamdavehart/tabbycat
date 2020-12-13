@@ -1,9 +1,8 @@
 {
   "name": "tabbycat",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "client.js",
-  "types": "index.d.ts",
+  "main": "./src/client.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:types": "tsc --emitDeclarationOnly",

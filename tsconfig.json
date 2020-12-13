@@ -8,17 +8,19 @@
       // "noUnusedLocals": true,
       // "noImplicitAny": true,
       "outDir": "dist",
-      "declarationDir": "generator/out/types",
+      "declarationDir": "generator/out/types2",
       "declaration": true,
       "target": "es2015",
-      "module": "es2015",
+      "module": "amd",
       "strict": true,
       "allowJs": true,
       "checkJs": true,
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "typeRoots": [ "src/types" ]
     },
     "include": [
-      "src/*.ts",
+      "src/*.js",
+      "src/*.ts"
     ],
     "exclude": [
       "src/__tests__",
