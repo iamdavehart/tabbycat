@@ -5,8 +5,7 @@ using axios
 
 ## Version 0.1.0
 
-> :warning :
->
+> :warning:
 > This API client is built using code generation and there are many routes that have not been tested yet.
 
 
