@@ -1,12 +1,11 @@
-/** 
+/**
  * This file was automatically generated from the Tableau REST API Reference.
  * DO NOT MODIFY THIS FILE BY HAND. instead edit the metadata and/or code generator
  * and regenerate any files
  */
 
-
-import { AuthenticationRequest, AuthenticatedRequest } from './request'
-import * as methods from './execute'
+import { AuthenticationRequest, AuthenticatedRequest } from "./request";
+import * as methods from "./execute";
 
 /* 
 the base url and authentication token can be stored here at a module level
@@ -16,13 +15,22 @@ baseURL and token will usually be managed by the client or on a per-request basi
 
 let baseURL;
 let authenticationToken;
-const defaultOptions = { baseURL: null, http:methods };
-export function setBaseURL(url) { baseURL=url; }
-export function setToken(token) { authenticationToken=token; }
-export function getBaseURL(options) { return getOpt("baseURL", options, baseURL); }
-export function getToken(options) { return getOpt("token", options, authenticationToken); }
-function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? opts[name] : dflt; }
-
+const defaultOptions = { baseURL: null, http: methods };
+export function setBaseURL(url) {
+    baseURL = url;
+}
+export function setToken(token) {
+    authenticationToken = token;
+}
+export function getBaseURL(options) {
+    return getOpt("baseURL", options, baseURL);
+}
+export function getToken(options) {
+    return getOpt("token", options, authenticationToken);
+}
+function getOpt(name, opts, dflt) {
+    return opts && opts.hasOwnProperty(name) ? opts[name] : dflt;
+}
 
 /**
  * HttpManager object containing standard http methods for GET,POST,PUT,DELETE
@@ -32,7 +40,7 @@ function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? o
  * @property {Function} post HTTP POST method
  * @property {Function} del HTTP DEL method
  */
-    
+
 /**
  * Execute Options allow fine-grained control over each request
  * @typedef {Object} ExecOptions
@@ -53,7 +61,7 @@ function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? o
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function signIn(credentials, options=defaultOptions) { 
+export function signIn(credentials, options = defaultOptions) {
     return AuthenticationRequest.builder(getBaseURL(options))
         .withPath(`/api/{apiVersion}/auth/signin`)
         .withBodyParameters(credentials)
@@ -66,7 +74,7 @@ export function signIn(credentials, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function signOut(options=defaultOptions) { 
+export function signOut(options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/auth/signout`)
         .build()
@@ -81,7 +89,7 @@ export function signOut(options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function switchSite(site, options=defaultOptions) { 
+export function switchSite(site, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/auth/switchSite`)
         .withBodyParameters(site)
@@ -97,7 +105,7 @@ export function switchSite(site, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createSite(site, options=defaultOptions) { 
+export function createSite(site, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites`)
         .withBodyParameters(site)
@@ -118,7 +126,13 @@ export function createSite(site, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySite(siteId, siteName, contentUrl, queryOptions={}, options=defaultOptions) { 
+export function querySite(
+    siteId,
+    siteName,
+    contentUrl,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withQueryParameters(queryOptions)
@@ -137,7 +151,7 @@ export function querySite(siteId, siteName, contentUrl, queryOptions={}, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) { 
+export function querySiteByID(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withQueryParameters(queryOptions)
@@ -156,7 +170,7 @@ export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySiteByName(siteName, queryOptions={}, options=defaultOptions) { 
+export function querySiteByName(siteName, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteName}`)
         .withQueryParameters(queryOptions)
@@ -175,7 +189,7 @@ export function querySiteByName(siteName, queryOptions={}, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySiteByContentUrl(contentUrl, queryOptions={}, options=defaultOptions) { 
+export function querySiteByContentUrl(contentUrl, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${contentUrl}`)
         .withQueryParameters(queryOptions)
@@ -192,7 +206,7 @@ export function querySiteByContentUrl(contentUrl, queryOptions={}, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySites(queryOptions={}, options=defaultOptions) { 
+export function querySites(queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites`)
         .withQueryParameters(queryOptions)
@@ -206,7 +220,7 @@ export function querySites(queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getRecentlyViewedForSite(siteId, options=defaultOptions) { 
+export function getRecentlyViewedForSite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/content/recent`)
         .build()
@@ -227,7 +241,7 @@ export function getRecentlyViewedForSite(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewsForSite(siteId, queryOptions={}, options=defaultOptions) { 
+export function queryViewsForSite(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views`)
         .withQueryParameters(queryOptions)
@@ -243,7 +257,7 @@ export function queryViewsForSite(siteId, queryOptions={}, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateSite(siteId, site, options=defaultOptions) { 
+export function updateSite(siteId, site, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withBodyParameters(site)
@@ -261,7 +275,7 @@ export function updateSite(siteId, site, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSite(siteId, siteName, contentUrl, options=defaultOptions) { 
+export function deleteSite(siteId, siteName, contentUrl, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .build()
@@ -276,7 +290,7 @@ export function deleteSite(siteId, siteName, contentUrl, options=defaultOptions)
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSiteByID(siteId, options=defaultOptions) { 
+export function deleteSiteByID(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .build()
@@ -291,7 +305,7 @@ export function deleteSiteByID(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSiteByName(siteName, options=defaultOptions) { 
+export function deleteSiteByName(siteName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteName}`)
         .build()
@@ -306,7 +320,7 @@ export function deleteSiteByName(siteName, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSiteByContentUrl(contentUrl, options=defaultOptions) { 
+export function deleteSiteByContentUrl(contentUrl, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${contentUrl}`)
         .build()
@@ -320,7 +334,7 @@ export function deleteSiteByContentUrl(contentUrl, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataDrivenAlert(siteId, dataAlertId, options=defaultOptions) { 
+export function deleteDataDrivenAlert(siteId, dataAlertId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .build()
@@ -334,7 +348,7 @@ export function deleteDataDrivenAlert(siteId, dataAlertId, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataDrivenAlertDetails(siteId, dataAlertId, options=defaultOptions) { 
+export function queryDataDrivenAlertDetails(siteId, dataAlertId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .build()
@@ -347,7 +361,7 @@ export function queryDataDrivenAlertDetails(siteId, dataAlertId, options=default
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataDrivenAlerts(siteId, options=defaultOptions) { 
+export function queryDataDrivenAlerts(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts`)
         .build()
@@ -362,7 +376,7 @@ export function queryDataDrivenAlerts(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options=defaultOptions) { 
+export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users`)
         .withBodyParameters(user)
@@ -378,7 +392,12 @@ export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options=defa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteUserFromDataDrivenAlert(siteId, dataAlertId, userId, options=defaultOptions) { 
+export function deleteUserFromDataDrivenAlert(
+    siteId,
+    dataAlertId,
+    userId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users/${userId}`)
         .build()
@@ -393,7 +412,7 @@ export function deleteUserFromDataDrivenAlert(siteId, dataAlertId, userId, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options=defaultOptions) { 
+export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .withBodyParameters(dataAlert)
@@ -409,7 +428,7 @@ export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options=de
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addFlowPermissions(siteId, flowId, permissions, options=defaultOptions) { 
+export function addFlowPermissions(siteId, flowId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions`)
         .withQueryParameters(queryOptions)
@@ -427,7 +446,7 @@ export function addFlowPermissions(siteId, flowId, permissions, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addFlowTaskToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
+export function addFlowTaskToSchedule(siteId, scheduleId, task, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/flows`)
         .withBodyParameters(task)
@@ -442,7 +461,7 @@ export function addFlowTaskToSchedule(siteId, scheduleId, task, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteFlow(siteId, flowId, options=defaultOptions) { 
+export function deleteFlow(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
         .build()
@@ -460,9 +479,19 @@ export function deleteFlow(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteFlowPermission(siteId, flowId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteFlowPermission(
+    siteId,
+    flowId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -477,9 +506,18 @@ export function deleteFlowPermission(siteId, flowId, groupId, userId, capability
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteFlowPermissionsForGroup(siteId, flowId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteFlowPermissionsForGroup(
+    siteId,
+    flowId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -494,9 +532,18 @@ export function deleteFlowPermissionsForGroup(siteId, flowId, groupId, capabilit
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteFlowPermissionsForUser(siteId, flowId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteFlowPermissionsForUser(
+    siteId,
+    flowId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -508,7 +555,7 @@ export function deleteFlowPermissionsForUser(siteId, flowId, userId, capabilityN
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadFlow(siteId, flowId, options=defaultOptions) { 
+export function downloadFlow(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/content`)
         .build()
@@ -522,7 +569,7 @@ export function downloadFlow(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getFlowRunTask(siteId, taskId, options=defaultOptions) { 
+export function getFlowRunTask(siteId, taskId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}`)
         .build()
@@ -535,7 +582,7 @@ export function getFlowRunTask(siteId, taskId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getFlowRunTasks(siteId, options=defaultOptions) { 
+export function getFlowRunTasks(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow`)
         .build()
@@ -554,7 +601,7 @@ export function getFlowRunTasks(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function publishFlow(siteId, flow, file, options=defaultOptions) { 
+export function publishFlow(siteId, flow, file, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows`)
         .withHeaders({ "Content-Type": "multipart/mixed" })
@@ -573,7 +620,7 @@ export function publishFlow(siteId, flow, file, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryFlow(siteId, flowId, options=defaultOptions) { 
+export function queryFlow(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
         .build()
@@ -587,7 +634,7 @@ export function queryFlow(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryFlowConnections(siteId, flowId, options=defaultOptions) { 
+export function queryFlowConnections(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/connections`)
         .build()
@@ -601,7 +648,7 @@ export function queryFlowConnections(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryFlowPermissions(siteId, flowId, options=defaultOptions) { 
+export function queryFlowPermissions(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions`)
         .build()
@@ -614,7 +661,7 @@ export function queryFlowPermissions(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryFlowsForSite(siteId, options=defaultOptions) { 
+export function queryFlowsForSite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows`)
         .withQueryParameters(queryOptions)
@@ -634,7 +681,7 @@ export function queryFlowsForSite(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryFlowsForUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
+export function queryFlowsForUser(siteId, userId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/flows`)
         .withQueryParameters(queryOptions)
@@ -653,7 +700,7 @@ export function queryFlowsForUser(siteId, userId, queryOptions={}, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function runFlowTask(siteId, taskId, options=defaultOptions) { 
+export function runFlowTask(siteId, taskId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}/runNow`)
         .build()
@@ -667,7 +714,7 @@ export function runFlowTask(siteId, taskId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateFlow(siteId, flowId, options=defaultOptions) { 
+export function updateFlow(siteId, flowId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
         .withQueryParameters(queryOptions)
@@ -683,7 +730,7 @@ export function updateFlow(siteId, flowId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateFlowConnection(siteId, flowId, connectionId, options=defaultOptions) { 
+export function updateFlowConnection(siteId, flowId, connectionId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/connections/${connectionId}`)
         .build()
@@ -700,7 +747,7 @@ export function updateFlowConnection(siteId, flowId, connectionId, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createProject(siteId, project, queryOptions={}, options=defaultOptions) { 
+export function createProject(siteId, project, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects`)
         .withQueryParameters(queryOptions)
@@ -721,7 +768,7 @@ export function createProject(siteId, project, queryOptions={}, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryProjects(siteId, queryOptions={}, options=defaultOptions) { 
+export function queryProjects(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects`)
         .withQueryParameters(queryOptions)
@@ -739,7 +786,13 @@ export function queryProjects(siteId, queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateProject(siteId, projectId, project, queryOptions={}, options=defaultOptions) { 
+export function updateProject(
+    siteId,
+    projectId,
+    project,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}`)
         .withQueryParameters(queryOptions)
@@ -755,7 +808,7 @@ export function updateProject(siteId, projectId, project, queryOptions={}, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteProject(siteId, projectId, options=defaultOptions) { 
+export function deleteProject(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}`)
         .build()
@@ -782,7 +835,13 @@ export function deleteProject(siteId, projectId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function publishWorkbook(siteId, workbook, file, queryOptions={}, options=defaultOptions) { 
+export function publishWorkbook(
+    siteId,
+    workbook,
+    file,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks`)
         .withHeaders({ "Content-Type": "multipart/mixed" })
@@ -801,7 +860,7 @@ export function publishWorkbook(siteId, workbook, file, queryOptions={}, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToView(siteId, viewId, tags, options=defaultOptions) { 
+export function addTagsToView(siteId, viewId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/tags`)
         .withBodyParameters(tags)
@@ -817,7 +876,7 @@ export function addTagsToView(siteId, viewId, tags, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptions) { 
+export function addTagsToWorkbook(siteId, workbookId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags`)
         .withBodyParameters(tags)
@@ -835,7 +894,12 @@ export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
+export function queryViewsForWorkbook(
+    siteId,
+    workbookId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/views`)
         .withQueryParameters(queryOptions)
@@ -856,7 +920,7 @@ export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOptions) { 
+export function queryViewData(siteId, viewId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/data`)
         .withQueryParameters(queryOptions)
@@ -878,7 +942,7 @@ export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOp
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultOptions) { 
+export function queryViewImage(siteId, viewId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/image`)
         .withQueryParameters(queryOptions)
@@ -900,7 +964,7 @@ export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewPDF(siteId, viewId, queryOptions={}, options=defaultOptions) { 
+export function queryViewPDF(siteId, viewId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/pdf`)
         .withQueryParameters(queryOptions)
@@ -917,9 +981,11 @@ export function queryViewPDF(siteId, viewId, queryOptions={}, options=defaultOpt
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewPreviewImage(siteId, workbookId, viewId, options=defaultOptions) { 
+export function queryViewPreviewImage(siteId, workbookId, viewId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/views/${viewId}/previewImage`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/views/${viewId}/previewImage`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -932,7 +998,7 @@ export function queryViewPreviewImage(siteId, workbookId, viewId, options=defaul
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbook(siteId, workbookId, options=defaultOptions) { 
+export function queryWorkbook(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .build()
@@ -946,7 +1012,7 @@ export function queryWorkbook(siteId, workbookId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbookConnections(siteId, workbookId, options=defaultOptions) { 
+export function queryWorkbookConnections(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections`)
         .build()
@@ -960,7 +1026,7 @@ export function queryWorkbookConnections(siteId, workbookId, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getView(siteId, viewId, options=defaultOptions) { 
+export function getView(siteId, viewId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}`)
         .build()
@@ -975,7 +1041,7 @@ export function getView(siteId, viewId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getViewByPath(siteId, queryOptions={}, options=defaultOptions) { 
+export function getViewByPath(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views`)
         .withQueryParameters(queryOptions)
@@ -989,7 +1055,7 @@ export function getViewByPath(siteId, queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getViewRecommendations(siteId, options=defaultOptions) { 
+export function getViewRecommendations(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/`)
         .build()
@@ -1008,7 +1074,12 @@ export function getViewRecommendations(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getWorkbookRevisions(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
+export function getWorkbookRevisions(
+    siteId,
+    workbookId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions`)
         .withQueryParameters(queryOptions)
@@ -1023,7 +1094,7 @@ export function getWorkbookRevisions(siteId, workbookId, queryOptions={}, option
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function hideViewRecommendations(siteId, recommendationDismissal, options=defaultOptions) { 
+export function hideViewRecommendations(siteId, recommendationDismissal, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/dismissals`)
         .withBodyParameters(recommendationDismissal)
@@ -1039,7 +1110,7 @@ export function hideViewRecommendations(siteId, recommendationDismissal, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function unhideViewRecommendations(siteId, queryOptions={}, options=defaultOptions) { 
+export function unhideViewRecommendations(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/dismissals/`)
         .withQueryParameters(queryOptions)
@@ -1055,7 +1126,7 @@ export function unhideViewRecommendations(siteId, queryOptions={}, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbookPreviewImage(siteId, workbookId, options=defaultOptions) { 
+export function queryWorkbookPreviewImage(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/previewImage`)
         .build()
@@ -1075,7 +1146,7 @@ export function queryWorkbookPreviewImage(siteId, workbookId, options=defaultOpt
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOptions) { 
+export function queryWorkbooksForSite(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks`)
         .withQueryParameters(queryOptions)
@@ -1095,7 +1166,7 @@ export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOp
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
+export function queryWorkbooksForUser(siteId, userId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/workbooks`)
         .withQueryParameters(queryOptions)
@@ -1113,7 +1184,12 @@ export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=d
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadViewCrosstabExcel(siteId, viewId, queryOptions={}, options=defaultOptions) { 
+export function downloadViewCrosstabExcel(
+    siteId,
+    viewId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/crosstab/excel`)
         .withQueryParameters(queryOptions)
@@ -1130,7 +1206,7 @@ export function downloadViewCrosstabExcel(siteId, viewId, queryOptions={}, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
+export function downloadWorkbook(siteId, workbookId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/content`)
         .withQueryParameters(queryOptions)
@@ -1150,7 +1226,12 @@ export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=de
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
+export function downloadWorkbookPDF(
+    siteId,
+    workbookId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/pdf`)
         .withQueryParameters(queryOptions)
@@ -1168,7 +1249,12 @@ export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
+export function downloadWorkbookPowerpoint(
+    siteId,
+    workbookId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/powerpoint`)
         .withQueryParameters(queryOptions)
@@ -1187,9 +1273,17 @@ export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadWorkbookRevision(siteId, workbookId, revisionNumber, queryOptions={}, options=defaultOptions) { 
+export function downloadWorkbookRevision(
+    siteId,
+    workbookId,
+    revisionNumber,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}/content`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}/content`
+        )
         .withQueryParameters(queryOptions)
         .build()
         .execute(options.http.get, options.callback);
@@ -1203,7 +1297,7 @@ export function downloadWorkbookRevision(siteId, workbookId, revisionNumber, que
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateWorkbook(siteId, workbookId, workbook, options=defaultOptions) { 
+export function updateWorkbook(siteId, workbookId, workbook, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .withBodyParameters(workbook)
@@ -1222,9 +1316,17 @@ export function updateWorkbook(siteId, workbookId, workbook, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateWorkbookConnection(siteId, workbookId, connectionId, connection, options=defaultOptions) { 
+export function updateWorkbookConnection(
+    siteId,
+    workbookId,
+    connectionId,
+    connection,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections/${connectionId}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections/${connectionId}`
+        )
         .withBodyParameters(connection)
         .build()
         .execute(options.http.put, options.callback);
@@ -1239,7 +1341,7 @@ export function updateWorkbookConnection(siteId, workbookId, connectionId, conne
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateWorkbookNow(siteId, workbookId, options=defaultOptions) { 
+export function updateWorkbookNow(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/refresh`)
         .withBodyParameters()
@@ -1254,7 +1356,7 @@ export function updateWorkbookNow(siteId, workbookId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteWorkbook(siteId, workbookId, options=defaultOptions) { 
+export function deleteWorkbook(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .build()
@@ -1269,7 +1371,7 @@ export function deleteWorkbook(siteId, workbookId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromView(siteId, viewId, tagName, options=defaultOptions) { 
+export function deleteTagFromView(siteId, viewId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/tags/${tagName}`)
         .build()
@@ -1284,7 +1386,7 @@ export function deleteTagFromView(siteId, viewId, tagName, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromWorkbook(siteId, workbookId, tagName, options=defaultOptions) { 
+export function deleteTagFromWorkbook(siteId, workbookId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags/${tagName}`)
         .build()
@@ -1297,7 +1399,7 @@ export function deleteTagFromWorkbook(siteId, workbookId, tagName, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getDataAccelerationReportForASite(siteId, options=defaultOptions) { 
+export function getDataAccelerationReportForASite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAccelerationReport`)
         .build()
@@ -1323,7 +1425,13 @@ export function getDataAccelerationReportForASite(siteId, options=defaultOptions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function publishDataSource(siteId, datasource, file, queryOptions={}, options=defaultOptions) { 
+export function publishDataSource(
+    siteId,
+    datasource,
+    file,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources`)
         .withHeaders({ "Content-Type": "multipart/mixed" })
@@ -1342,7 +1450,7 @@ export function publishDataSource(siteId, datasource, file, queryOptions={}, opt
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToDataSource(siteId, datasourceId, tags, options=defaultOptions) { 
+export function addTagsToDataSource(siteId, datasourceId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags`)
         .withBodyParameters(tags)
@@ -1358,7 +1466,7 @@ export function addTagsToDataSource(siteId, datasourceId, tags, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromDataSource(siteId, datasourceId, tagName, options=defaultOptions) { 
+export function deleteTagFromDataSource(siteId, datasourceId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags/${tagName}`)
         .build()
@@ -1373,7 +1481,7 @@ export function deleteTagFromDataSource(siteId, datasourceId, tagName, options=d
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataSource(siteId, datasourceId, options=defaultOptions) { 
+export function queryDataSource(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .build()
@@ -1393,7 +1501,7 @@ export function queryDataSource(siteId, datasourceId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataSources(siteId, queryOptions={}, options=defaultOptions) { 
+export function queryDataSources(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources`)
         .withQueryParameters(queryOptions)
@@ -1408,7 +1516,7 @@ export function queryDataSources(siteId, queryOptions={}, options=defaultOptions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataSourceConnections(siteId, datasourceId, options=defaultOptions) { 
+export function queryDataSourceConnections(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections`)
         .build()
@@ -1427,7 +1535,12 @@ export function queryDataSourceConnections(siteId, datasourceId, options=default
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getDataSourceRevisions(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
+export function getDataSourceRevisions(
+    siteId,
+    datasourceId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions`)
         .withQueryParameters(queryOptions)
@@ -1444,7 +1557,12 @@ export function getDataSourceRevisions(siteId, datasourceId, queryOptions={}, op
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadDataSource(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
+export function downloadDataSource(
+    siteId,
+    datasourceId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/content`)
         .withQueryParameters(queryOptions)
@@ -1463,9 +1581,17 @@ export function downloadDataSource(siteId, datasourceId, queryOptions={}, option
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function downloadDataSourceRevision(siteId, datasourceId, revisionNumber, queryOptions={}, options=defaultOptions) { 
+export function downloadDataSourceRevision(
+    siteId,
+    datasourceId,
+    revisionNumber,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}/content`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}/content`
+        )
         .withQueryParameters(queryOptions)
         .build()
         .execute(options.http.get, options.callback);
@@ -1479,7 +1605,7 @@ export function downloadDataSourceRevision(siteId, datasourceId, revisionNumber,
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDataSource(siteId, datasourceId, datasource, options=defaultOptions) { 
+export function updateDataSource(siteId, datasourceId, datasource, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .withBodyParameters(datasource)
@@ -1496,9 +1622,17 @@ export function updateDataSource(siteId, datasourceId, datasource, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDataSourceConnection(siteId, datasourceId, connectionId, connection, options=defaultOptions) { 
+export function updateDataSourceConnection(
+    siteId,
+    datasourceId,
+    connectionId,
+    connection,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections/${connectionId}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections/${connectionId}`
+        )
         .withBodyParameters(connection)
         .build()
         .execute(options.http.put, options.callback);
@@ -1513,7 +1647,7 @@ export function updateDataSourceConnection(siteId, datasourceId, connectionId, c
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDataSourceNow(siteId, datasourceId, options=defaultOptions) { 
+export function updateDataSourceNow(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/refresh`)
         .withBodyParameters()
@@ -1528,7 +1662,7 @@ export function updateDataSourceNow(siteId, datasourceId, options=defaultOptions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataSource(siteId, datasourceId, options=defaultOptions) { 
+export function deleteDataSource(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .build()
@@ -1545,9 +1679,16 @@ export function deleteDataSource(siteId, datasourceId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeDataSourceRevision(siteId, datasourceId, revisionNumber, options=defaultOptions) { 
+export function removeDataSourceRevision(
+    siteId,
+    datasourceId,
+    revisionNumber,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -1566,7 +1707,7 @@ export function removeDataSourceRevision(siteId, datasourceId, revisionNumber, o
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createGroup(siteId, group, queryOptions={}, options=defaultOptions) { 
+export function createGroup(siteId, group, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups`)
         .withQueryParameters(queryOptions)
@@ -1584,7 +1725,7 @@ export function createGroup(siteId, group, queryOptions={}, options=defaultOptio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addUserToGroup(siteId, groupId, user, options=defaultOptions) { 
+export function addUserToGroup(siteId, groupId, user, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users`)
         .withBodyParameters(user)
@@ -1605,7 +1746,7 @@ export function addUserToGroup(siteId, groupId, user, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addUserToSite(siteId, user, options=defaultOptions) { 
+export function addUserToSite(siteId, user, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users`)
         .withBodyParameters(user)
@@ -1623,7 +1764,7 @@ export function addUserToSite(siteId, user, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getGroupsForAUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
+export function getGroupsForAUser(siteId, userId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/groups`)
         .withQueryParameters(queryOptions)
@@ -1641,7 +1782,7 @@ export function getGroupsForAUser(siteId, userId, queryOptions={}, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getUsersInGroup(siteId, groupId, queryOptions={}, options=defaultOptions) { 
+export function getUsersInGroup(siteId, groupId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users`)
         .withQueryParameters(queryOptions)
@@ -1661,7 +1802,7 @@ export function getUsersInGroup(siteId, groupId, queryOptions={}, options=defaul
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getUsersOnSite(siteId, queryOptions={}, options=defaultOptions) { 
+export function getUsersOnSite(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users`)
         .withQueryParameters(queryOptions)
@@ -1681,7 +1822,7 @@ export function getUsersOnSite(siteId, queryOptions={}, options=defaultOptions) 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryGroups(siteId, queryOptions={}, options=defaultOptions) { 
+export function queryGroups(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups`)
         .withQueryParameters(queryOptions)
@@ -1697,7 +1838,7 @@ export function queryGroups(siteId, queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryUserOnSite(siteId, userId, options=defaultOptions) { 
+export function queryUserOnSite(siteId, userId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
         .build()
@@ -1715,7 +1856,7 @@ export function queryUserOnSite(siteId, userId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateGroup(siteId, groupId, group, options=defaultOptions) { 
+export function updateGroup(siteId, groupId, group, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}`)
         .withQueryParameters(queryOptions)
@@ -1735,7 +1876,7 @@ export function updateGroup(siteId, groupId, group, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateUser(siteId, userId, user, options=defaultOptions) { 
+export function updateUser(siteId, userId, user, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
         .withBodyParameters(user)
@@ -1751,7 +1892,7 @@ export function updateUser(siteId, userId, user, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeUserFromGroup(siteId, groupId, userId, options=defaultOptions) { 
+export function removeUserFromGroup(siteId, groupId, userId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users/${userId}`)
         .build()
@@ -1766,7 +1907,7 @@ export function removeUserFromGroup(siteId, groupId, userId, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeUserFromSite(siteId, userId, options=defaultOptions) { 
+export function removeUserFromSite(siteId, userId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
         .withQueryParameters(queryOptions)
@@ -1782,7 +1923,7 @@ export function removeUserFromSite(siteId, userId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteGroup(siteId, groupId, options=defaultOptions) { 
+export function deleteGroup(siteId, groupId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}`)
         .build()
@@ -1796,7 +1937,7 @@ export function deleteGroup(siteId, groupId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDatabase(siteId, databaseId, options=defaultOptions) { 
+export function queryDatabase(siteId, databaseId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .build()
@@ -1809,7 +1950,7 @@ export function queryDatabase(siteId, databaseId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDatabases(siteId, options=defaultOptions) { 
+export function queryDatabases(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases`)
         .build()
@@ -1824,7 +1965,7 @@ export function queryDatabases(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDatabase(siteId, databaseId, options=defaultOptions) { 
+export function updateDatabase(siteId, databaseId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .withBodyParameters()
@@ -1840,7 +1981,7 @@ export function updateDatabase(siteId, databaseId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeDatabase(siteId, databaseId, options=defaultOptions) { 
+export function removeDatabase(siteId, databaseId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .build()
@@ -1856,7 +1997,7 @@ export function removeDatabase(siteId, databaseId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDatabasePermissions(siteId, databaseId, permissions, options=defaultOptions) { 
+export function addDatabasePermissions(siteId, databaseId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`)
         .withBodyParameters(permissions)
@@ -1871,7 +2012,7 @@ export function addDatabasePermissions(siteId, databaseId, permissions, options=
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDatabasePermissions(siteId, databaseId, options=defaultOptions) { 
+export function queryDatabasePermissions(siteId, databaseId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`)
         .build()
@@ -1888,9 +2029,16 @@ export function queryDatabasePermissions(siteId, databaseId, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDefaultDatabasePermissions(siteId, databaseId, permissions, options=defaultOptions) { 
+export function addDefaultDatabasePermissions(
+    siteId,
+    databaseId,
+    permissions,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`
+        )
         .withBodyParameters(permissions)
         .build()
         .execute(options.http.put, options.callback);
@@ -1903,9 +2051,11 @@ export function addDefaultDatabasePermissions(siteId, databaseId, permissions, o
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDefaultDatabasePermissions(siteId, databaseId, options=defaultOptions) { 
+export function queryDefaultDatabasePermissions(siteId, databaseId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -1922,9 +2072,19 @@ export function queryDefaultDatabasePermissions(siteId, databaseId, options=defa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDatabasePermissions(siteId, databaseId, userId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDatabasePermissions(
+    siteId,
+    databaseId,
+    userId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -1940,9 +2100,18 @@ export function deleteDatabasePermissions(siteId, databaseId, userId, groupId, c
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDatabasePermissionsForGroup(siteId, databaseId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDatabasePermissionsForGroup(
+    siteId,
+    databaseId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -1958,9 +2127,18 @@ export function deleteDatabasePermissionsForGroup(siteId, databaseId, userId, ca
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDatabasePermissionsForUser(siteId, databaseId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDatabasePermissionsForUser(
+    siteId,
+    databaseId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -1976,9 +2154,18 @@ export function deleteDatabasePermissionsForUser(siteId, databaseId, groupId, ca
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultDatabasePermissions(siteId, databaseId, userId, capabilityMode, groupId, options=defaultOptions) { 
+export function deleteDefaultDatabasePermissions(
+    siteId,
+    databaseId,
+    userId,
+    capabilityMode,
+    groupId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -1993,9 +2180,17 @@ export function deleteDefaultDatabasePermissions(siteId, databaseId, userId, cap
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultDatabasePermissionsForUser(siteId, databaseId, userId, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultDatabasePermissionsForUser(
+    siteId,
+    databaseId,
+    userId,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2010,9 +2205,17 @@ export function deleteDefaultDatabasePermissionsForUser(siteId, databaseId, user
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultDatabasePermissionsForGroup(siteId, databaseId, capabilityMode, groupId, options=defaultOptions) { 
+export function deleteDefaultDatabasePermissionsForGroup(
+    siteId,
+    databaseId,
+    capabilityMode,
+    groupId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2024,7 +2227,7 @@ export function deleteDefaultDatabasePermissionsForGroup(siteId, databaseId, cap
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryTable(siteId, tableId, options=defaultOptions) { 
+export function queryTable(siteId, tableId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .build()
@@ -2037,7 +2240,7 @@ export function queryTable(siteId, tableId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryTables(siteId, options=defaultOptions) { 
+export function queryTables(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables`)
         .build()
@@ -2053,7 +2256,7 @@ export function queryTables(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateTable(siteId, tableId, table, options=defaultOptions) { 
+export function updateTable(siteId, tableId, table, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .withBodyParameters(table)
@@ -2069,7 +2272,7 @@ export function updateTable(siteId, tableId, table, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeTable(siteId, tableId, options=defaultOptions) { 
+export function removeTable(siteId, tableId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .build()
@@ -2085,7 +2288,7 @@ export function removeTable(siteId, tableId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTablePermissions(siteId, tableId, permissions, options=defaultOptions) { 
+export function addTablePermissions(siteId, tableId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/permissions`)
         .withBodyParameters(permissions)
@@ -2100,7 +2303,7 @@ export function addTablePermissions(siteId, tableId, permissions, options=defaul
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryTablePermissions(siteId, tableId, options=defaultOptions) { 
+export function queryTablePermissions(siteId, tableId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/permissions`)
         .build()
@@ -2115,7 +2318,7 @@ export function queryTablePermissions(siteId, tableId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTablePermissions(siteId, tableId, options=defaultOptions) { 
+export function deleteTablePermissions(siteId, tableId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/table/${tableId}/permissions`)
         .build()
@@ -2130,7 +2333,7 @@ export function deleteTablePermissions(siteId, tableId, options=defaultOptions) 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryColumnInATable(siteId, tableId, columnId, options=defaultOptions) { 
+export function queryColumnInATable(siteId, tableId, columnId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .build()
@@ -2144,7 +2347,7 @@ export function queryColumnInATable(siteId, tableId, columnId, options=defaultOp
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryColumnsInATable(siteId, tableId, options=defaultOptions) { 
+export function queryColumnsInATable(siteId, tableId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns`)
         .build()
@@ -2161,7 +2364,7 @@ export function queryColumnsInATable(siteId, tableId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateColumn(siteId, tableId, columnId, column, options=defaultOptions) { 
+export function updateColumn(siteId, tableId, columnId, column, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .withBodyParameters(column)
@@ -2178,7 +2381,7 @@ export function updateColumn(siteId, tableId, columnId, column, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeColumn(siteId, tableId, columnId, options=defaultOptions) { 
+export function removeColumn(siteId, tableId, columnId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .build()
@@ -2195,9 +2398,17 @@ export function removeColumn(siteId, tableId, columnId, options=defaultOptions) 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDataQualityWarning(siteId, contentType, contentLuid, dataQualityWarning, options=defaultOptions) { 
+export function addDataQualityWarning(
+    siteId,
+    contentType,
+    contentLuid,
+    dataQualityWarning,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`
+        )
         .withBodyParameters(dataQualityWarning)
         .build()
         .execute(options.http.post, options.callback);
@@ -2210,7 +2421,11 @@ export function addDataQualityWarning(siteId, contentType, contentLuid, dataQual
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataQualityWarningByID(siteId, dataqualitywarningId, options=defaultOptions) { 
+export function queryDataQualityWarningByID(
+    siteId,
+    dataqualitywarningId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .build()
@@ -2225,9 +2440,16 @@ export function queryDataQualityWarningByID(siteId, dataqualitywarningId, option
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataQualityWarningByContent(siteId, contentType, contentLuid, options=defaultOptions) { 
+export function queryDataQualityWarningByContent(
+    siteId,
+    contentType,
+    contentLuid,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -2241,7 +2463,12 @@ export function queryDataQualityWarningByContent(siteId, contentType, contentLui
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateDataQualityWarning(siteId, dataqualitywarningId, dataQualityWarning, options=defaultOptions) { 
+export function updateDataQualityWarning(
+    siteId,
+    dataqualitywarningId,
+    dataQualityWarning,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .withBodyParameters(dataQualityWarning)
@@ -2257,7 +2484,11 @@ export function updateDataQualityWarning(siteId, dataqualitywarningId, dataQuali
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataQualityWarningByID(siteId, dataqualitywarningId, options=defaultOptions) { 
+export function deleteDataQualityWarningByID(
+    siteId,
+    dataqualitywarningId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .build()
@@ -2273,9 +2504,16 @@ export function deleteDataQualityWarningByID(siteId, dataqualitywarningId, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataQualityWarningByContent(siteId, contentType, contentLuid, options=defaultOptions) { 
+export function deleteDataQualityWarningByContent(
+    siteId,
+    contentType,
+    contentLuid,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
+        .withPath(
+            `api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2289,7 +2527,7 @@ export function deleteDataQualityWarningByContent(siteId, contentType, contentLu
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToDatabase(siteId, databaseId, tags, options=defaultOptions) { 
+export function addTagsToDatabase(siteId, databaseId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/tags`)
         .withBodyParameters(tags)
@@ -2306,7 +2544,7 @@ export function addTagsToDatabase(siteId, databaseId, tags, options=defaultOptio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToTable(siteId, tableId, tags, options=defaultOptions) { 
+export function addTagsToTable(siteId, tableId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/tags`)
         .withBodyParameters(tags)
@@ -2323,7 +2561,7 @@ export function addTagsToTable(siteId, tableId, tags, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addTagsToColumn(siteId, columnId, tags, options=defaultOptions) { 
+export function addTagsToColumn(siteId, columnId, tags, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/columns/${columnId}/tags`)
         .withBodyParameters(tags)
@@ -2339,7 +2577,7 @@ export function addTagsToColumn(siteId, columnId, tags, options=defaultOptions) 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function batchAddTags(siteId, tagBatch, options=defaultOptions) { 
+export function batchAddTags(siteId, tagBatch, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tags:batchCreate`)
         .withBodyParameters(tagBatch)
@@ -2356,7 +2594,7 @@ export function batchAddTags(siteId, tagBatch, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromDatabase(siteId, databaseId, tagName, options=defaultOptions) { 
+export function deleteTagFromDatabase(siteId, databaseId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/tags/${tagName}`)
         .build()
@@ -2372,7 +2610,7 @@ export function deleteTagFromDatabase(siteId, databaseId, tagName, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromTable(siteId, tableId, tagName, options=defaultOptions) { 
+export function deleteTagFromTable(siteId, tableId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/tags/${tagName}`)
         .build()
@@ -2388,7 +2626,7 @@ export function deleteTagFromTable(siteId, tableId, tagName, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteTagFromColumn(siteId, columnId, tagName, options=defaultOptions) { 
+export function deleteTagFromColumn(siteId, columnId, tagName, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/columns/${columnId}/tags/${tagName}`)
         .build()
@@ -2403,7 +2641,7 @@ export function deleteTagFromColumn(siteId, columnId, tagName, options=defaultOp
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function batchDeleteTags(siteId, tagBatch, options=defaultOptions) { 
+export function batchDeleteTags(siteId, tagBatch, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tags:BatchDelete`)
         .withBodyParameters(tagBatch)
@@ -2421,9 +2659,16 @@ export function batchDeleteTags(siteId, tagBatch, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function removeWorkbookRevision(siteId, workbookId, revisionNumber, options=defaultOptions) { 
+export function removeWorkbookRevision(
+    siteId,
+    workbookId,
+    revisionNumber,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2438,7 +2683,12 @@ export function removeWorkbookRevision(siteId, workbookId, revisionNumber, optio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDataSourcePermissions(siteId, datasourceId, permissions, options=defaultOptions) { 
+export function addDataSourcePermissions(
+    siteId,
+    datasourceId,
+    permissions,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`)
         .withBodyParameters(permissions)
@@ -2455,7 +2705,7 @@ export function addDataSourcePermissions(siteId, datasourceId, permissions, opti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addProjectPermissions(siteId, projectId, permissions, options=defaultOptions) { 
+export function addProjectPermissions(siteId, projectId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions`)
         .withBodyParameters(permissions)
@@ -2472,9 +2722,11 @@ export function addProjectPermissions(siteId, projectId, permissions, options=de
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDefaultPermissions(siteId, projectId, permissions, options=defaultOptions) { 
+export function addDefaultPermissions(siteId, projectId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`
+        )
         .withBodyParameters(permissions)
         .build()
         .execute(options.http.put, options.callback);
@@ -2489,9 +2741,16 @@ export function addDefaultPermissions(siteId, projectId, permissions, options=de
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDefaultPermissionsForWorkbooks(siteId, projectId, permissions, options=defaultOptions) { 
+export function addDefaultPermissionsForWorkbooks(
+    siteId,
+    projectId,
+    permissions,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`
+        )
         .withBodyParameters(permissions)
         .build()
         .execute(options.http.put, options.callback);
@@ -2506,9 +2765,16 @@ export function addDefaultPermissionsForWorkbooks(siteId, projectId, permissions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDefaultPermissionsForDatasources(siteId, projectId, permissions, options=defaultOptions) { 
+export function addDefaultPermissionsForDatasources(
+    siteId,
+    projectId,
+    permissions,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`
+        )
         .withBodyParameters(permissions)
         .build()
         .execute(options.http.put, options.callback);
@@ -2523,9 +2789,16 @@ export function addDefaultPermissionsForDatasources(siteId, projectId, permissio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDefaultPermissionsForFlows(siteId, projectId, permissions, options=defaultOptions) { 
+export function addDefaultPermissionsForFlows(
+    siteId,
+    projectId,
+    permissions,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`
+        )
         .withBodyParameters(permissions)
         .build()
         .execute(options.http.put, options.callback);
@@ -2539,7 +2812,7 @@ export function addDefaultPermissionsForFlows(siteId, projectId, permissions, op
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addViewPermissions(siteId, viewId, permissions, options=defaultOptions) { 
+export function addViewPermissions(siteId, viewId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions`)
         .withBodyParameters(permissions)
@@ -2555,7 +2828,7 @@ export function addViewPermissions(siteId, viewId, permissions, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addWorkbookPermissions(siteId, workbookId, permissions, options=defaultOptions) { 
+export function addWorkbookPermissions(siteId, workbookId, permissions, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`)
         .withBodyParameters(permissions)
@@ -2572,7 +2845,7 @@ export function addWorkbookPermissions(siteId, workbookId, permissions, options=
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addWorkbookToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
+export function addWorkbookToSchedule(siteId, scheduleId, task, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/workbooks`)
         .withBodyParameters(task)
@@ -2587,7 +2860,7 @@ export function addWorkbookToSchedule(siteId, scheduleId, task, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDataSourcePermissions(siteId, datasourceId, options=defaultOptions) { 
+export function queryDataSourcePermissions(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`)
         .build()
@@ -2601,7 +2874,7 @@ export function queryDataSourcePermissions(siteId, datasourceId, options=default
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryProjectPermissions(siteId, projectId, options=defaultOptions) { 
+export function queryProjectPermissions(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions`)
         .build()
@@ -2616,9 +2889,11 @@ export function queryProjectPermissions(siteId, projectId, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDefaultPermissions(siteId, projectId, options=defaultOptions) { 
+export function queryDefaultPermissions(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -2631,9 +2906,11 @@ export function queryDefaultPermissions(siteId, projectId, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDefaultPermissionsForDatasources(siteId, projectId, options=defaultOptions) { 
+export function queryDefaultPermissionsForDatasources(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -2646,9 +2923,11 @@ export function queryDefaultPermissionsForDatasources(siteId, projectId, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDefaultPermissionsForWorkbooks(siteId, projectId, options=defaultOptions) { 
+export function queryDefaultPermissionsForWorkbooks(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -2661,9 +2940,11 @@ export function queryDefaultPermissionsForWorkbooks(siteId, projectId, options=d
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryDefaultPermissionsForFlows(siteId, projectId, options=defaultOptions) { 
+export function queryDefaultPermissionsForFlows(siteId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`
+        )
         .build()
         .execute(options.http.get, options.callback);
 }
@@ -2675,7 +2956,7 @@ export function queryDefaultPermissionsForFlows(siteId, projectId, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryViewPermissions(siteId, viewId, options=defaultOptions) { 
+export function queryViewPermissions(siteId, viewId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions`)
         .build()
@@ -2689,7 +2970,7 @@ export function queryViewPermissions(siteId, viewId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryWorkbookPermissions(siteId, workbookId, options=defaultOptions) { 
+export function queryWorkbookPermissions(siteId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`)
         .build()
@@ -2707,9 +2988,19 @@ export function queryWorkbookPermissions(siteId, workbookId, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataSourcePermission(siteId, datasourceId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDataSourcePermission(
+    siteId,
+    datasourceId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2724,9 +3015,18 @@ export function deleteDataSourcePermission(siteId, datasourceId, groupId, userId
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataSourcePermissionForGroup(siteId, datasourceId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDataSourcePermissionForGroup(
+    siteId,
+    datasourceId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2741,9 +3041,18 @@ export function deleteDataSourcePermissionForGroup(siteId, datasourceId, groupId
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataSorucePermissionForUser(siteId, datasourceId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDataSorucePermissionForUser(
+    siteId,
+    datasourceId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2759,9 +3068,19 @@ export function deleteDataSorucePermissionForUser(siteId, datasourceId, userId, 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteProjectPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteProjectPermission(
+    siteId,
+    projectId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2776,9 +3095,18 @@ export function deleteProjectPermission(siteId, projectId, groupId, userId, capa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteProjectPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteProjectPermissionForGroup(
+    siteId,
+    projectId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2793,9 +3121,18 @@ export function deleteProjectPermissionForGroup(siteId, projectId, groupId, capa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteProjectPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteProjectPermissionForUser(
+    siteId,
+    projectId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2812,9 +3149,19 @@ export function deleteProjectPermissionForUser(siteId, projectId, userId, capabi
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultPermission(
+    siteId,
+    projectId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2830,9 +3177,18 @@ export function deleteDefaultPermission(siteId, projectId, groupId, userId, capa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultWorkbookPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultWorkbookPermissionForGroup(
+    siteId,
+    projectId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2848,9 +3204,18 @@ export function deleteDefaultWorkbookPermissionForGroup(siteId, projectId, group
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultWorkbookPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultWorkbookPermissionForUser(
+    siteId,
+    projectId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2866,9 +3231,18 @@ export function deleteDefaultWorkbookPermissionForUser(siteId, projectId, userId
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultDatasourcePermissionsForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultDatasourcePermissionsForGroup(
+    siteId,
+    projectId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2884,9 +3258,18 @@ export function deleteDefaultDatasourcePermissionsForGroup(siteId, projectId, gr
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultFlowPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultFlowPermissionForGroup(
+    siteId,
+    projectId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2902,9 +3285,18 @@ export function deleteDefaultFlowPermissionForGroup(siteId, projectId, groupId, 
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDefaultFlowPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteDefaultFlowPermissionForUser(
+    siteId,
+    projectId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2920,9 +3312,19 @@ export function deleteDefaultFlowPermissionForUser(siteId, projectId, userId, ca
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteViewPermission(siteId, viewId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteViewPermission(
+    siteId,
+    viewId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2937,9 +3339,18 @@ export function deleteViewPermission(siteId, viewId, groupId, userId, capability
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteViewPermissionForGroup(siteId, viewId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteViewPermissionForGroup(
+    siteId,
+    viewId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2954,9 +3365,18 @@ export function deleteViewPermissionForGroup(siteId, viewId, groupId, capability
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteViewPermissionForUser(siteId, viewId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteViewPermissionForUser(
+    siteId,
+    viewId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2972,9 +3392,19 @@ export function deleteViewPermissionForUser(siteId, viewId, userId, capabilityNa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteWorkbookPermission(siteId, workbookId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteWorkbookPermission(
+    siteId,
+    workbookId,
+    groupId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -2989,9 +3419,18 @@ export function deleteWorkbookPermission(siteId, workbookId, groupId, userId, ca
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteWorkbookPermissionForGroup(siteId, workbookId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteWorkbookPermissionForGroup(
+    siteId,
+    workbookId,
+    groupId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -3006,9 +3445,18 @@ export function deleteWorkbookPermissionForGroup(siteId, workbookId, groupId, ca
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteWorkbookPermissionForUser(siteId, workbookId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
+export function deleteWorkbookPermissionForUser(
+    siteId,
+    workbookId,
+    userId,
+    capabilityName,
+    capabilityMode,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -3021,7 +3469,7 @@ export function deleteWorkbookPermissionForUser(siteId, workbookId, userId, capa
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDataSourceToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
+export function addDataSourceToSchedule(siteId, scheduleId, task, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/datasources`)
         .withBodyParameters(task)
@@ -3038,7 +3486,7 @@ export function addDataSourceToSchedule(siteId, scheduleId, task, options=defaul
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function cancelJob(siteId, jobId, options=defaultOptions) { 
+export function cancelJob(siteId, jobId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs/${jobId}`)
         .build()
@@ -3053,7 +3501,7 @@ export function cancelJob(siteId, jobId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryJob(siteId, jobId, options=defaultOptions) { 
+export function queryJob(siteId, jobId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs/${jobId}`)
         .build()
@@ -3067,7 +3515,7 @@ export function queryJob(siteId, jobId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryJobs(siteId, options=defaultOptions) { 
+export function queryJobs(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs`)
         .build()
@@ -3082,7 +3530,7 @@ export function queryJobs(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
+export function getExtractRefreshTask(siteId, taskId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`)
         .build()
@@ -3096,7 +3544,7 @@ export function getExtractRefreshTask(siteId, taskId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getExtractRefreshTasks(siteId, options=defaultOptions) { 
+export function getExtractRefreshTasks(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes`)
         .build()
@@ -3111,7 +3559,7 @@ export function getExtractRefreshTasks(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createSchedule(schedule, options=defaultOptions) { 
+export function createSchedule(schedule, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/schedules`)
         .withBodyParameters(schedule)
@@ -3131,7 +3579,12 @@ export function createSchedule(schedule, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function queryExtractRefreshTasks(siteId, scheduleId, queryOptions={}, options=defaultOptions) { 
+export function queryExtractRefreshTasks(
+    siteId,
+    scheduleId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/extracts`)
         .withQueryParameters(queryOptions)
@@ -3148,7 +3601,7 @@ export function queryExtractRefreshTasks(siteId, scheduleId, queryOptions={}, op
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySchedules(queryOptions={}, options=defaultOptions) { 
+export function querySchedules(queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/schedules`)
         .withQueryParameters(queryOptions)
@@ -3167,7 +3620,7 @@ export function querySchedules(queryOptions={}, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function runExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
+export function runExtractRefreshTask(siteId, taskId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}/runNow`)
         .withBodyParameters()
@@ -3182,7 +3635,7 @@ export function runExtractRefreshTask(siteId, taskId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateSchedule(scheduleId, schedule, options=defaultOptions) { 
+export function updateSchedule(scheduleId, schedule, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/schedules/${scheduleId}`)
         .withBodyParameters(schedule)
@@ -3196,7 +3649,7 @@ export function updateSchedule(scheduleId, schedule, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSchedule(scheduleId, options=defaultOptions) { 
+export function deleteSchedule(scheduleId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/schedules/${scheduleId}`)
         .build()
@@ -3210,7 +3663,7 @@ export function deleteSchedule(scheduleId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataAccelerationTask(siteId, dataAccelerationId, options=defaultOptions) { 
+export function deleteDataAccelerationTask(siteId, dataAccelerationId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/dataAcceleration/${dataAccelerationId}`)
         .build()
@@ -3223,7 +3676,7 @@ export function deleteDataAccelerationTask(siteId, dataAccelerationId, options=d
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getDataAccelerationTasks(siteId, options=defaultOptions) { 
+export function getDataAccelerationTasks(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/dataAcceleration`)
         .build()
@@ -3239,7 +3692,7 @@ export function getDataAccelerationTasks(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createSubscription(siteId, subscription, options=defaultOptions) { 
+export function createSubscription(siteId, subscription, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions`)
         .withBodyParameters(subscription)
@@ -3255,7 +3708,7 @@ export function createSubscription(siteId, subscription, options=defaultOptions)
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySubscription(siteId, subscriptionId, options=defaultOptions) { 
+export function querySubscription(siteId, subscriptionId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .build()
@@ -3272,7 +3725,7 @@ export function querySubscription(siteId, subscriptionId, options=defaultOptions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function querySubscriptions(siteId, queryOptions={}, options=defaultOptions) { 
+export function querySubscriptions(siteId, queryOptions = {}, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions`)
         .withQueryParameters(queryOptions)
@@ -3288,7 +3741,7 @@ export function querySubscriptions(siteId, queryOptions={}, options=defaultOptio
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function updateSubscription(siteId, subscriptionId, subscription, options=defaultOptions) { 
+export function updateSubscription(siteId, subscriptionId, subscription, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .withBodyParameters(subscription)
@@ -3303,7 +3756,7 @@ export function updateSubscription(siteId, subscriptionId, subscription, options
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteSubscription(siteId, subscriptionId, options=defaultOptions) { 
+export function deleteSubscription(siteId, subscriptionId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .build()
@@ -3319,7 +3772,7 @@ export function deleteSubscription(siteId, subscriptionId, options=defaultOption
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addDataSourceToFavorites(siteId, userId, favorite, options=defaultOptions) { 
+export function addDataSourceToFavorites(siteId, userId, favorite, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
@@ -3336,7 +3789,7 @@ export function addDataSourceToFavorites(siteId, userId, favorite, options=defau
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addProjectToFavorites(siteId, userId, favorite, options=defaultOptions) { 
+export function addProjectToFavorites(siteId, userId, favorite, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
@@ -3353,7 +3806,7 @@ export function addProjectToFavorites(siteId, userId, favorite, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addViewToFavorites(siteId, userId, favorite, options=defaultOptions) { 
+export function addViewToFavorites(siteId, userId, favorite, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
@@ -3370,7 +3823,7 @@ export function addViewToFavorites(siteId, userId, favorite, options=defaultOpti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function addWorkbookToFavorites(siteId, userId, favorite, options=defaultOptions) { 
+export function addWorkbookToFavorites(siteId, userId, favorite, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
@@ -3386,9 +3839,16 @@ export function addWorkbookToFavorites(siteId, userId, favorite, options=default
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteDataSourceFromFavorites(siteId, userId, datasourceId, options=defaultOptions) { 
+export function deleteDataSourceFromFavorites(
+    siteId,
+    userId,
+    datasourceId,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
-        .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/datasources/${datasourceId}`)
+        .withPath(
+            `/api/{apiVersion}/sites/${siteId}/favorites/${userId}/datasources/${datasourceId}`
+        )
         .build()
         .execute(options.http.del, options.callback);
 }
@@ -3401,7 +3861,7 @@ export function deleteDataSourceFromFavorites(siteId, userId, datasourceId, opti
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteProjectFromFavorites(siteId, userId, projectId, options=defaultOptions) { 
+export function deleteProjectFromFavorites(siteId, userId, projectId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/projects/${projectId}`)
         .build()
@@ -3416,7 +3876,7 @@ export function deleteProjectFromFavorites(siteId, userId, projectId, options=de
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteViewFromFavorites(siteId, userId, viewId, options=defaultOptions) { 
+export function deleteViewFromFavorites(siteId, userId, viewId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/views/${viewId}`)
         .build()
@@ -3431,7 +3891,7 @@ export function deleteViewFromFavorites(siteId, userId, viewId, options=defaultO
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteWorkbookFromFavorites(siteId, userId, workbookId, options=defaultOptions) { 
+export function deleteWorkbookFromFavorites(siteId, userId, workbookId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/workbooks/${workbookId}`)
         .build()
@@ -3445,7 +3905,7 @@ export function deleteWorkbookFromFavorites(siteId, userId, workbookId, options=
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getFavoritesForUser(siteId, userId, options=defaultOptions) { 
+export function getFavoritesForUser(siteId, userId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .build()
@@ -3461,7 +3921,7 @@ export function getFavoritesForUser(siteId, userId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function initiateFileUpload(siteId, options=defaultOptions) { 
+export function initiateFileUpload(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/fileUploads`)
         .build()
@@ -3478,7 +3938,7 @@ export function initiateFileUpload(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function appendToFileUpload(siteId, uploadSessionId, file, options=defaultOptions) { 
+export function appendToFileUpload(siteId, uploadSessionId, file, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/fileUploads/${uploadSessionId}`)
         .withHeaders({ "Content-Type": "multipart/mixed" })
@@ -3493,7 +3953,7 @@ export function appendToFileUpload(siteId, uploadSessionId, file, options=defaul
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function serverInfo(options=defaultOptions) { 
+export function serverInfo(options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/serverinfo`)
         .build()
@@ -3505,7 +3965,7 @@ export function serverInfo(options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function getCurrentServerSessionDetails(options=defaultOptions) { 
+export function getCurrentServerSessionDetails(options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sessions/current`)
         .build()
@@ -3521,7 +3981,12 @@ export function getCurrentServerSessionDetails(options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createAnExtractForADataSource(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
+export function createAnExtractForADataSource(
+    siteId,
+    datasourceId,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/createExtract`)
         .withQueryParameters(queryOptions)
@@ -3536,7 +4001,7 @@ export function createAnExtractForADataSource(siteId, datasourceId, queryOptions
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteAnExtractFromADataSource(siteId, datasourceId, options=defaultOptions) { 
+export function deleteAnExtractFromADataSource(siteId, datasourceId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/deleteExtract`)
         .build()
@@ -3555,7 +4020,13 @@ export function deleteAnExtractFromADataSource(siteId, datasourceId, options=def
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, queryOptions={}, options=defaultOptions) { 
+export function createExtractsForEmbeddedDataSourcesInAWorkbook(
+    siteId,
+    workbookId,
+    datasources,
+    queryOptions = {},
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/createExtract`)
         .withQueryParameters(queryOptions)
@@ -3573,7 +4044,12 @@ export function createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbook
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, options=defaultOptions) { 
+export function deleteExtractsForEmbeddedDataSourcesInAWorkbook(
+    siteId,
+    workbookId,
+    datasources,
+    options = defaultOptions
+) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbookss/${workbookId}/deleteExtract`)
         .withQueryParameters(queryOptions)
@@ -3589,7 +4065,7 @@ export function deleteExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbook
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function deleteExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
+export function deleteExtractRefreshTask(siteId, taskId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`)
         .build()
@@ -3604,7 +4080,7 @@ export function deleteExtractRefreshTask(siteId, taskId, options=defaultOptions)
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function encryptExtractsInASite(siteId, options=defaultOptions) { 
+export function encryptExtractsInASite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/encrypt-extracts`)
         .build()
@@ -3619,7 +4095,7 @@ export function encryptExtractsInASite(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function decryptExtractsInASite(siteId, options=defaultOptions) { 
+export function decryptExtractsInASite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/decrypt-extracts`)
         .build()
@@ -3634,7 +4110,7 @@ export function decryptExtractsInASite(siteId, options=defaultOptions) {
  * @param {ExecOptions} [options] an object containing the execution options for this request
  * @returns Promise | undefined
  */
-export function reencryptExtractsInASite(siteId, options=defaultOptions) { 
+export function reencryptExtractsInASite(siteId, options = defaultOptions) {
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/reencrypt-extracts`)
         .build()
