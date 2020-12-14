@@ -24,6 +24,7 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: { "tabbycat": path.resolve(__dirname, 'src') },
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json", ".scss"],
   },
   plugins: [],

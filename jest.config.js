@@ -1,3 +1,6 @@
 module.exports = {
-    verbose: false
+    verbose: false,
+    moduleNameMapper: {
+        "^tabbycat(.*)$": "<rootDir>/src$1"
+    }
 }
