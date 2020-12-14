@@ -188,6 +188,14 @@ export class TableauRestRequestBuilder {
     }
 
     /**
+     * performs internal replacement on the path before it is built
+     * this allows parameters from the builder to affect how the path is built
+     */
+    processPath() {
+        this.path = this.path.replace(/\{apiVersion\}/, encodeURIComponent(this.version));
+    }
+
+    /**
      * adds a host value to the builder
      * @param {} host the host server for the request
      */
@@ -283,7 +291,7 @@ export class TableauRestRequestBuilder {
      * Builds the final request with all parameters
      */
     build() {
-        this.path = this.path.replace(/\{apiVersion\}/, this.version);
+        this.processPath();
         return new TableauRestRequest(this);
     }
 }
