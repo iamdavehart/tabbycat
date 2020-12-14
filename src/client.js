@@ -20,11 +20,11 @@ export class TableauRestApiClient extends WrappedApiCalls {
         // bind
         this.execOpts = this.execOpts.bind(this);
         this.getSite = this.getSite.bind(this);
+        this.updateCurrentCredentials = this.updateCurrentCredentials.bind(this);
         // set up api executives
         const axiosOptions = options.axios || {};
-        const updateCreds = this.updateCurrentCredentials.bind(this);
         this.authHttp = new TableauAuthorisedRestExecutive(axiosOptions);
-        this.http = new TableauAuthorisationRestExecutive(axiosOptions, updateCreds);
+        this.http = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
     }
 
     execOpts(opts = {}) {
