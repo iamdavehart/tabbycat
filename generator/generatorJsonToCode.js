@@ -12,7 +12,7 @@ function generateCodeFromJson(config) {
     try {
         const methodCalls = extendedMethods.map((m) => {
             const name = camel(m.name);
-            const params = m.uriParams.slice(0).map((p) => ({ ...p, paramType: "string" }));
+            const params = m.uriParams.slice(0).map((p) => ({ paramType: "string", ...p  }));
             const siteSpecific = m.uriParams.some((p) => p.name === "site-id");
 
             if (m.requestBodyType) {

@@ -6,11 +6,10 @@ const camel = utils.camel;
 
 function generateReferenceIntermediate(config) {
     try {
-
         // check our config
-        const linkReplacements = config ? config.linkReplacements || {} : {};
-        const pathReplacements = config ? config.pathReplacements || {} : {};        
-        const overrides = config ? config.overrides || {} : {};
+        const linkReplacements = config && config.reference ? config.reference.linkReplacements || {} : {};
+        const pathReplacements = config && config.reference ? config.reference.pathReplacements || {} : {};
+        const overrides = config && config.reference ? config.reference.overrides || {} : {};
 
         // read the file in.
         // we're using a local file but you can pass a url here
@@ -40,8 +39,7 @@ function generateReferenceIntermediate(config) {
                 const nameNode = $(el).children().get(1);
                 const name = $(nameNode).text().trim();
                 const link = $(nameNode).find("a").attr("href");
-                const tableauOnline =
-                    $(tableauOnlineNode).text().trim().toUpperCase() == "YES";
+                const tableauOnline = $(tableauOnlineNode).text().trim().toUpperCase() == "YES";
                 area = $(areaNode).text().trim() || area;
                 allMethods.push({
                     index: idx,
@@ -100,9 +98,7 @@ function generateReferenceIntermediate(config) {
                     // uri
                     const uris = [];
                     const urls = [];
-                    const uriNode = sections.find(
-                        (s) => $(s).first().text() == "URI"
-                    );
+                    const uriNode = sections.find((s) => $(s).first().text() == "URI");
                     // usually the path node is immediately after the H4 URI
                     // but occasionally there's a containing paragraph that we need to
                     // process instead
@@ -132,8 +128,7 @@ function generateReferenceIntermediate(config) {
                                     nodeText = nodeText.substr(1);
                                 }
                                 const isPlaceholder =
-                                    (el.tagName === "span" &&
-                                        $(el).hasClass("api-placeholder")) ||
+                                    (el.tagName === "span" && $(el).hasClass("api-placeholder")) ||
                                     el.tagName === "i";
                                 if (nodeText.indexOf("?") > -1) {
                                     queryString = true;
@@ -141,26 +136,16 @@ function generateReferenceIntermediate(config) {
 
                                 let qsKey = "";
                                 if (isPlaceholder) {
-                                    const qsFound = urlQS.find(
-                                        (u) => u[1] == nodeText
-                                    );
+                                    const qsFound = urlQS.find((u) => u[1] == nodeText);
                                     qsKey = qsFound ? qsFound[0] : "";
                                 }
 
                                 return {
                                     value: nodeText,
-                                    text: isPlaceholder
-                                        ? "${" + camel(nodeText) + "}"
-                                        : nodeText,
-                                    type: isPlaceholder
-                                        ? queryString
-                                            ? "query"
-                                            : "path"
-                                        : "text",
+                                    text: isPlaceholder ? "${" + camel(nodeText) + "}" : nodeText,
+                                    type: isPlaceholder ? (queryString ? "query" : "path") : "text",
                                     name: isPlaceholder ? nodeText : "",
-                                    variable: isPlaceholder
-                                        ? camel(nodeText)
-                                        : "",
+                                    variable: isPlaceholder ? camel(nodeText) : "",
                                     qsKey: qsKey,
                                 };
                             })
@@ -171,31 +156,20 @@ function generateReferenceIntermediate(config) {
                         if (pathReplacements.hasOwnProperty(linkSelector)) {
                             pathReplacements[linkSelector].forEach((r) => {
                                 const found = pathContents.find(
-                                    (p) =>
-                                        p.type === r.type && p.value === r.value
+                                    (p) => p.type === r.type && p.value === r.value
                                 );
                                 if (found) {
-                                    const foundIndex = pathContents.indexOf(
-                                        found
-                                    );
+                                    const foundIndex = pathContents.indexOf(found);
                                     pathContents.splice(
                                         foundIndex,
                                         1,
                                         ...r.replacements.map((rr) => ({
                                             text:
                                                 rr.type != "text"
-                                                    ? "${" +
-                                                      camel(rr.value) +
-                                                      "}"
+                                                    ? "${" + camel(rr.value) + "}"
                                                     : rr.value,
-                                            name:
-                                                rr.type != "text"
-                                                    ? rr.value
-                                                    : "",
-                                            variable:
-                                                rr.type != "text"
-                                                    ? camel(rr.value)
-                                                    : "",
+                                            name: rr.type != "text" ? rr.value : "",
+                                            variable: rr.type != "text" ? camel(rr.value) : "",
                                             qsKey: "",
                                             ...rr,
                                         }))
@@ -204,16 +178,12 @@ function generateReferenceIntermediate(config) {
                             });
                         }
 
-                        const fullUri = pathContents
-                            .map((c) => c.text)
-                            .join("");
+                        const fullUri = pathContents.map((c) => c.text).join("");
                         const fullUriSplit = fullUri.split(" ");
                         const method = fullUriSplit[0];
                         const url = fullUriSplit[1];
                         const uri =
-                            url.indexOf("?") > -1
-                                ? url.substring(0, url.indexOf("?"))
-                                : url;
+                            url.indexOf("?") > -1 ? url.substring(0, url.indexOf("?")) : url;
 
                         // push every example into the urls
                         urlObj = {
@@ -251,18 +221,33 @@ function generateReferenceIntermediate(config) {
                     $("tbody tr", $(uriParamsTableNode)).each((i, e) => {
                         const nameCell = $(e).children().get(0);
                         const descCell = $(e).children().get(1);
-                        const argumentElement = $(nameCell).children(
-                            ".api-placeholder"
-                        );
-                        const name =
-                            $(argumentElement).text().trim() ||
-                            $(nameCell).text().trim();
+                        const argumentElement = $(nameCell).children(".api-placeholder");
+                        const name = $(argumentElement).text().trim() || $(nameCell).text().trim();
                         const type = paramTypes.find((c) => c.name == name);
                         if (name) {
+                            const paramDesc = $(descCell).text().trim();
+                            let paramType;
+                            if (["pageNumber", "pageSize", "page-number", "page-size"].indexOf(name) > -1) {
+                                paramType = "number";
+                            } else if (name.startsWith("is") || name.startsWith("has")) {
+                                paramType = "boolean";
+                            } else if (
+                                paramDesc.indexOf("boolean") > -1 ||
+                                paramDesc.indexOf("true") > -1 ||
+                                paramDesc.indexOf("false") > -1
+                            ) {
+                                paramType = "boolean";
+                            } else if (paramDesc.indexOf("number") > -1) {
+                                paramType = "number";
+                            } else {
+                                paramType = "string";
+                            }
+
                             uriParams.push({
                                 name: name,
-                                desc: $(descCell).text().trim(),
+                                desc: paramDesc,
                                 type: type ? type.type : "unknown",
+                                paramType: paramType,
                                 qsKey: type ? type.qsKey : "",
                             });
                         }
@@ -275,9 +260,7 @@ function generateReferenceIntermediate(config) {
                         .filter((p) => p.type == "query" || p.type == "path")
                         .forEach((p) => {
                             const existing = uriParams.find(
-                                (u) =>
-                                    u.name.toLowerCase() ===
-                                    p.name.toLowerCase()
+                                (u) => u.name.toLowerCase() === p.name.toLowerCase()
                             );
                             if (!existing) {
                                 uriParams.push({
@@ -291,7 +274,7 @@ function generateReferenceIntermediate(config) {
 
                     // request body
                     const bodyNode = sections.find(
-                        (s) => $(s).first().text().indexOf("Request Body")>-1
+                        (s) => $(s).first().text().indexOf("Request Body") > -1
                     );
                     const bodies = $(bodyNode).next().find("code");
                     let body;
@@ -323,17 +306,13 @@ function generateReferenceIntermediate(config) {
                     });
 
                     // response body
-                    const rbodyNode = sections.find(
-                        (s) => $(s).first().text() == "Response Body"
-                    );
+                    const rbodyNode = sections.find((s) => $(s).first().text() == "Response Body");
                     const rbody = $(rbodyNode).next().find("code.xml").first();
                     const responseBody = rbody.text().trim();
 
                     // errors
                     const errors = [];
-                    const errorNode = sections.find(
-                        (s) => $(s).first().text() == "Errors"
-                    );
+                    const errorNode = sections.find((s) => $(s).first().text() == "Errors");
                     const errorTableNode = $(errorNode)
                         .next()
                         .find("table.api-error-table")
@@ -355,9 +334,7 @@ function generateReferenceIntermediate(config) {
                     });
 
                     // version
-                    const verNode = sections.find(
-                        (s) => $(s).first().text() == "Version"
-                    );
+                    const verNode = sections.find((s) => $(s).first().text() == "Version");
                     const verStr = $(verNode).next().text().trim();
                     const ver = verStr.match(/Version (\d.\d)/i);
 
@@ -375,12 +352,8 @@ function generateReferenceIntermediate(config) {
                         const paginationBlockRE = /\<pagination.+?\/\>/;
                         const boundaryStringRE = /\-\-boundary\-string/;
                         if (requestBody) {
-                            requestMultipart = boundaryStringRE.test(
-                                requestBody
-                            );
-                            const isReqPaginated = paginationBlockRE.test(
-                                requestBody
-                            );
+                            requestMultipart = boundaryStringRE.test(requestBody);
+                            const isReqPaginated = paginationBlockRE.test(requestBody);
                             const reqBody = isReqPaginated
                                 ? requestBody.replace(paginationBlockRE, "")
                                 : requestBody;
@@ -390,9 +363,7 @@ function generateReferenceIntermediate(config) {
                                     : "";
                         }
                         if (responseBody) {
-                            responsePaginated = paginationBlockRE.test(
-                                responseBody
-                            );
+                            responsePaginated = paginationBlockRE.test(responseBody);
                             const rspBody = paginationBlockRE.test(responseBody)
                                 ? responseBody.replace(paginationBlockRE, "")
                                 : responseBody;
@@ -408,10 +379,10 @@ function generateReferenceIntermediate(config) {
                         ...m,
                         link: linkSelector,
                         desc: desc,
-                        uri: uris[0].uri,
+                        uri: uris.length > 0 ? uris[0].uri : "",
                         uris: uris.length > 1 ? uris.map((u) => u.uri) : [],
                         urls: urls.length > 1 ? urls.map((u) => u.url) : [],
-                        method: uris[0].method,
+                        method: uris.length > 0 ? uris[0].method : "",
                         uriParams: uriParams,
                         requestBody: requestBody,
                         requestBodyType: requestBodyType,
@@ -424,7 +395,7 @@ function generateReferenceIntermediate(config) {
                         responsePaginated: responsePaginated,
                         errorCodes: errors,
                         version: ver && ver.length ? ver[1] : "",
-                        ...methodOverrides
+                        ...methodOverrides,
                     };
                 });
 
@@ -438,9 +409,7 @@ function generateReferenceIntermediate(config) {
             //  - permissions
             //  - flows
 
-            const urlToMethodMapping = config
-                ? config.urlToMethodMapping || {}
-                : {};
+            const urlToMethodMapping = config ? config.urlToMethodMapping || {} : {};
             const extraMethods = extendedMethods
                 .filter((m) => m.uris && m.uris.length)
                 .reduce((a, m) => {
@@ -452,18 +421,14 @@ function generateReferenceIntermediate(config) {
                         // find or create a new name
                         const newName = cfgUri || m.name + "_" + i.toString();
                         // filter the urls down to only those that match
-                        const newUrls = m.urls.filter((url) =>
-                            url.startsWith(u)
-                        );
+                        const newUrls = m.urls.filter((url) => url.startsWith(u));
                         // remove path parameters that aren't in the uri
                         const newPathParams = u.match(/\$\{.+?\}/g) || [];
                         const newUriParams = m.uriParams.filter(
                             (up) =>
                                 !(
                                     up.type == "path" &&
-                                    newPathParams.indexOf(
-                                        "${" + camel(up.name) + "}"
-                                    ) === -1
+                                    newPathParams.indexOf("${" + camel(up.name) + "}") === -1
                                 )
                         );
                         return {
