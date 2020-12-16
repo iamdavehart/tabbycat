@@ -277,8 +277,8 @@ function generateCodeFromJson(config) {
 
         // response and return types to import
         const typeDefs = _.concat(
-                        _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "api-requests", type: m })),
-                        _.uniq(methodCalls.filter(m => m.responseTypeJS).map(m=>m.responseTypeJS)).map(m=>({ file: "api-responses", type: m }))
+                        _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "index", type: m })),
+                        _.uniq(methodCalls.filter(m => m.responseTypeJS).map(m=>m.responseTypeJS)).map(m=>({ file: "index", type: m }))
                         );
 
         // construct our file headers
@@ -300,7 +300,7 @@ function generateCodeFromJson(config) {
         const apiFullText =
             headerText +
             API_HEADER +
-            '/**\n'+typeDefs.map(t=> `    * @typedef {import("./types/${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
+            '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
             execJSONDoc +
             methodCalls.map((m) => m.methodCallJS).join("\n\n");
         utils.writeToFile(path.join(outDirectory, "api-full.js"), apiFullText);
@@ -309,7 +309,7 @@ function generateCodeFromJson(config) {
         const wrappedCallsText =
             headerText +
             WRAPPED_HEADER +
-            '/**\n'+typeDefs.map(t=> `    * @typedef {import("./types/${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
+            '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
             methodCalls.map((m) => m.wrappedCallJS).join("\n\n\t") +
             WRAPPED_FOOTER;
 
