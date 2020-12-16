@@ -125,50 +125,33 @@ export class TableauRestRequest {
 export class TableauRestRequestBuilder {
     /**
      * Creates a new Request Builder with default parameters
+     * @param {string=} url optional url to build the request with
      */
     constructor(url) {
+        /** @property {string} host The host server for the api request */
         this.host = "";
-        this.port = "";
+        /** @property {number} port The port to communicate the api request over, defaults to 80 or 443 if omitted depending on the scheme */
+        this.port = 0;
+        /** @property {string} scheme The scheme to communicate the api request over ie 'http' or 'https' */
         this.scheme = "";
+        /** @property {string} path the path of the request */
         this.path = "";
+        /** @property {string} version api or resource version for the request */
         this.version = "";
+        /** @property {Object} headers An object containing headers as key value pairs to be added to the request */
         this.headers = {};
+        /** @property {Object} queryParameters An object containing all the keys to be supplied as query paramteters */
         this.queryParameters = {};
+        /** @property {Object} bodyParameters An object to be added to the body of the request, usually as a JSON object */
         this.bodyParameters = {};
+        /** @property {Object[]} fileParameters Any file data to be added to the body of the request */
         this.fileParameters = [];
         this.processUrl(url);
     }
 
-    /** The api or resource version for the request */
-    version;
-
-    /** The host server for the api request */
-    host;
-
-    /** The port to communicate the api request over, defaults to 80 or 443 if omitted depending on the scheme */
-    port;
-
-    /** The scheme to communicate the api request over ie 'http' or 'https' */
-    scheme;
-
-    /** An object containing all the keys to be supplied as query paramteters */
-    queryParameters;
-
-    /** An object to be added to the body of the request, usually as a JSON object */
-    bodyParameters;
-
-    /** Any file data to be added to the body of the request */
-    fileParameters;
-
-    /** An object containing headers as key value pairs to be added to the request */
-    headers;
-
-    /** the path of the request */
-    path;
-
     /**
      * Processes a supplied base uri into scheme,host,port properties
-     * @param {string} url The base uri for the server request
+     * @param {string=} url The base uri for the server request
      */
     processUrl(url) {
         if (!url) {
@@ -178,9 +161,11 @@ export class TableauRestRequestBuilder {
             const u = new URL(url);
             this.scheme = u.protocol.replace(":", "");
             this.host = u.host && u.host.indexOf(":") > -1 ? u.host.split(":")[0] : u.host;
-            this.port =
-                (u.port ? parseInt(u.port) : u.port) ||
-                (this.scheme.toLowerCase() === "https" ? 443 : 80);
+            this.port = u.port
+                ? parseInt(u.port)
+                : this.scheme.toLowerCase() === "https"
+                ? 443
+                : 80;
         } catch (e) {
             throw e;
         }
@@ -196,7 +181,7 @@ export class TableauRestRequestBuilder {
 
     /**
      * adds a host value to the builder
-     * @param {} host the host server for the request
+     * @param {string} host the host server for the request
      */
     withHost(host) {
         this.host = host;

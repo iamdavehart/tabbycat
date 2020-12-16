@@ -1,5 +1,5 @@
-import fs from "fs";
-import FormData from "form-data";
+const fs = require('fs');
+const FormData = require('form-data');
 import { TableauRestRequest } from "./request";
 
 /**

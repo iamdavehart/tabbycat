@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { TableauRestRequest } from './request';
 import * as methods from "./execute";
 
 /**
- * A TableauRestExecutive class wraps a specific instance to axios and defaults the 
+ * A TableauRestExecutive class wraps a specific instance to axios and defaults the
  * Tableau Auth header
  */
 export class TableauRestExecutive {
@@ -19,22 +20,42 @@ export class TableauRestExecutive {
         this.del = this.del.bind(this);
     }
 
+    /**
+     * Sets the security token to be used
+     * @param {string} token security token
+     */
     setAccessToken(token) {
         this.axiosInstance.defaults.headers.common["X-Tableau-Auth"] = token;
     }
 
+    /**
+     * Executes a GET request
+     * @param {TableauRestRequest} request the request
+     */
     get(request) {
         return methods.get(request, this.axiosInstance);
     }
 
+    /**
+     * Executes a PUT request
+     * @param {TableauRestRequest} request the request
+     */
     put(request) {
         return methods.put(request, this.axiosInstance);
     }
 
+    /**
+     * Executes a POST request
+     * @param {TableauRestRequest} request the request
+     */
     post(request) {
         return methods.post(request, this.axiosInstance);
     }
 
+    /**
+     * Executes a DELETE request
+     * @param {TableauRestRequest} request the request
+     */
     del(request) {
         return methods.del(request, this.axiosInstance);
     }
@@ -50,9 +71,7 @@ export class TableauAuthorisedRestExecutive extends TableauRestExecutive {
      */
     constructor(options) {
         super(options);
-        this.axiosInstance.interceptors.response.use(
-            (response) => response.data
-        );
+        this.axiosInstance.interceptors.response.use((response) => response.data);
     }
 }
 

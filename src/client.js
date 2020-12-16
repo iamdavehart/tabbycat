@@ -1,4 +1,4 @@
-export * as api from "tabbycat/api-full";
+export * as api from "./api-full";
 import { WrappedApiCalls } from "./api-wrapped";
 import { TableauAuthorisationRestExecutive, TableauAuthorisedRestExecutive } from "./executive";
 import { DEFAULT_API_VERSION } from "./request";
@@ -10,6 +10,9 @@ export class TableauRestApiClient extends WrappedApiCalls {
     /**
      * Builds the Tableau Rest API client
      * @param {Object} options An options object containing the baseURL and version number
+     * @param {string=} options.baseURL the baseURL for the server requests(defaults to localhost if not set)
+     * @param {string=} options.version the default version to use (defaults to latest if not set)
+     * @param {Object=} options.axios an options object that is passed to the underlying axios executives
      */
     constructor(options = { baseURL: "http://localhost", version: DEFAULT_API_VERSION }) {
         super();
@@ -27,6 +30,11 @@ export class TableauRestApiClient extends WrappedApiCalls {
         this.http = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
     }
 
+    /**
+     * Creates the execute options for the clients api requests
+     * @param {Object} opts an existing options object
+     * @param {boolean=} opts.authentication whether the route retunrs authentication information
+     */
     execOpts(opts = {}) {
         return {
             baseURL: this.baseURL,
@@ -36,6 +44,15 @@ export class TableauRestApiClient extends WrappedApiCalls {
         };
     }
 
+    /**
+     * Updates the credentials stored in the client
+     * @param {Object} creds the credentials object returned by Tableau Server
+     * @param {Object} creds.user the current logged-in user object returned by Tableau Server
+     * @param {string=} creds.user.id the current logged-in user id returned by Tableau Server
+     * @param {Object} creds.site the current logged-in site object returned by Tableau Server
+     * @param {string=} creds.site.id the current logged-in site id returned by Tableau Server
+     * @param {string} creds.token the token returned by Tableau Server
+     */
     updateCurrentCredentials(creds) {
         if (!creds) {
             return;
@@ -46,8 +63,12 @@ export class TableauRestApiClient extends WrappedApiCalls {
         this.authHttp.setAccessToken(creds.token);
     }
 
+    /**
+     * Get the id of the current site that the client is logged in to
+     * @returns {string}
+     */
     getSite() {
-        return this.currentSite.id;
+        return this.currentSite ? this.currentSite.id || "" : "";
     }
 
 }

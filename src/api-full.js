@@ -14,15 +14,101 @@ if you are choosing to access the api methods directly for convenience, but the
 baseURL and token will usually be managed by the client or on a per-request basis
 */
 
-let baseURL;
-let authenticationToken;
-const defaultOptions = { baseURL: null, http:methods };
+/** @type {string} */
+let baseURL = "";
+/** @type {string} */
+let authenticationToken = "";
+/** @type {ExecOptions} */
+const defaultOptions = { baseURL: "", http:methods };
+/**
+ * Sets the Base URL
+ * @param {string} url the base URl
+ */
 export function setBaseURL(url) { baseURL=url; }
+/**
+ * Sets the security Token
+ * @param {string} token the security token
+ */
 export function setToken(token) { authenticationToken=token; }
+/**
+ * Gets the base url from either provided  opts or baseURL property
+ * @param {ExecOptions} options options object
+ */
 export function getBaseURL(options) { return getOpt("baseURL", options, baseURL); }
+/**
+ * Gets the token from either provided opts or authenticationToken property
+ * @param {ExecOptions} options options object
+ */
 export function getToken(options) { return getOpt("token", options, authenticationToken); }
+/**
+ * Retrieves an option from either opts object or default value
+ * @param {string} name the name of the option
+ * @param {ExecOptions} opts an existing opts object
+ * @param {string} dflt a default value to be returned if object does not have the property
+ */
 function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? opts[name] : dflt; }
 
+
+/**
+    * @typedef {import("./types/api-requests").CredentialsRequest} CredentialsRequest
+    * @typedef {import("./types/api-requests").SiteRequest} SiteRequest
+    * @typedef {import("./types/api-requests").UserRequest} UserRequest
+    * @typedef {import("./types/api-requests").DataAlertRequest} DataAlertRequest
+    * @typedef {import("./types/api-requests").PermissionsRequest} PermissionsRequest
+    * @typedef {import("./types/api-requests").TaskRequest} TaskRequest
+    * @typedef {import("./types/api-requests").FlowRequest} FlowRequest
+    * @typedef {import("./types/api-requests").ProjectRequest} ProjectRequest
+    * @typedef {import("./types/api-requests").WorkbookRequest} WorkbookRequest
+    * @typedef {import("./types/api-requests").TagsRequest} TagsRequest
+    * @typedef {import("./types/api-requests").RecommendationDismissalRequest} RecommendationDismissalRequest
+    * @typedef {import("./types/api-requests").ConnectionRequest} ConnectionRequest
+    * @typedef {import("./types/api-requests").DatasourceRequest} DatasourceRequest
+    * @typedef {import("./types/api-requests").GroupRequest} GroupRequest
+    * @typedef {import("./types/api-requests").TableRequest} TableRequest
+    * @typedef {import("./types/api-requests").ColumnRequest} ColumnRequest
+    * @typedef {import("./types/api-requests").DataQualityWarningRequest} DataQualityWarningRequest
+    * @typedef {import("./types/api-requests").TagBatchRequest} TagBatchRequest
+    * @typedef {import("./types/api-requests").ScheduleRequest} ScheduleRequest
+    * @typedef {import("./types/api-requests").SubscriptionRequest} SubscriptionRequest
+    * @typedef {import("./types/api-requests").FavoriteRequest} FavoriteRequest
+    * @typedef {import("./types/api-requests").DatasourcesRequest} DatasourcesRequest
+    * @typedef {import("./types/api-responses").CredentialsResponse} CredentialsResponse
+    * @typedef {import("./types/api-responses").SiteResponse} SiteResponse
+    * @typedef {import("./types/api-responses").SitesResponse} SitesResponse
+    * @typedef {import("./types/api-responses").ViewsResponse} ViewsResponse
+    * @typedef {import("./types/api-responses").DataAlertResponse} DataAlertResponse
+    * @typedef {import("./types/api-responses").DataAlertsResponse} DataAlertsResponse
+    * @typedef {import("./types/api-responses").UserResponse} UserResponse
+    * @typedef {import("./types/api-responses").PermissionsResponse} PermissionsResponse
+    * @typedef {import("./types/api-responses").ProjectResponse} ProjectResponse
+    * @typedef {import("./types/api-responses").ProjectsResponse} ProjectsResponse
+    * @typedef {import("./types/api-responses").WorkbookResponse} WorkbookResponse
+    * @typedef {import("./types/api-responses").TagsResponse} TagsResponse
+    * @typedef {import("./types/api-responses").ConnectionsResponse} ConnectionsResponse
+    * @typedef {import("./types/api-responses").ViewResponse} ViewResponse
+    * @typedef {import("./types/api-responses").RevisionsResponse} RevisionsResponse
+    * @typedef {import("./types/api-responses").WorkbooksResponse} WorkbooksResponse
+    * @typedef {import("./types/api-responses").ConnectionResponse} ConnectionResponse
+    * @typedef {import("./types/api-responses").JobResponse} JobResponse
+    * @typedef {import("./types/api-responses").DataAccelerationReportResponse} DataAccelerationReportResponse
+    * @typedef {import("./types/api-responses").DatasourceResponse} DatasourceResponse
+    * @typedef {import("./types/api-responses").DatasourcesResponse} DatasourcesResponse
+    * @typedef {import("./types/api-responses").GroupResponse} GroupResponse
+    * @typedef {import("./types/api-responses").GroupsResponse} GroupsResponse
+    * @typedef {import("./types/api-responses").UsersResponse} UsersResponse
+    * @typedef {import("./types/api-responses").TaskResponse} TaskResponse
+    * @typedef {import("./types/api-responses").ParentResponse} ParentResponse
+    * @typedef {import("./types/api-responses").BackgroundJobsResponse} BackgroundJobsResponse
+    * @typedef {import("./types/api-responses").TasksResponse} TasksResponse
+    * @typedef {import("./types/api-responses").ScheduleResponse} ScheduleResponse
+    * @typedef {import("./types/api-responses").ExtractsResponse} ExtractsResponse
+    * @typedef {import("./types/api-responses").SchedulesResponse} SchedulesResponse
+    * @typedef {import("./types/api-responses").SubscriptionResponse} SubscriptionResponse
+    * @typedef {import("./types/api-responses").SubscriptionsResponse} SubscriptionsResponse
+    * @typedef {import("./types/api-responses").FavoritesResponse} FavoritesResponse
+    * @typedef {import("./types/api-responses").FileUploadResponse} FileUploadResponse
+    * @typedef {import("./types/api-responses").ServerInfoResponse} ServerInfoResponse
+    */
 
 /**
  * HttpManager object containing standard http methods for GET,POST,PUT,DELETE
@@ -36,10 +122,10 @@ function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? o
 /**
  * Execute Options allow fine-grained control over each request
  * @typedef {Object} ExecOptions
- * @property {HttpManager} http Object containing standard http methods for GET,POST,PUT,DELETE
- * @property {boolean} [authentication] states that the route returns authentication information
- * @property {string} [baseURL] specifies the url to run this request against
- * @property {string} [version] specifies a particular version of the api to run this request on
+ * @property {HttpManager=} http Object containing standard http methods for GET,POST,PUT,DELETE
+ * @property {boolean=} [authentication] states that the route returns authentication information
+ * @property {string=} [baseURL] specifies the url to run this request against
+ * @property {string=} [version] specifies a particular version of the api to run this request on
  */
 
 /**
@@ -49,7 +135,7 @@ function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? o
  * For more information about authentication, see Signing In and Signing Out (Authentication).
  * Note: SAML single sign on (SSO) authentication does not validate REST API requests. Even if you are manually signed in to your server through SSO, REST API request authentication requires that you first make a REST sign in request, and then use the credentials token from its response in the header of subsequent requests. For information about the requirements for using SAML, see SAML Requirements.(Link opens in a new window)
  * @param {CredentialsRequest} credentials credentials
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<CredentialsResponse>} Promise | undefined
  */
 export function signIn(credentials, options=defaultOptions) { 
@@ -57,19 +143,19 @@ export function signIn(credentials, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/auth/signin`)
         .withBodyParameters(credentials)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Signs you out of the current session. This call invalidates the authentication token that is created by a call to Sign In.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function signOut(options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/auth/signout`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -77,7 +163,7 @@ export function signOut(options=defaultOptions) {
  * This method allows an authenticated user to switch sites that they have access to. When you call this method, you must provide the current authorization token as the value of the X-Tableau-Auth header. Using the current authentication token, the method signs you in as a user on the site specified in the request payload. The method returns a new authentication token and invalidates the old one. You have the permissions of the user associated with the authorization token. By default, the token is good for 240 minutes. (You can specify a different timeout value for the token by calling the tsm configuration set command to change the wgserver.session.idle_limit setting.)
  * Note This method is not available on Tableau Online.
  * @param {SiteRequest} site site
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<CredentialsResponse>} Promise | undefined
  */
 export function switchSite(site, options=defaultOptions) { 
@@ -85,7 +171,7 @@ export function switchSite(site, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/auth/switchSite`)
         .withBodyParameters(site)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -93,7 +179,7 @@ export function switchSite(site, options=defaultOptions) {
  * For more information, see Work with Sites(Link opens in a new window) and Add or Edit Sites(Link opens in a new window) in the Tableau Server documentation.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {SiteRequest} site site
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function createSite(site, options=defaultOptions) { 
@@ -101,7 +187,7 @@ export function createSite(site, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites`)
         .withBodyParameters(site)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -112,9 +198,9 @@ export function createSite(site, options=defaultOptions) {
  * @param {string} siteId The ID of the site to get information for.
  * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
  * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function querySite(siteId, siteName, contentUrl, queryOptions={}, options=defaultOptions) { 
@@ -122,7 +208,7 @@ export function querySite(siteId, siteName, contentUrl, queryOptions={}, options
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -131,9 +217,9 @@ export function querySite(siteId, siteName, contentUrl, queryOptions={}, options
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} siteId The ID of the site to get information for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) { 
@@ -141,7 +227,7 @@ export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -150,9 +236,9 @@ export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) {
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function querySiteByName(siteName, queryOptions={}, options=defaultOptions) { 
@@ -160,7 +246,7 @@ export function querySiteByName(siteName, queryOptions={}, options=defaultOption
         .withPath(`/api/{apiVersion}/sites/${siteName}`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -169,9 +255,9 @@ export function querySiteByName(siteName, queryOptions={}, options=defaultOption
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function querySiteByContentUrl(contentUrl, queryOptions={}, options=defaultOptions) { 
@@ -179,16 +265,16 @@ export function querySiteByContentUrl(contentUrl, queryOptions={}, options=defau
         .withPath(`/api/{apiVersion}/sites/${contentUrl}`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of the sites on the server that the caller of this method has access to. This method is not available for Tableau Online.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SitesResponse>} Promise | undefined
  */
 export function querySites(queryOptions={}, options=defaultOptions) { 
@@ -196,34 +282,34 @@ export function querySites(queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Gets the details of the views and workbooks on a site that have been most recently created, updated, or accessed by the signed in user. The 24 most recently viewed items are returned, though it may take some minutes after being viewed for an item to appear in the results.
  * @param {string} siteId The ID of the site that contains the views and workbooks.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getRecentlyViewedForSite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/content/recent`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns all the views for the specified site, optionally including usage statistics.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the views.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.getUsageInformation (Optional) true to return usage statistics. The default is false.
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
- * @param {string} queryOptions.filterExpression <parameter documentation missing>
- * @param {string} queryOptions.sortExpression <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.getUsageInformation] (Optional) true to return usage statistics. The default is false.
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {string=} [queryOptions.filterExpression] <parameter documentation missing>
+ * @param {string=} [queryOptions.sortExpression] <parameter documentation missing>
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewsResponse>} Promise | undefined
  */
 export function queryViewsForSite(siteId, queryOptions={}, options=defaultOptions) { 
@@ -231,7 +317,7 @@ export function queryViewsForSite(siteId, queryOptions={}, options=defaultOption
         .withPath(`/api/{apiVersion}/sites/${siteId}/views`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -239,7 +325,7 @@ export function queryViewsForSite(siteId, queryOptions={}, options=defaultOption
  * Note: You must be signed in to a site in order to update it.
  * @param {string} siteId The ID of the site to update.
  * @param {SiteRequest} site site
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
 export function updateSite(siteId, site, options=defaultOptions) { 
@@ -247,7 +333,7 @@ export function updateSite(siteId, site, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .withBodyParameters(site)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -257,14 +343,14 @@ export function updateSite(siteId, site, options=defaultOptions) {
  * @param {string} siteId The ID of the site to delete.
  * @param {string} siteName The name of the site to delete. If you specify a site name, you must also include the parameter key=name.
  * @param {string} contentUrl The URL of the site to delete. If you specify a content URL, you must also include the parameter key=contentUrl.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSite(siteId, siteName, contentUrl, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -272,14 +358,14 @@ export function deleteSite(siteId, siteName, contentUrl, options=defaultOptions)
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You must have previously called Sign In and signed in to a site in order to delete the site. (When you call this method, you must include the authentication token that you got back when you signed into the site.)
  * @param {string} siteId The ID of the site to delete.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSiteByID(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -287,14 +373,14 @@ export function deleteSiteByID(siteId, options=defaultOptions) {
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You must have previously called Sign In and signed in to a site in order to delete the site. (When you call this method, you must include the authentication token that you got back when you signed into the site.)
  * @param {string} siteName The name of the site to delete. If you specify a site name, you must also include the parameter key=name.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSiteByName(siteName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -302,55 +388,55 @@ export function deleteSiteByName(siteName, options=defaultOptions) {
  * You can specify the site to delete by using the site ID, the site name, or the content URL. You use the key query string parameter to indicate how you are specifying the site, as shown in the URIs.
  * Note: You must have previously called Sign In and signed in to a site in order to delete the site. (When you call this method, you must include the authentication token that you got back when you signed into the site.)
  * @param {string} contentUrl The URL of the site to delete. If you specify a content URL, you must also include the parameter key=contentUrl.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSiteByContentUrl(contentUrl, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${contentUrl}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Deletes the specified data-driven alert from the specified site.
  * @param {string} siteId The ID of the site that contains the specified data-driven alert.
  * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataDrivenAlert(siteId, dataAlertId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Returns details on a specified data-driven alert, including the recipients of the alert.
  * @param {string} siteId The ID of the site that contains the specified data-driven alert.
  * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DataAlertResponse>} Promise | undefined
  */
 export function queryDataDrivenAlertDetails(siteId, dataAlertId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of data-driven alerts in use on the specified site.
  * @param {string} siteId The ID of the site that contains data-driven alerts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DataAlertsResponse>} Promise | undefined
  */
 export function queryDataDrivenAlerts(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -358,7 +444,7 @@ export function queryDataDrivenAlerts(siteId, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the specified data-driven alert.
  * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
  * @param {UserRequest} user user
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UserResponse>} Promise | undefined
  */
 export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options=defaultOptions) { 
@@ -366,7 +452,7 @@ export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options=defa
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users`)
         .withBodyParameters(user)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -374,14 +460,14 @@ export function addUserToDataDrivenAlert(siteId, dataAlertId, user, options=defa
  * @param {string} siteId The ID of the site that contains the specified data-driven alert.
  * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
  * @param {string} userId The ID (not name) of the user to remove from the data-driven alert.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteUserFromDataDrivenAlert(siteId, dataAlertId, userId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users/${userId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -389,7 +475,7 @@ export function deleteUserFromDataDrivenAlert(siteId, dataAlertId, userId, optio
  * @param {string} siteId The ID of the site that contains the data-driven alert.
  * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
  * @param {DataAlertRequest} dataAlert dataAlert
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DataAlertResponse>} Promise | undefined
  */
 export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options=defaultOptions) { 
@@ -397,7 +483,7 @@ export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options=de
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`)
         .withBodyParameters(dataAlert)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -405,16 +491,15 @@ export function updateDataDrivenAlert(siteId, dataAlertId, dataAlert, options=de
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId <parameter documentation missing>
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function addFlowPermissions(siteId, flowId, permissions, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions`)
-        .withQueryParameters(queryOptions)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -423,7 +508,7 @@ export function addFlowPermissions(siteId, flowId, permissions, options=defaultO
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} scheduleId The ID of the schedule that you are associating with the flow. The schedule that you are adding to must have Flow as the schedule type.
  * @param {TaskRequest} task task
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addFlowTaskToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
@@ -431,21 +516,21 @@ export function addFlowTaskToSchedule(siteId, scheduleId, task, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/flows`)
         .withBodyParameters(task)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Deletes a flow. When a flow is deleted, its associated connections, the output and input steps, any associated scheduled tasks, and run history are also deleted.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to delete.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteFlow(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -456,14 +541,14 @@ export function deleteFlow(siteId, flowId, options=defaultOptions) {
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a flow are ChangeHierarchy, ChangePermissions, Delete, Execute, ExportXml (Download), Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteFlowPermission(siteId, flowId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -473,14 +558,14 @@ export function deleteFlowPermission(siteId, flowId, groupId, userId, capability
  * @param {string} groupId The ID of the group to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a flow are ChangeHierarchy, ChangePermissions, Delete, Execute, ExportXml (Download), Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteFlowPermissionsForGroup(siteId, flowId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -490,55 +575,55 @@ export function deleteFlowPermissionsForGroup(siteId, flowId, groupId, capabilit
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a flow are ChangeHierarchy, ChangePermissions, Delete, Execute, ExportXml (Download), Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteFlowPermissionsForUser(siteId, flowId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Downloads a flow in .tlsx format.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to download.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadFlow(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/content`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns information about the specified flow run task. This method shows you information about the scheduled task for the flow.
  * @param {string} siteId The ID of the site that the user is a member of.
  * @param {string} taskId The ID of the scheduled flow run task that you want information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getFlowRunTask(siteId, taskId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of scheduled flow tasks for the site.
  * @param {string} siteId The ID of the site that the user is a member of.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getFlowRunTasks(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -550,18 +635,17 @@ export function getFlowRunTasks(siteId, options=defaultOptions) {
  * @param {string} siteId The ID of the site to publish to.
  * @param {FlowRequest} flow flow
  * @param {Object} file File Contents
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function publishFlow(siteId, flow, file, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows`)
         .withHeaders({ "Content-Type": "multipart/mixed" })
-        .withQueryParameters(queryOptions)
         .withBodyParameters(flow)
         .withFileParameters({ name: "tableau_flow", file: file })
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -569,56 +653,55 @@ export function publishFlow(siteId, flow, file, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to return information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryFlow(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of data connections for the specific flow.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to return connection information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryFlowConnections(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/connections`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of permissions for the specific flow.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to get permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryFlowPermissions(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns the flows on a site. If the user is not an administrator, the method returns just the flows that the user has permissions to view.
  * @param {string} siteId The ID of the site that contains the flows.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryFlowsForSite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows`)
-        .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -626,11 +709,11 @@ export function queryFlowsForSite(siteId, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to get flows for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.isOwner (Optional) trueto return only flows that the specified user owns, or falseto return all flows that the specified user has at least read access to. The default is false.
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.isOwner] (Optional) trueto return only flows that the specified user owns, or falseto return all flows that the specified user has at least read access to. The default is false.
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryFlowsForUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
@@ -638,7 +721,7 @@ export function queryFlowsForUser(siteId, userId, queryOptions={}, options=defau
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/flows`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -649,29 +732,28 @@ export function queryFlowsForUser(siteId, userId, queryOptions={}, options=defau
  * A flow task can be initiated by a REST API call, a tabcmd command, or a job calling the task on a schedule. A REST request to start a flow task will often fail if the task has been put in the task queue in any of these ways, or is already in progress. If your request results in an error code 403102, it means that there is already a scheduled task for this within a very close time period (seconds). In this case, if the task is currently in a suspended state, it will resume.
  * @param {string} siteId The ID of the site that the user is a member of.
  * @param {string} taskId The ID of the flow run task that you want to run.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function runFlowTask(siteId, taskId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}/runNow`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Updates the owner, project, of the specified flow.
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateFlow(siteId, flowId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}`)
-        .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -679,14 +761,14 @@ export function updateFlow(siteId, flowId, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the flow.
  * @param {string} flowId The ID of the flow to update.
  * @param {string} connectionId The ID of the connection to update. To determine what connections are available for a flow, call Query Flow Connections.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateFlowConnection(siteId, flowId, connectionId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/flows/${flowId}/connections/${connectionId}`)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -694,9 +776,9 @@ export function updateFlowConnection(siteId, flowId, connectionId, options=defau
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site to create the project in.
  * @param {ProjectRequest} project project
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.publishValue (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.publishValue] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectResponse>} Promise | undefined
  */
 export function createProject(siteId, project, queryOptions={}, options=defaultOptions) { 
@@ -705,19 +787,19 @@ export function createProject(siteId, project, queryOptions={}, options=defaultO
         .withQueryParameters(queryOptions)
         .withBodyParameters(project)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Returns a list of projects on the specified site, with optional parameters for specifying the paging of large results.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the projects.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectsResponse>} Promise | undefined
  */
 export function queryProjects(siteId, queryOptions={}, options=defaultOptions) { 
@@ -725,7 +807,7 @@ export function queryProjects(siteId, queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -733,9 +815,9 @@ export function queryProjects(siteId, queryOptions={}, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to update.
  * @param {ProjectRequest} project project
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.publishValue (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.publishValue] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectResponse>} Promise | undefined
  */
 export function updateProject(siteId, projectId, project, queryOptions={}, options=defaultOptions) { 
@@ -744,21 +826,21 @@ export function updateProject(siteId, projectId, project, queryOptions={}, optio
         .withQueryParameters(queryOptions)
         .withBodyParameters(project)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Deletes the specified project on a specific site. When a project is deleted, all of its assets are also deleted: associated workbooks, data sources, project view options, and rights. Use this method with caution.
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to delete.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteProject(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -772,13 +854,13 @@ export function deleteProject(siteId, projectId, options=defaultOptions) {
  * @param {string} siteId The ID of the site to publish to.
  * @param {WorkbookRequest} workbook workbook
  * @param {Object} file File Contents
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.overwriteFlag (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
- * @param {boolean} queryOptions.asJobValue (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
- * @param {boolean} queryOptions.skipConnectionCheckFlag (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
- * @param {string} queryOptions.uploadSessionId If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
- * @param {string} queryOptions.workbookFileType twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.overwriteFlag] (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
+ * @param {boolean=} [queryOptions.asJobValue] (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
+ * @param {boolean=} [queryOptions.skipConnectionCheckFlag] (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
+ * @param {string=} [queryOptions.uploadSessionId] If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
+ * @param {string=} [queryOptions.workbookFileType] twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbookResponse>} Promise | undefined
  */
 export function publishWorkbook(siteId, workbook, file, queryOptions={}, options=defaultOptions) { 
@@ -789,7 +871,7 @@ export function publishWorkbook(siteId, workbook, file, queryOptions={}, options
         .withBodyParameters(workbook)
         .withFileParameters({ name: "tableau_workbook", file: file })
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -797,7 +879,7 @@ export function publishWorkbook(siteId, workbook, file, queryOptions={}, options
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} viewId The ID of the views to add tags to.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TagsResponse>} Promise | undefined
  */
 export function addTagsToView(siteId, viewId, tags, options=defaultOptions) { 
@@ -805,7 +887,7 @@ export function addTagsToView(siteId, viewId, tags, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -813,7 +895,7 @@ export function addTagsToView(siteId, viewId, tags, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to add tags to.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TagsResponse>} Promise | undefined
  */
 export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptions) { 
@@ -821,7 +903,7 @@ export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptio
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -829,9 +911,9 @@ export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptio
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to get the views for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.getUsageInformation true to return usage statistics. The default is false.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.getUsageInformation] true to return usage statistics. The default is false.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewsResponse>} Promise | undefined
  */
 export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
@@ -839,7 +921,7 @@ export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, optio
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/views`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -849,10 +931,10 @@ export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, optio
  * This method includes the ability to filter a view using fields in the underlying workbook data. To learn more about filtering query views, see Filtering and Sorting in the REST API.
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to render as data.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOptions) { 
@@ -860,7 +942,7 @@ export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOp
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/data`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -870,11 +952,11 @@ export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOp
  * Note: If you want to disable this endpoint, use TSM to set the sheet_image.enabled setting to false. For more information, see tsm configuration set options in the Tableau Server help.
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to return an image for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.imageResolution (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.imageResolution] (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultOptions) { 
@@ -882,7 +964,7 @@ export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/image`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -891,12 +973,12 @@ export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultO
  * This method includes the ability to filter a view using fields in the underlying workbook data. To learn more about filtering query views, see Filtering and Sorting in the REST API.
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to render as a .pdf file.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string} queryOptions.pageOrientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
- * @param {string} queryOptions.pageType (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.pageOrientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+ * @param {string=} [queryOptions.pageType] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryViewPDF(siteId, viewId, queryOptions={}, options=defaultOptions) { 
@@ -904,7 +986,7 @@ export function queryViewPDF(siteId, viewId, queryOptions={}, options=defaultOpt
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/pdf`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -913,14 +995,14 @@ export function queryViewPDF(siteId, viewId, queryOptions={}, options=defaultOpt
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} workbookId The ID of the workbook that contains the view to return a thumbnail image for.
  * @param {string} viewId The ID of the view to return a thumbnail image for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryViewPreviewImage(siteId, workbookId, viewId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/views/${viewId}/previewImage`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -928,50 +1010,50 @@ export function queryViewPreviewImage(siteId, workbookId, viewId, options=defaul
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to return information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbookResponse>} Promise | undefined
  */
 export function queryWorkbook(siteId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of data connections for the specific workbook.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to return connection information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ConnectionsResponse>} Promise | undefined
  */
 export function queryWorkbookConnections(siteId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Gets the details of a specific view.
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} viewId The ID of the view whose details are requested.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewResponse>} Promise | undefined
  */
 export function getView(siteId, viewId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Gets the details of all views in a site with a specified name.
  * @param {string} siteId The ID of the site that contains the group.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.viewName The name of the view as it appears in the URL to the view. For https://MY_SERVER/#/MY_SITE/views/workbook-name/Sheet1?:iid=1, the name would be Sheet1.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.viewName] The name of the view as it appears in the URL to the view. For https://MY_SERVER/#/MY_SITE/views/workbook-name/Sheet1?:iid=1, the name would be Sheet1.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewResponse>} Promise | undefined
  */
 export function getViewByPath(siteId, queryOptions={}, options=defaultOptions) { 
@@ -979,20 +1061,20 @@ export function getViewByPath(siteId, queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/views`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Gets a list of views that are recommended for a user. Using machine learning, the server will match preferences between similar users and recommend content that is most popular and recently viewed. When a recommended view is selected and not marked as hidden, it appears on the server Home and Recommendations pages.
  * @param {string} siteId <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getViewRecommendations(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1001,10 +1083,10 @@ export function getViewRecommendations(siteId, options=defaultOptions) {
  * To get a specific version of the workbook from revision history, use the Download Workbook Revision method. For more information, see Maintain a History of Revisions(Link opens in a new window) in the Tableau Server Help.
  * @param {string} siteId The ID of the site that contains the workbook to get revisions for.
  * @param {string} workbookId The ID of the workbook to get revisions for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<RevisionsResponse>} Promise | undefined
  */
 export function getWorkbookRevisions(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
@@ -1012,14 +1094,14 @@ export function getWorkbookRevisions(siteId, workbookId, queryOptions={}, option
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Hides a view from being recommended by the server by adding it to a list of views that are dismissed for a user. If hidden, a view will not be displayed on the server Home or Recommendation pages.
  * @param {string} siteId The ID of the site that contains the group.
  * @param {RecommendationDismissalRequest} recommendationDismissal recommendationDismissal
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function hideViewRecommendations(siteId, recommendationDismissal, options=defaultOptions) { 
@@ -1027,15 +1109,15 @@ export function hideViewRecommendations(siteId, recommendationDismissal, options
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/dismissals`)
         .withBodyParameters(recommendationDismissal)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Unhides a view from being recommended by the server by removing it from the list of views that are dimissed for a user. If the unhidden view meets the criteria for being recommended, then it will be displayed on the server Home or Recommendation pages.
  * @param {string} siteId The ID of the site that contains the group.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.viewLuid The LUID of the view to be removed from the list of views hidden from recommendation for a user.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.viewLuid] The LUID of the view to be removed from the list of views hidden from recommendation for a user.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function unhideViewRecommendations(siteId, queryOptions={}, options=defaultOptions) { 
@@ -1043,7 +1125,7 @@ export function unhideViewRecommendations(siteId, queryOptions={}, options=defau
         .withPath(`/api/{apiVersion}/sites/${siteId}/recommendations/dismissals/`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1051,27 +1133,27 @@ export function unhideViewRecommendations(siteId, queryOptions={}, options=defau
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to return the thumbnail image for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryWorkbookPreviewImage(siteId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/previewImage`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns the workbooks on a site.
  * If the user is not an administrator, the method returns just the workbooks that the user has permissions to view.
  * @param {string} siteId The ID of the site that contains the workbooks.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbooksResponse>} Promise | undefined
  */
 export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOptions) { 
@@ -1079,7 +1161,7 @@ export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOp
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1087,11 +1169,11 @@ export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOp
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to get workbooks for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.isOwner (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.isOwner] (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbooksResponse>} Promise | undefined
  */
 export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
@@ -1099,7 +1181,7 @@ export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=d
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/workbooks`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1107,9 +1189,9 @@ export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=d
  * If you make multiple requests for an .xlsx, subsequent calls return a cached version of the file. This means that the returned .xlsx might not include the latest changes to the workbook. To decrease the amount of time that a workbook is cached, use the maxAge parameter.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} viewId The ID of the view to use as the source of the crosstab to be downloaded as an .xlsx file.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadViewCrosstabExcel(siteId, viewId, queryOptions={}, options=defaultOptions) { 
@@ -1117,16 +1199,16 @@ export function downloadViewCrosstabExcel(siteId, viewId, queryOptions={}, optio
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/crosstab/excel`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Downloads a workbook in .twb or .twbx format.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to download.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
@@ -1134,7 +1216,7 @@ export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=de
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/content`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1142,11 +1224,11 @@ export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=de
  * If you make multiple requests for a PDF, subsequent calls return a cached version of the file. This means that the returned PDF might not include the latest changes to the workbook. To decrease the amount of time that a workbook is cached, use the maxAge parameter.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to use as the source of the .pdf file to be downloaded.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string} queryOptions.pageOrientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
- * @param {string} queryOptions.pageType (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.pageOrientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+ * @param {string=} [queryOptions.pageType] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
@@ -1154,7 +1236,7 @@ export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/pdf`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1162,9 +1244,9 @@ export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options
  * If you make multiple requests for a .pptx, subsequent calls return a cached version of the file. This means that the returned .pptx might not include the latest changes to the workbook. To decrease the amount of time that a workbook is cached, use the maxAge parameter.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to use as the source of the .pptx file to be downloaded.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, options=defaultOptions) { 
@@ -1172,7 +1254,7 @@ export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, 
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/powerpoint`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1181,9 +1263,9 @@ export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, 
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to download.
  * @param {number} revisionNumber The revision number of the workbook to download. To determine what versions are available, call Get Workbook Revisions. Note that the current revision of a workbook cannot be accessed by this call; use Download Workbook instead.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadWorkbookRevision(siteId, workbookId, revisionNumber, queryOptions={}, options=defaultOptions) { 
@@ -1191,7 +1273,7 @@ export function downloadWorkbookRevision(siteId, workbookId, revisionNumber, que
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}/content`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1199,7 +1281,7 @@ export function downloadWorkbookRevision(siteId, workbookId, revisionNumber, que
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to update.
  * @param {WorkbookRequest} workbook workbook
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbookResponse>} Promise | undefined
  */
 export function updateWorkbook(siteId, workbookId, workbook, options=defaultOptions) { 
@@ -1207,7 +1289,7 @@ export function updateWorkbook(siteId, workbookId, workbook, options=defaultOpti
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .withBodyParameters(workbook)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1218,7 +1300,7 @@ export function updateWorkbook(siteId, workbookId, workbook, options=defaultOpti
  * @param {string} workbookId The ID of the workbook to update.
  * @param {string} connectionId The ID of the connection to update.
  * @param {ConnectionRequest} connection connection
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ConnectionResponse>} Promise | undefined
  */
 export function updateWorkbookConnection(siteId, workbookId, connectionId, connection, options=defaultOptions) { 
@@ -1226,7 +1308,7 @@ export function updateWorkbookConnection(siteId, workbookId, connectionId, conne
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections/${connectionId}`)
         .withBodyParameters(connection)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1235,7 +1317,7 @@ export function updateWorkbookConnection(siteId, workbookId, connectionId, conne
  * Note: This method will fail and result in an error if your Server Administrator has disabled the RunNow setting for the site. For more information, see Tableau Server Settings(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to refresh.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<JobResponse>} Promise | undefined
  */
 export function updateWorkbookNow(siteId, workbookId, options=defaultOptions) { 
@@ -1243,21 +1325,21 @@ export function updateWorkbookNow(siteId, workbookId, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/refresh`)
         .withBodyParameters()
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Deletes a workbook. When a workbook is deleted, all of its assets are also deleted, including associated views, data connections, and so on.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to remove.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteWorkbook(siteId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1265,14 +1347,14 @@ export function deleteWorkbook(siteId, workbookId, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} viewId The ID of the view to remove the tag from.
  * @param {string} tagName The name of the tag to remove from the view.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromView(siteId, viewId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1280,27 +1362,27 @@ export function deleteTagFromView(siteId, viewId, tagName, options=defaultOption
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to remove the tag from.
  * @param {string} tagName The name of the tag to remove from the workbook.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromWorkbook(siteId, workbookId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Returns a report about data acceleration for the site. It lets you compare page load times for before and after data acceleration is enabled.
  * @param {string} siteId The ID of the site that contains the task.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DataAccelerationReportResponse>} Promise | undefined
  */
 export function getDataAccelerationReportForASite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/dataAccelerationReport`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1313,13 +1395,13 @@ export function getDataAccelerationReportForASite(siteId, options=defaultOptions
  * @param {string} siteId The ID of the site to publish to.
  * @param {DatasourceRequest} datasource datasource
  * @param {Object} file File Contents
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.overwriteFlag (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
- * @param {boolean} queryOptions.asJobValue (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
- * @param {boolean} queryOptions.appendFlag (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
- * @param {string} queryOptions.uploadSessionId If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
- * @param {string} queryOptions.datasourceFileType hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.overwriteFlag] (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
+ * @param {boolean=} [queryOptions.asJobValue] (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
+ * @param {boolean=} [queryOptions.appendFlag] (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
+ * @param {string=} [queryOptions.uploadSessionId] If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
+ * @param {string=} [queryOptions.datasourceFileType] hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
 export function publishDataSource(siteId, datasource, file, queryOptions={}, options=defaultOptions) { 
@@ -1330,7 +1412,7 @@ export function publishDataSource(siteId, datasource, file, queryOptions={}, opt
         .withBodyParameters(datasource)
         .withFileParameters({ name: "tableau_datasource", file: file })
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -1338,7 +1420,7 @@ export function publishDataSource(siteId, datasource, file, queryOptions={}, opt
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to add tags to.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TagsResponse>} Promise | undefined
  */
 export function addTagsToDataSource(siteId, datasourceId, tags, options=defaultOptions) { 
@@ -1346,7 +1428,7 @@ export function addTagsToDataSource(siteId, datasourceId, tags, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1354,14 +1436,14 @@ export function addTagsToDataSource(siteId, datasourceId, tags, options=defaultO
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to remove the tag from.
  * @param {string} tagName The name of the tag to remove from the data source.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromDataSource(siteId, datasourceId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1369,27 +1451,27 @@ export function deleteTagFromDataSource(siteId, datasourceId, tagName, options=d
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The site that contains the data source.
  * @param {string} datasourceId The ID of the data source to get.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
 export function queryDataSource(siteId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of published data sources on the specified site, with optional parameters for specifying the paging of large results. To get a list of data sources embedded in a workbook, use the Query Workbook Connections method.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the data sources.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourcesResponse>} Promise | undefined
  */
 export function queryDataSources(siteId, queryOptions={}, options=defaultOptions) { 
@@ -1397,21 +1479,21 @@ export function queryDataSources(siteId, queryOptions={}, options=defaultOptions
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of data connections for the specified data source.
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to return connection information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ConnectionsResponse>} Promise | undefined
  */
 export function queryDataSourceConnections(siteId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1420,10 +1502,10 @@ export function queryDataSourceConnections(siteId, datasourceId, options=default
  * To get a specific version of the data source from revision history, use the Download Data Source Revision method.
  * @param {string} siteId The ID of the site that contains the data source to get revisions for.
  * @param {string} datasourceId The ID of the data source to get revisions for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<RevisionsResponse>} Promise | undefined
  */
 export function getDataSourceRevisions(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
@@ -1431,16 +1513,16 @@ export function getDataSourceRevisions(siteId, datasourceId, queryOptions={}, op
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Downloads a data source in .tdsx format.
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to download.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadDataSource(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
@@ -1448,7 +1530,7 @@ export function downloadDataSource(siteId, datasourceId, queryOptions={}, option
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/content`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1457,9 +1539,9 @@ export function downloadDataSource(siteId, datasourceId, queryOptions={}, option
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to download.
  * @param {number} revisionNumber The revision number of the data source to download. To determine what versions are available, call Get Data Source Revisions.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function downloadDataSourceRevision(siteId, datasourceId, revisionNumber, queryOptions={}, options=defaultOptions) { 
@@ -1467,7 +1549,7 @@ export function downloadDataSourceRevision(siteId, datasourceId, revisionNumber,
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}/content`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1475,7 +1557,7 @@ export function downloadDataSourceRevision(siteId, datasourceId, revisionNumber,
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to update.
  * @param {DatasourceRequest} datasource datasource
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
 export function updateDataSource(siteId, datasourceId, datasource, options=defaultOptions) { 
@@ -1483,7 +1565,7 @@ export function updateDataSource(siteId, datasourceId, datasource, options=defau
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .withBodyParameters(datasource)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1492,7 +1574,7 @@ export function updateDataSource(siteId, datasourceId, datasource, options=defau
  * @param {string} datasourceId The ID of the data source to update.
  * @param {string} connectionId The ID of the connection to update. To determine what connections are available for a data source, call Query Data Source Connections.
  * @param {ConnectionRequest} connection connection
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ConnectionResponse>} Promise | undefined
  */
 export function updateDataSourceConnection(siteId, datasourceId, connectionId, connection, options=defaultOptions) { 
@@ -1500,7 +1582,7 @@ export function updateDataSourceConnection(siteId, datasourceId, connectionId, c
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections/${connectionId}`)
         .withBodyParameters(connection)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1509,7 +1591,7 @@ export function updateDataSourceConnection(siteId, datasourceId, connectionId, c
  * This method runs an extract refresh for the specified data source, with no need to associate that extract refresh with a scheduled task. This method is the equivalent of selecting a data source using the Tableau Server UI, and then selecting Refresh Extracts from the menu (also known as a "manual refresh"), however, the REST method always runs a full refresh even if the refresh type is set to incremental. Similar to a manual refresh, if the extract is a .tde file, it will be converted to a .hyper file as a result of the refresh. To learn more about extract upgrades to the .hyper file format, see Extract Upgrade to .hyper Format.
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to refresh.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<JobResponse>} Promise | undefined
  */
 export function updateDataSourceNow(siteId, datasourceId, options=defaultOptions) { 
@@ -1517,21 +1599,21 @@ export function updateDataSourceNow(siteId, datasourceId, options=defaultOptions
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/refresh`)
         .withBodyParameters()
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Deletes the specified data source from a site. When a data source is deleted, its associated data connection is also deleted. Workbooks that use the data source are not deleted, but they will no longer work properly.
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to delete.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataSource(siteId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1541,14 +1623,14 @@ export function deleteDataSource(siteId, datasourceId, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} datasourceId The ID of the data source to remove the revision for.
  * @param {number} revisionNumber The revision number of the data source to remove. To determine what versions are available, call Get Data Source Revisions.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeDataSourceRevision(siteId, datasourceId, revisionNumber, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1560,9 +1642,9 @@ export function removeDataSourceRevision(siteId, datasourceId, revisionNumber, o
  * The Create Group response returns information in two ways: in the response header and in the response body. The ID of the new group is always returned as the value of the Location header. If you create a local group or import an Active Directory group immediately, the response body contains the name and ID of the new group. If you import an Active Directory group using a background process, the response body contains a <job> element that includes a job ID. You can use the job ID to check the status of the operation by calling Query Job.
  * @param {string} siteId The ID of the site to create the group in.
  * @param {GroupRequest} group group
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.asJobValue A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.asJobValue] A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<GroupResponse>} Promise | undefined
  */
 export function createGroup(siteId, group, queryOptions={}, options=defaultOptions) { 
@@ -1571,7 +1653,7 @@ export function createGroup(siteId, group, queryOptions={}, options=defaultOptio
         .withQueryParameters(queryOptions)
         .withBodyParameters(group)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -1580,7 +1662,7 @@ export function createGroup(siteId, group, queryOptions={}, options=defaultOptio
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} groupId The ID of the group to add the user to.
  * @param {UserRequest} user user
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UserResponse>} Promise | undefined
  */
 export function addUserToGroup(siteId, groupId, user, options=defaultOptions) { 
@@ -1588,7 +1670,7 @@ export function addUserToGroup(siteId, groupId, user, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users`)
         .withBodyParameters(user)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -1601,7 +1683,7 @@ export function addUserToGroup(siteId, groupId, user, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site to add users to.
  * @param {UserRequest} user user
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UserResponse>} Promise | undefined
  */
 export function addUserToSite(siteId, user, options=defaultOptions) { 
@@ -1609,17 +1691,17 @@ export function addUserToSite(siteId, user, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/users`)
         .withBodyParameters(user)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Gets a list of groups of which the specified user is a member.
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} userId The ID of the user whose group memberships are listed.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<GroupsResponse>} Promise | undefined
  */
 export function getGroupsForAUser(siteId, userId, queryOptions={}, options=defaultOptions) { 
@@ -1627,17 +1709,17 @@ export function getGroupsForAUser(siteId, userId, queryOptions={}, options=defau
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}/groups`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Gets a list of users in the specified group.
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} groupId The ID of the group to get the users for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UsersResponse>} Promise | undefined
  */
 export function getUsersInGroup(siteId, groupId, queryOptions={}, options=defaultOptions) { 
@@ -1645,19 +1727,19 @@ export function getUsersInGroup(siteId, groupId, queryOptions={}, options=defaul
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns the users associated with the specified site.
  * @param {string} siteId The ID of the site that contains the users.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UsersResponse>} Promise | undefined
  */
 export function getUsersOnSite(siteId, queryOptions={}, options=defaultOptions) { 
@@ -1665,19 +1747,19 @@ export function getUsersOnSite(siteId, queryOptions={}, options=defaultOptions) 
         .withPath(`/api/{apiVersion}/sites/${siteId}/users`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of groups on the specified site, with optional parameters for specifying the paging of large results.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the groups.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<GroupsResponse>} Promise | undefined
  */
 export function queryGroups(siteId, queryOptions={}, options=defaultOptions) { 
@@ -1685,7 +1767,7 @@ export function queryGroups(siteId, queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1693,14 +1775,14 @@ export function queryGroups(siteId, queryOptions={}, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to get information for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UserResponse>} Promise | undefined
  */
 export function queryUserOnSite(siteId, userId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1711,16 +1793,15 @@ export function queryUserOnSite(siteId, userId, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} groupId The ID of the group to update.
  * @param {GroupRequest} group group
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateGroup(siteId, groupId, group, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}`)
-        .withQueryParameters(queryOptions)
         .withBodyParameters(group)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1731,7 +1812,7 @@ export function updateGroup(siteId, groupId, group, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to update.
  * @param {UserRequest} user user
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UserResponse>} Promise | undefined
  */
 export function updateUser(siteId, userId, user, options=defaultOptions) { 
@@ -1739,7 +1820,7 @@ export function updateUser(siteId, userId, user, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
         .withBodyParameters(user)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1747,14 +1828,14 @@ export function updateUser(siteId, userId, user, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} groupId The ID of the group to remove the user from.
  * @param {string} userId The ID of the user to remove.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeUserFromGroup(siteId, groupId, userId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}/users/${userId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1762,15 +1843,14 @@ export function removeUserFromGroup(siteId, groupId, userId, options=defaultOpti
  * If a user is removed from all sites that the user is a member of, the user is deleted.
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to remove.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeUserFromSite(siteId, userId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/users/${userId}`)
-        .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1778,41 +1858,41 @@ export function removeUserFromSite(siteId, userId, options=defaultOptions) {
  * Note: You cannot delete the All Users group.
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} groupId The ID of the group to delete.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteGroup(siteId, groupId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/groups/${groupId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Get information about a database asset.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDatabase(siteId, databaseId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Get information about all database assets for a site.
  * @param {string} siteId The unique ID of the site asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDatabases(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1820,7 +1900,7 @@ export function queryDatabases(siteId, options=defaultOptions) {
  * This method is available if your Tableau Online site or Tableau Server is licensed with the Data Management Add-on.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateDatabase(siteId, databaseId, options=defaultOptions) { 
@@ -1828,7 +1908,7 @@ export function updateDatabase(siteId, databaseId, options=defaultOptions) {
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .withBodyParameters()
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -1836,14 +1916,14 @@ export function updateDatabase(siteId, databaseId, options=defaultOptions) {
  * This method is available if your Tableau Online site or Tableau Server is licensed with the Data Management Add-on.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeDatabase(siteId, databaseId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1852,7 +1932,7 @@ export function removeDatabase(siteId, databaseId, options=defaultOptions) {
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDatabasePermissions(siteId, databaseId, permissions, options=defaultOptions) { 
@@ -1860,21 +1940,21 @@ export function addDatabasePermissions(siteId, databaseId, permissions, options=
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Get information about the permissions on a database asset.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDatabasePermissions(siteId, databaseId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1884,7 +1964,7 @@ export function queryDatabasePermissions(siteId, databaseId, options=defaultOpti
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset to set default permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDefaultDatabasePermissions(siteId, databaseId, permissions, options=defaultOptions) { 
@@ -1892,21 +1972,21 @@ export function addDefaultDatabasePermissions(siteId, databaseId, permissions, o
         .withPath(`/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Get the default permissions applied to the database asset and its children tables.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset to set default permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDefaultDatabasePermissions(siteId, databaseId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -1918,14 +1998,14 @@ export function queryDefaultDatabasePermissions(siteId, databaseId, options=defa
  * @param {string} groupId The unique ID of the group to remove the permissions for.
  * @param {string} capabilityName The explicit permissions capability to remove. Capabilities that can be removed are Read, Write, or ChangePermissions.
  * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDatabasePermissions(siteId, databaseId, userId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1936,14 +2016,14 @@ export function deleteDatabasePermissions(siteId, databaseId, userId, groupId, c
  * @param {string} userId The unique ID of the user to remove the permissions for.
  * @param {string} capabilityName The explicit permissions capability to remove. Capabilities that can be removed are Read, Write, or ChangePermissions.
  * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDatabasePermissionsForGroup(siteId, databaseId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1954,14 +2034,14 @@ export function deleteDatabasePermissionsForGroup(siteId, databaseId, userId, ca
  * @param {string} groupId The unique ID of the group to remove the permissions for.
  * @param {string} capabilityName The explicit permissions capability to remove. Capabilities that can be removed are Read, Write, or ChangePermissions.
  * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDatabasePermissionsForUser(siteId, databaseId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1972,14 +2052,14 @@ export function deleteDatabasePermissionsForUser(siteId, databaseId, groupId, ca
  * @param {string} userId <parameter documentation missing>
  * @param {string} capabilityMode <parameter documentation missing>
  * @param {string} groupId <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultDatabasePermissions(siteId, databaseId, userId, capabilityMode, groupId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -1989,14 +2069,14 @@ export function deleteDefaultDatabasePermissions(siteId, databaseId, userId, cap
  * @param {string} databaseId The unique ID of the database asset.
  * @param {string} userId <parameter documentation missing>
  * @param {string} capabilityMode <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultDatabasePermissionsForUser(siteId, databaseId, userId, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2006,41 +2086,41 @@ export function deleteDefaultDatabasePermissionsForUser(siteId, databaseId, user
  * @param {string} databaseId The unique ID of the database asset.
  * @param {string} capabilityMode <parameter documentation missing>
  * @param {string} groupId <parameter documentation missing>
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultDatabasePermissionsForGroup(siteId, databaseId, capabilityMode, groupId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Get information about a table asset.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryTable(siteId, tableId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Get information about all table assets for a site.
  * @param {string} siteId The unique ID of the site asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryTables(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2049,7 +2129,7 @@ export function queryTables(siteId, options=defaultOptions) {
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {TableRequest} table table
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateTable(siteId, tableId, table, options=defaultOptions) { 
@@ -2057,7 +2137,7 @@ export function updateTable(siteId, tableId, table, options=defaultOptions) {
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .withBodyParameters(table)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2065,14 +2145,14 @@ export function updateTable(siteId, tableId, table, options=defaultOptions) {
  * This method is available if your Tableau Online site or Tableau Server is licensed with the Data Management Add-on.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeTable(siteId, tableId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2081,7 +2161,7 @@ export function removeTable(siteId, tableId, options=defaultOptions) {
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addTablePermissions(siteId, tableId, permissions, options=defaultOptions) { 
@@ -2089,21 +2169,21 @@ export function addTablePermissions(siteId, tableId, permissions, options=defaul
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Get information about the permissions on a table asset.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryTablePermissions(siteId, tableId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2111,14 +2191,14 @@ export function queryTablePermissions(siteId, tableId, options=defaultOptions) {
  * This method is available if your Tableau Online site or Tableau Server is licensed with the Data Management Add-on.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTablePermissions(siteId, tableId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/table/${tableId}/permissions`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2126,28 +2206,28 @@ export function deleteTablePermissions(siteId, tableId, options=defaultOptions) 
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryColumnInATable(siteId, tableId, columnId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Get information about the columns in a table asset.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryColumnsInATable(siteId, tableId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2157,7 +2237,7 @@ export function queryColumnsInATable(siteId, tableId, options=defaultOptions) {
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
  * @param {ColumnRequest} column column
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateColumn(siteId, tableId, columnId, column, options=defaultOptions) { 
@@ -2165,7 +2245,7 @@ export function updateColumn(siteId, tableId, columnId, column, options=defaultO
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .withBodyParameters(column)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2174,14 +2254,14 @@ export function updateColumn(siteId, tableId, columnId, column, options=defaultO
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeColumn(siteId, tableId, columnId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2191,7 +2271,7 @@ export function removeColumn(siteId, tableId, columnId, options=defaultOptions) 
  * @param {string} contentType The type of asset that the data quality warning is being attached to. To specify the type, use: databasetabledatasourceflowTypes are not case sensitive.
  * @param {string} contentLuid The unique ID of the asset (database, table, published data source, or flow). This is the same as the content ID.
  * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDataQualityWarning(siteId, contentType, contentLuid, dataQualityWarning, options=defaultOptions) { 
@@ -2199,21 +2279,21 @@ export function addDataQualityWarning(siteId, contentType, contentLuid, dataQual
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
         .withBodyParameters(dataQualityWarning)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Get information about a specific data quality warning.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning attached to the asset (database, table, published data source, or flow).
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDataQualityWarningByID(siteId, dataqualitywarningId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2221,14 +2301,14 @@ export function queryDataQualityWarningByID(siteId, dataqualitywarningId, option
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} contentType The type of asset that the data quality warning is being attached to. To specify the type, use one of the following values: databasetabledatasourceflowTypes are not case sensitive.
  * @param {string} contentLuid The unique ID of the content type (database, table, published data source, or flow). This is the same as the content ID.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function queryDataQualityWarningByContent(siteId, contentType, contentLuid, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2237,7 +2317,7 @@ export function queryDataQualityWarningByContent(siteId, contentType, contentLui
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning attached to the asset (database, table, published data source, or flow).
  * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function updateDataQualityWarning(siteId, dataqualitywarningId, dataQualityWarning, options=defaultOptions) { 
@@ -2245,7 +2325,7 @@ export function updateDataQualityWarning(siteId, dataqualitywarningId, dataQuali
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .withBodyParameters(dataQualityWarning)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2253,14 +2333,14 @@ export function updateDataQualityWarning(siteId, dataqualitywarningId, dataQuali
  * This method is available if your Tableau Online site or Tableau Server is licensed with the Data Management Add-on.
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning attached to the asset (database, table, published data source, or flow).
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataQualityWarningByID(siteId, dataqualitywarningId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2269,14 +2349,14 @@ export function deleteDataQualityWarningByID(siteId, dataqualitywarningId, optio
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} contentType The type of asset that the data quality warning is being attached to. To specify the type, use:   database  table  datasource  flow   Types are not case sensitive.
  * @param {string} contentLuid The unique ID of the content type(database, table, published data source, or flow). This is the same as the content ID.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataQualityWarningByContent(siteId, contentType, contentLuid, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2285,7 +2365,7 @@ export function deleteDataQualityWarningByContent(siteId, contentType, contentLu
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addTagsToDatabase(siteId, databaseId, tags, options=defaultOptions) { 
@@ -2293,7 +2373,7 @@ export function addTagsToDatabase(siteId, databaseId, tags, options=defaultOptio
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2302,7 +2382,7 @@ export function addTagsToDatabase(siteId, databaseId, tags, options=defaultOptio
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the column asset.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addTagsToTable(siteId, tableId, tags, options=defaultOptions) { 
@@ -2310,7 +2390,7 @@ export function addTagsToTable(siteId, tableId, tags, options=defaultOptions) {
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2319,7 +2399,7 @@ export function addTagsToTable(siteId, tableId, tags, options=defaultOptions) {
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} columnId The unique ID of the column asset.
  * @param {TagsRequest} tags tags
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addTagsToColumn(siteId, columnId, tags, options=defaultOptions) { 
@@ -2327,7 +2407,7 @@ export function addTagsToColumn(siteId, columnId, tags, options=defaultOptions) 
         .withPath(`api/{apiVersion}/sites/${siteId}/columns/${columnId}/tags`)
         .withBodyParameters(tags)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2335,7 +2415,7 @@ export function addTagsToColumn(siteId, columnId, tags, options=defaultOptions) 
  * For more information about tags, see Tag Items(Link opens in a new window) in the Tableau User Help.
  * @param {string} siteId The unique ID of the site asset.
  * @param {TagBatchRequest} tagBatch tagBatch
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function batchAddTags(siteId, tagBatch, options=defaultOptions) { 
@@ -2343,7 +2423,7 @@ export function batchAddTags(siteId, tagBatch, options=defaultOptions) {
         .withPath(`api/{apiVersion}/sites/${siteId}/tags:batchCreate`)
         .withBodyParameters(tagBatch)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2352,14 +2432,14 @@ export function batchAddTags(siteId, tagBatch, options=defaultOptions) {
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} databaseId The unique ID of the database asset.
  * @param {string} tagName The keyword text of the tag.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromDatabase(siteId, databaseId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/databases/${databaseId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2368,14 +2448,14 @@ export function deleteTagFromDatabase(siteId, databaseId, tagName, options=defau
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} tagName The keyword text of the tag.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromTable(siteId, tableId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/tables/${tableId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2384,14 +2464,14 @@ export function deleteTagFromTable(siteId, tableId, tagName, options=defaultOpti
  * @param {string} siteId The unique ID of the site asset.
  * @param {string} columnId The unique ID of the column asset.
  * @param {string} tagName The keyword text of the tag.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteTagFromColumn(siteId, columnId, tagName, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`api/{apiVersion}/sites/${siteId}/columns/${columnId}/tags/${tagName}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2399,7 +2479,7 @@ export function deleteTagFromColumn(siteId, columnId, tagName, options=defaultOp
  * For more information about tags, see Tag Items(Link opens in a new window) in the Tableau User Help.
  * @param {string} siteId The unique ID of the site asset.
  * @param {TagBatchRequest} tagBatch tagBatch
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function batchDeleteTags(siteId, tagBatch, options=defaultOptions) { 
@@ -2407,7 +2487,7 @@ export function batchDeleteTags(siteId, tagBatch, options=defaultOptions) {
         .withPath(`api/{apiVersion}/sites/${siteId}/tags:BatchDelete`)
         .withBodyParameters(tagBatch)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2417,14 +2497,14 @@ export function batchDeleteTags(siteId, tagBatch, options=defaultOptions) {
  * @param {string} siteId The ID of the site that contains the group.
  * @param {string} workbookId The ID of the workbook to remove the revision for.
  * @param {number} revisionNumber The revision number of the workbook to remove. To determine what versions are available, call Get Workbook Revisions.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function removeWorkbookRevision(siteId, workbookId, revisionNumber, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2434,7 +2514,7 @@ export function removeWorkbookRevision(siteId, workbookId, revisionNumber, optio
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to set permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDataSourcePermissions(siteId, datasourceId, permissions, options=defaultOptions) { 
@@ -2442,7 +2522,7 @@ export function addDataSourcePermissions(siteId, datasourceId, permissions, opti
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2451,7 +2531,7 @@ export function addDataSourcePermissions(siteId, datasourceId, permissions, opti
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to set permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function addProjectPermissions(siteId, projectId, permissions, options=defaultOptions) { 
@@ -2459,7 +2539,7 @@ export function addProjectPermissions(siteId, projectId, permissions, options=de
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2468,7 +2548,7 @@ export function addProjectPermissions(siteId, projectId, permissions, options=de
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to set default permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDefaultPermissions(siteId, projectId, permissions, options=defaultOptions) { 
@@ -2476,7 +2556,7 @@ export function addDefaultPermissions(siteId, projectId, permissions, options=de
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2485,7 +2565,7 @@ export function addDefaultPermissions(siteId, projectId, permissions, options=de
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to set default permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDefaultPermissionsForWorkbooks(siteId, projectId, permissions, options=defaultOptions) { 
@@ -2493,7 +2573,7 @@ export function addDefaultPermissionsForWorkbooks(siteId, projectId, permissions
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2502,7 +2582,7 @@ export function addDefaultPermissionsForWorkbooks(siteId, projectId, permissions
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to set default permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDefaultPermissionsForDatasources(siteId, projectId, permissions, options=defaultOptions) { 
@@ -2510,7 +2590,7 @@ export function addDefaultPermissionsForDatasources(siteId, projectId, permissio
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2519,7 +2599,7 @@ export function addDefaultPermissionsForDatasources(siteId, projectId, permissio
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The ID of the project to set default permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function addDefaultPermissionsForFlows(siteId, projectId, permissions, options=defaultOptions) { 
@@ -2527,7 +2607,7 @@ export function addDefaultPermissionsForFlows(siteId, projectId, permissions, op
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2535,7 +2615,7 @@ export function addDefaultPermissionsForFlows(siteId, projectId, permissions, op
  * @param {string} siteId The ID of the site that contains the workbook view.
  * @param {string} viewId The ID of the view to set permissions for. You can obtain this ID by calling Query Views for Site.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function addViewPermissions(siteId, viewId, permissions, options=defaultOptions) { 
@@ -2543,7 +2623,7 @@ export function addViewPermissions(siteId, viewId, permissions, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2551,7 +2631,7 @@ export function addViewPermissions(siteId, viewId, permissions, options=defaultO
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to set permissions for.
  * @param {PermissionsRequest} permissions permissions
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function addWorkbookPermissions(siteId, workbookId, permissions, options=defaultOptions) { 
@@ -2559,7 +2639,7 @@ export function addWorkbookPermissions(siteId, workbookId, permissions, options=
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`)
         .withBodyParameters(permissions)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -2568,7 +2648,7 @@ export function addWorkbookPermissions(siteId, workbookId, permissions, options=
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} scheduleId The ID of the schedule that you are associating with the workbook.
  * @param {TaskRequest} task task
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TaskResponse>} Promise | undefined
  */
 export function addWorkbookToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
@@ -2576,35 +2656,35 @@ export function addWorkbookToSchedule(siteId, scheduleId, task, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/workbooks`)
         .withBodyParameters(task)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Returns a list of permissions for a specific data source.
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to get permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryDataSourcePermissions(siteId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns information about the set of permissions allowed or denied for groups and users in a project.
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The project to get permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryProjectPermissions(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2612,14 +2692,14 @@ export function queryProjectPermissions(siteId, projectId, options=defaultOption
  * Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The project to get default permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryDefaultPermissions(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2627,14 +2707,14 @@ export function queryDefaultPermissions(siteId, projectId, options=defaultOption
  * Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The project to get default permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryDefaultPermissionsForDatasources(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2642,14 +2722,14 @@ export function queryDefaultPermissionsForDatasources(siteId, projectId, options
  * Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The project to get default permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryDefaultPermissionsForWorkbooks(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2657,42 +2737,42 @@ export function queryDefaultPermissionsForWorkbooks(siteId, projectId, options=d
  * Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} projectId The project to get default permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
 export function queryDefaultPermissionsForFlows(siteId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of permissions for the specific view.
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to get permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ParentResponse>} Promise | undefined
  */
 export function queryViewPermissions(siteId, viewId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of permissions for the specific workbook.
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to get permissions for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ParentResponse>} Promise | undefined
  */
 export function queryWorkbookPermissions(siteId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -2703,14 +2783,14 @@ export function queryWorkbookPermissions(siteId, workbookId, options=defaultOpti
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataSourcePermission(siteId, datasourceId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2720,14 +2800,14 @@ export function deleteDataSourcePermission(siteId, datasourceId, groupId, userId
  * @param {string} groupId The ID of the group to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataSourcePermissionForGroup(siteId, datasourceId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2737,14 +2817,14 @@ export function deleteDataSourcePermissionForGroup(siteId, datasourceId, groupId
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataSorucePermissionForUser(siteId, datasourceId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2755,14 +2835,14 @@ export function deleteDataSorucePermissionForUser(siteId, datasourceId, userId, 
  * @param {string} userId The ID of the user to remove project the permission for.
  * @param {string} capabilityName The capability to remove the permission for. In Tableau Server 10.0, valid capabilities for a project are ProjectLeader, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteProjectPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2772,14 +2852,14 @@ export function deleteProjectPermission(siteId, projectId, groupId, userId, capa
  * @param {string} groupId The ID of the group to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. In Tableau Server 10.0, valid capabilities for a project are ProjectLeader, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteProjectPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2789,14 +2869,14 @@ export function deleteProjectPermissionForGroup(siteId, projectId, groupId, capa
  * @param {string} userId The ID of the user to remove project the permission for.
  * @param {string} capabilityName The capability to remove the permission for. In Tableau Server 10.0, valid capabilities for a project are ProjectLeader, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteProjectPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2808,14 +2888,14 @@ export function deleteProjectPermissionForUser(siteId, projectId, userId, capabi
  * @param {string} userId The ID of the user to remove default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2826,14 +2906,14 @@ export function deleteDefaultPermission(siteId, projectId, groupId, userId, capa
  * @param {string} groupId The ID of the group to remove the default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultWorkbookPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2844,14 +2924,14 @@ export function deleteDefaultWorkbookPermissionForGroup(siteId, projectId, group
  * @param {string} userId The ID of the user to remove default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultWorkbookPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2862,14 +2942,14 @@ export function deleteDefaultWorkbookPermissionForUser(siteId, projectId, userId
  * @param {string} groupId The ID of the group to remove the default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultDatasourcePermissionsForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2880,14 +2960,14 @@ export function deleteDefaultDatasourcePermissionsForGroup(siteId, projectId, gr
  * @param {string} groupId The ID of the group to remove the default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultFlowPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2898,14 +2978,14 @@ export function deleteDefaultFlowPermissionForGroup(siteId, projectId, groupId, 
  * @param {string} userId The ID of the user to remove default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. Valid capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDefaultFlowPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2916,14 +2996,14 @@ export function deleteDefaultFlowPermissionForUser(siteId, projectId, userId, ca
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. The valid capabilities for a view are AddComment, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteViewPermission(siteId, viewId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2933,14 +3013,14 @@ export function deleteViewPermission(siteId, viewId, groupId, userId, capability
  * @param {string} groupId The ID of the group to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. The valid capabilities for a view are AddComment, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteViewPermissionForGroup(siteId, viewId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2950,14 +3030,14 @@ export function deleteViewPermissionForGroup(siteId, viewId, groupId, capability
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. The valid capabilities for a view are AddComment, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteViewPermissionForUser(siteId, viewId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/views/${viewId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2968,14 +3048,14 @@ export function deleteViewPermissionForUser(siteId, viewId, userId, capabilityNa
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write.  For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteWorkbookPermission(siteId, workbookId, groupId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -2985,14 +3065,14 @@ export function deleteWorkbookPermission(siteId, workbookId, groupId, userId, ca
  * @param {string} groupId The ID of the group to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write.  For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteWorkbookPermissionForGroup(siteId, workbookId, groupId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3002,14 +3082,14 @@ export function deleteWorkbookPermissionForGroup(siteId, workbookId, groupId, ca
  * @param {string} userId The ID of the user to remove the permission for.
  * @param {string} capabilityName The capability to remove the permission for. Valid capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete, ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments, ViewUnderlyingData, WebAuthoring, and Write.  For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteWorkbookPermissionForUser(siteId, workbookId, userId, capabilityName, capabilityMode, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3017,7 +3097,7 @@ export function deleteWorkbookPermissionForUser(siteId, workbookId, userId, capa
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} scheduleId The ID of the schedule that you are associating with the data source.
  * @param {TaskRequest} task task
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TaskResponse>} Promise | undefined
  */
 export function addDataSourceToSchedule(siteId, scheduleId, task, options=defaultOptions) { 
@@ -3025,7 +3105,7 @@ export function addDataSourceToSchedule(siteId, scheduleId, task, options=defaul
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/datasources`)
         .withBodyParameters(task)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3034,14 +3114,14 @@ export function addDataSourceToSchedule(siteId, scheduleId, task, options=defaul
  * Full extract refresh Incremental extract refresh Subscription Flow Run Data Acceleration Bridge full extract refresh Bridge incremental extract refresh Queue upgrade Thumbnail (Job that puts the upgrade thumbnail job on the queue) Upgrade Thumbnail
  * @param {string} siteId The ID of the site where the job is running.
  * @param {string} jobId The ID of the job to cancel.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function cancelJob(siteId, jobId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs/${jobId}`)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3049,28 +3129,28 @@ export function cancelJob(siteId, jobId, options=defaultOptions) {
  * Import users from Active Directory (the result of a call to Create Group). Synchronize an existing Tableau Server group with Active Directory (the result of a call to Update Group). Run extract refresh tasks (the result of a call to Run Extract Refresh Task). Publish a workbook asynchronously (the result of a call to Publish Workbook). Run workbook or view subscriptions (the result of a call to Create Subscrtiption or Update Subscription)  Run a flow task (the result of a call to Run Flow Task)
  * @param {string} siteId The ID of the site where the job is running.
  * @param {string} jobId The ID of the job to get status information for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<JobResponse>} Promise | undefined
  */
 export function queryJob(siteId, jobId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs/${jobId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of active jobs on the specified site. To get details on a specific job, pass a job ID returned by this method to the Query Job method. To cancel an active job, pass a job ID returned by this method to the Cancel Job method.
  * Calls to this method can be filtered, as shown in the URI examples shown below. To learn more about filtering, see Filtering and Sorting in the REST API.
  * @param {string} siteId The ID of the site where the job is running.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<BackgroundJobsResponse>} Promise | undefined
  */
 export function queryJobs(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/jobs`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3078,28 +3158,28 @@ export function queryJobs(siteId, options=defaultOptions) {
  * This method shows you information about the scheduled task for the data source extract or a published workbook that connects to the data extract.
  * @param {string} siteId The ID of the site that the user is a member of.
  * @param {string} taskId The ID of the extract refresh that you want information about.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TaskResponse>} Promise | undefined
  */
 export function getExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of extract refresh tasks for the site.
  * This method shows you information about the scheduled tasks on the specified site for data source extracts or a published workbooks that connect to data extracts.
  * @param {string} siteId The ID of the site that the user is a member of.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TasksResponse>} Promise | undefined
  */
 export function getExtractRefreshTasks(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3107,7 +3187,7 @@ export function getExtractRefreshTasks(siteId, options=defaultOptions) {
  * Schedules are not specific to sites. For more information, see Creating a Flow Schedule(Link opens in a new window), Extracts and Refresh Schedules(Link opens in a new window) and Create or Modify a Schedule(Link opens in a new window) in the Tableau Server documentation. Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {ScheduleRequest} schedule schedule
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ScheduleResponse>} Promise | undefined
  */
 export function createSchedule(schedule, options=defaultOptions) { 
@@ -3115,7 +3195,7 @@ export function createSchedule(schedule, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/schedules`)
         .withBodyParameters(schedule)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3124,10 +3204,10 @@ export function createSchedule(schedule, options=defaultOptions) {
  * For more information about refresh tasks, see Manage Refresh Tasks(Link opens in a new window).
  * @param {string} siteId The ID of the site that contains the refresh tasks.
  * @param {string} scheduleId The ID of the schedule to get extract information for.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ExtractsResponse>} Promise | undefined
  */
 export function queryExtractRefreshTasks(siteId, scheduleId, queryOptions={}, options=defaultOptions) { 
@@ -3135,16 +3215,16 @@ export function queryExtractRefreshTasks(siteId, scheduleId, queryOptions={}, op
         .withPath(`/api/{apiVersion}/sites/${siteId}/schedules/${scheduleId}/extracts`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of flows, extract and subscription schedules. For each schedule, the API returns the name, frequency, priority, and other information.
  * For more information about schedules, see Create or Modify a Schedule(Link opens in a new window).
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SchedulesResponse>} Promise | undefined
  */
 export function querySchedules(queryOptions={}, options=defaultOptions) { 
@@ -3152,7 +3232,7 @@ export function querySchedules(queryOptions={}, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/schedules`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3163,7 +3243,7 @@ export function querySchedules(queryOptions={}, options=defaultOptions) {
  * An extract refresh task can be initiated by a REST API call, a tabcmd command, or a job calling the task on a schedule. A REST request to start a refresh task will fail if the task has been put in the task queue in any of these ways, or is already in progress.
  * @param {string} siteId The ID of the site that the user is a member of.
  * @param {string} taskId The ID of the extract refresh task that you want to run.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<JobResponse>} Promise | undefined
  */
 export function runExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
@@ -3171,14 +3251,14 @@ export function runExtractRefreshTask(siteId, taskId, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}/runNow`)
         .withBodyParameters()
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Modifies settings for the specified schedule, including the name, priority, and frequency details.
  * @param {string} scheduleId The ID of the schedule to update. To determine what schedules are available, call Query Schedules.
  * @param {ScheduleRequest} schedule schedule
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ScheduleResponse>} Promise | undefined
  */
 export function updateSchedule(scheduleId, schedule, options=defaultOptions) { 
@@ -3186,47 +3266,47 @@ export function updateSchedule(scheduleId, schedule, options=defaultOptions) {
         .withPath(`/api/{apiVersion}/schedules/${scheduleId}`)
         .withBodyParameters(schedule)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Deletes the specified schedule.
  * @param {string} scheduleId The ID of the schedule to delete. To determine what schedules are available, call Query Schedules.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSchedule(scheduleId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/schedules/${scheduleId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Deletes a data acceleration task.
  * @param {string} siteId The ID of the site that contains the task.
  * @param {string} dataAccelerationId The ID of the task to remove.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataAccelerationTask(siteId, dataAccelerationId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/dataAcceleration/${dataAccelerationId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Returns a list of data acceleration tasks for the site.
  * @param {string} siteId The ID of the site that contains the task.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<TasksResponse>} Promise | undefined
  */
 export function getDataAccelerationTasks(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/dataAcceleration`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3235,7 +3315,7 @@ export function getDataAccelerationTasks(siteId, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site to create the subscription in.
  * @param {SubscriptionRequest} subscription subscription
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SubscriptionResponse>} Promise | undefined
  */
 export function createSubscription(siteId, subscription, options=defaultOptions) { 
@@ -3243,7 +3323,7 @@ export function createSubscription(siteId, subscription, options=defaultOptions)
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions`)
         .withBodyParameters(subscription)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3251,24 +3331,24 @@ export function createSubscription(siteId, subscription, options=defaultOptions)
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the subscriptions.
  * @param {string} subscriptionId The ID of the subscription to get information for.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SubscriptionResponse>} Promise | undefined
  */
 export function querySubscription(siteId, subscriptionId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns a list of all the subscriptions on the specified site.
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the subscriptions.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
- * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
+ * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SubscriptionsResponse>} Promise | undefined
  */
 export function querySubscriptions(siteId, queryOptions={}, options=defaultOptions) { 
@@ -3276,7 +3356,7 @@ export function querySubscriptions(siteId, queryOptions={}, options=defaultOptio
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3284,7 +3364,7 @@ export function querySubscriptions(siteId, queryOptions={}, options=defaultOptio
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} subscriptionId The ID of the subscription to update.
  * @param {SubscriptionRequest} subscription subscription
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SubscriptionResponse>} Promise | undefined
  */
 export function updateSubscription(siteId, subscriptionId, subscription, options=defaultOptions) { 
@@ -3292,21 +3372,21 @@ export function updateSubscription(siteId, subscriptionId, subscription, options
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .withBodyParameters(subscription)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Deletes the specified subscription.
  * @param {string} siteId The ID of the site that contains the subscription.
  * @param {string} subscriptionId The ID of the subscription to delete. To determine what subscriptions are available, call Query Subscriptions.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteSubscription(siteId, subscriptionId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3315,7 +3395,7 @@ export function deleteSubscription(siteId, subscriptionId, options=defaultOption
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} userId The ID of the user to add the favorite for.
  * @param {FavoriteRequest} favorite favorite
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
 export function addDataSourceToFavorites(siteId, userId, favorite, options=defaultOptions) { 
@@ -3323,7 +3403,7 @@ export function addDataSourceToFavorites(siteId, userId, favorite, options=defau
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3332,7 +3412,7 @@ export function addDataSourceToFavorites(siteId, userId, favorite, options=defau
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} userId The ID of the user to add the favorite for.
  * @param {FavoriteRequest} favorite favorite
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
 export function addProjectToFavorites(siteId, userId, favorite, options=defaultOptions) { 
@@ -3340,7 +3420,7 @@ export function addProjectToFavorites(siteId, userId, favorite, options=defaultO
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3349,7 +3429,7 @@ export function addProjectToFavorites(siteId, userId, favorite, options=defaultO
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} userId The ID of the user to add the favorite for.
  * @param {FavoriteRequest} favorite favorite
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
 export function addViewToFavorites(siteId, userId, favorite, options=defaultOptions) { 
@@ -3357,7 +3437,7 @@ export function addViewToFavorites(siteId, userId, favorite, options=defaultOpti
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3366,7 +3446,7 @@ export function addViewToFavorites(siteId, userId, favorite, options=defaultOpti
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} userId The ID of the user to add the favorite for.
  * @param {FavoriteRequest} favorite favorite
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
 export function addWorkbookToFavorites(siteId, userId, favorite, options=defaultOptions) { 
@@ -3374,7 +3454,7 @@ export function addWorkbookToFavorites(siteId, userId, favorite, options=default
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .withBodyParameters(favorite)
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
@@ -3382,14 +3462,14 @@ export function addWorkbookToFavorites(siteId, userId, favorite, options=default
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} datasourceId The ID of the data source to remove from the user's favorites.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteDataSourceFromFavorites(siteId, userId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/datasources/${datasourceId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3397,14 +3477,14 @@ export function deleteDataSourceFromFavorites(siteId, userId, datasourceId, opti
  * @param {string} siteId The ID of the site that contains the project.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} projectId The ID of the project to remove from the user's favorites.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteProjectFromFavorites(siteId, userId, projectId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/projects/${projectId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3412,14 +3492,14 @@ export function deleteProjectFromFavorites(siteId, userId, projectId, options=de
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} viewId The ID of the view to remove from the user's favorites.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteViewFromFavorites(siteId, userId, viewId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/views/${viewId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3427,28 +3507,28 @@ export function deleteViewFromFavorites(siteId, userId, viewId, options=defaultO
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} workbookId The ID of the workbook to remove from the user's favorites.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteWorkbookFromFavorites(siteId, userId, workbookId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}/workbooks/${workbookId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
  * Returns a list of favorite projects, data sources, views and workbooks for a user.
  * @param {string} siteId The ID of the site that the user is a member of.
  * @param {string} userId The ID of the user for which you want to get a list favorites.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getFavoritesForUser(siteId, userId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/favorites/${userId}`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
@@ -3457,14 +3537,14 @@ export function getFavoritesForUser(siteId, userId, options=defaultOptions) {
  * The file size that is returned in the response is initialized to zero (0) megabytes, because no data has yet been loaded. Subsequent calls to Append to File Upload or the publishing APIs update this value.
  * For more information, see Publishing Resources.
  * @param {string} siteId The ID of the site to upload the file to.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FileUploadResponse>} Promise | undefined
  */
 export function initiateFileUpload(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/fileUploads`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3474,7 +3554,7 @@ export function initiateFileUpload(siteId, options=defaultOptions) {
  * @param {string} siteId The ID of the site to upload the file to.
  * @param {string} uploadSessionId The ID of the upload session. You get this value when you start an upload session using Initiate File Upload.
  * @param {Object} file File Contents
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<FileUploadResponse>} Promise | undefined
  */
 export function appendToFileUpload(siteId, uploadSessionId, file, options=defaultOptions) { 
@@ -3484,40 +3564,40 @@ export function appendToFileUpload(siteId, uploadSessionId, file, options=defaul
         .withBodyParameters()
         .withFileParameters({ name: "tableau_file", file: file })
         .build()
-        .execute(options.http.put);
+        .execute(options?.http?.put ?? methods.put);
 }
 
 /**
  * Returns the version of Tableau Server and the supported version of the REST API.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ServerInfoResponse>} Promise | undefined
  */
 export function serverInfo(options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/serverinfo`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Returns details of the current session of Tableau Server.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function getCurrentServerSessionDetails(options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sessions/current`)
         .build()
-        .execute(options.http.get);
+        .execute(options?.http?.get ?? methods.get);
 }
 
 /**
  * Create an extract for a data source in a site. Optionally, encrypt the extract if the site and workbooks using it are configured to allow it.
  * @param {string} siteId The LUID of the site.
  * @param {string} datasourceId The LUID of the datasource.
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.encryptionFlag If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.encryptionFlag] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function createAnExtractForADataSource(siteId, datasourceId, queryOptions={}, options=defaultOptions) { 
@@ -3525,21 +3605,21 @@ export function createAnExtractForADataSource(siteId, datasourceId, queryOptions
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/createExtract`)
         .withQueryParameters(queryOptions)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Delete the extract of a data source in a site.
  * @param {string} siteId The LUID of the site.
  * @param {string} datasourceId The LUID of the datasource whose extract is to be deleted.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteAnExtractFromADataSource(siteId, datasourceId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/datasources/${datasourceId}/deleteExtract`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3549,9 +3629,9 @@ export function deleteAnExtractFromADataSource(siteId, datasourceId, options=def
  * @param {string} siteId The LUID of the site.
  * @param {string} workbookId The LUID of the workbook.
  * @param {DatasourcesRequest} datasources datasources
- * @param {Object} [queryOptions] an object containing the query options for this request
- * @param {boolean} queryOptions.encryptionFlag If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean=} [queryOptions.encryptionFlag] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, queryOptions={}, options=defaultOptions) { 
@@ -3560,7 +3640,7 @@ export function createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbook
         .withQueryParameters(queryOptions)
         .withBodyParameters(datasources)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3569,30 +3649,29 @@ export function createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbook
  * @param {string} siteId The LUID of the site.
  * @param {string} workbookId <parameter documentation missing>
  * @param {DatasourcesRequest} datasources datasources
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/workbookss/${workbookId}/deleteExtract`)
-        .withQueryParameters(queryOptions)
         .withBodyParameters(datasources)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
  * Deletes an extract refresh task.
  * @param {string} siteId The ID of the site that contains the extract refresh task.
  * @param {string} taskId The ID of the extract refresh task to remove.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function deleteExtractRefreshTask(siteId, taskId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`)
         .build()
-        .execute(options.http.del);
+        .execute(options?.http?.del ?? methods.del);
 }
 
 /**
@@ -3600,14 +3679,14 @@ export function deleteExtractRefreshTask(siteId, taskId, options=defaultOptions)
  * Encrypts all extracts on a site.
  * Note: Depending on the number and size of extracts, this operation may consume significant server resources. Consider running this command outside of normal business hours.
  * @param {string} siteId The ID of the site.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function encryptExtractsInASite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/encrypt-extracts`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3615,14 +3694,14 @@ export function encryptExtractsInASite(siteId, options=defaultOptions) {
  * Decrypts all extracts on a site.
  * Note: Depending on the number and size of extracts, this operation may consume significant server resources. Consider running this command outside of normal business hours.
  * @param {string} siteId The ID of the site.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function decryptExtractsInASite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/decrypt-extracts`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }
 
 /**
@@ -3630,12 +3709,12 @@ export function decryptExtractsInASite(siteId, options=defaultOptions) {
  * Reencrypt all extracts on a site with new encryption keys. If no site is specified, extracts on the default site will be reencrypted.
  * Note: Depending on the number and size of extracts, this operation may consume significant server resources. Consider running this command outside of normal business hours.
  * @param {string} siteId The ID of the site.
- * @param {ExecOptions} [options] an object containing the execution options for this request
+ * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
 export function reencryptExtractsInASite(siteId, options=defaultOptions) { 
     return AuthenticatedRequest.builder(getBaseURL(options), getToken(options))
         .withPath(`/api/{apiVersion}/sites/${siteId}/reencrypt-extracts`)
         .build()
-        .execute(options.http.post);
+        .execute(options?.http?.post ?? methods.post);
 }

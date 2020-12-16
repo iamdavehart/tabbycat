@@ -22,6 +22,7 @@ export class WrappedApiCalls {
 
     /** 
      * retrieves an exec options object (overridden in clients) 
+	 * @param {ExecOptions} obj an existing exec options object
      * @returns {ExecOptions} executeOptions
      */
     execOpts(obj) { return { ...obj } }
@@ -88,22 +89,10 @@ export class WrappedApiCalls {
     */
 
 /**
- * HttpManager object containing standard http methods for GET,POST,PUT,DELETE
- * @typedef {Object} HttpManager
- * @property {Function} get HTTP GET method
- * @property {Function} put HTTP PUT method
- * @property {Function} post HTTP POST method
- * @property {Function} del HTTP DEL method
+ * @typedef {import("./api-full").ExecOptions} ExecOptions
+ * @typedef {import("./api-full").HttpManager} HttpManager
  */
-    
-/**
- * Execute Options allow fine-grained control over each request
- * @typedef {Object} ExecOptions
- * @property {HttpManager} http Object containing standard http methods for GET,POST,PUT,DELETE
- * @property {boolean} [authentication] states that the route returns authentication information
- * @property {string} [baseURL] specifies the url to run this request against
- * @property {string} [version] specifies a particular version of the api to run this request on
- */
+
 
 /**
 	 * Signs you in as a user on the specified site on Tableau Server. This call returns a credentials token that you use in subsequent calls to the server. Typically, a credentials token is valid for 240 minutes. You can change this timeout by using the tsm configuration set(Link opens in a new window) command and setting the wgserver.session.idle_limit option.
