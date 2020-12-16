@@ -97,9 +97,9 @@ function generateCodeFromJson(config) {
                               name: "queryOptions",
                               desc: "an object containing the query options for this request",
                               paramType: "Object", // name.substr(0, 1).toUpperCase() + name.substr(1) + "Options"
-                              optional: true,
+                              optional: false,
                           },
-                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], name: "queryOptions."+signatureParams.query[k].name })))
+                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], optional:true, name: "queryOptions."+signatureParams.query[k].name })))
                       ]
                     : []),
                 ...(Object.keys(signatureParams.option).length
@@ -132,7 +132,7 @@ function generateCodeFromJson(config) {
                               name: "queryOptions",
                               desc: "an object containing the query options for this request",
                               paramType: "Object", // name.substr(0, 1).toUpperCase() + name.substr(1) + "Options"
-                              optional: true,
+                              optional: false,
                           },
                           ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], name: "queryOptions."+signatureParams.query[k].name })))
                       ]
@@ -158,7 +158,7 @@ function generateCodeFromJson(config) {
             comments.push(m.desc.map((d) => ` * ${d}`).join("\n"));
             comments.push(
                 ...signatureParamsArray
-                    .map((p) => ({ ...p, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
+                    .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
                     .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
             comments.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
@@ -169,34 +169,14 @@ function generateCodeFromJson(config) {
             commentsWrapped.push(` * ${m.desc[0]}`);
             commentsWrapped.push(
                 ...signatureWrappedParamsArray
-                    .map((p) => ({ ...p, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
-                    .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
+                .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
+                .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
             commentsWrapped.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
             commentsWrapped.push(" */");
 
-            const queryParams = params
-                .filter(
-                    (p) =>
-                        p.type != "path" &&
-                        p.type != "header" &&
-                        p.type != "body" &&
-                        p.type != "option"
-                )
-                .map((p) => ({
-                    key: p.qsKey || camel(p.name),
-                    value: camel(p.name),
-                }));
-            const queryParamsObj = queryParams
-                .map(
-                    (p) =>
-                        (queryParams.length > 1 ? "            " : "") +
-                        (p.key == "vf_<fieldname>" ? "..." + p.value : p.key + ":" + p.value)
-                )
-                .join(",\n");
 
             const versionlessUri = m.uri.replace("${apiVersion}", "{apiVersion}");
-            const queryParamsSpacer = queryParams.length > 1 ? "\n" : " ";
             const httpMethod = m.method.toLowerCase() === "delete" ? "del" : m.method.toLowerCase();
             const requestType =
                 m.name != "Sign In" ? "AuthenticatedRequest" : "AuthenticationRequest";
@@ -220,23 +200,6 @@ function generateCodeFromJson(config) {
             const fileParameterName = fileParameterNameMatch
                 ? fileParameterNameMatch[1] || "file"
                 : "";
-
-            const queryOptionsTypeName =
-                name.substr(0, 1).toUpperCase() + name.substr(1) + "Options";
-            const queryOptionsTypeDefinitions = Object.keys(signatureParams.query)
-                .map((k) => {
-                    const param = signatureParams.query[k];
-                    return ` * @property {string} [${param.qsKey}] ${param.desc}`;
-                })
-                .join("\n");
-            const queryJSONDoc = `
-/**
- * ${m.name} Query Options
- * @typedef {Object} ${queryOptionsTypeName}
-${queryOptionsTypeDefinitions}
- */
-`;
-
 
 
             return {
@@ -267,7 +230,7 @@ ${queryOptionsTypeDefinitions}
                     (m.requestContentType != "application/json"
                         ? `        .withHeaders({ "Content-Type": "${m.requestContentType}" })\n`
                         : "") +
-                    (queryParams.length ? `        .withQueryParameters(queryOptions)\n` : "") +
+                    (Object.keys(signatureParams.query).length ? `        .withQueryParameters(queryOptions)\n` : "") +
                     (m.requestBody ? `        .withBodyParameters(${m.requestBodyType})\n` : "") +
                     (params.some((p) => p.name === "file" && p.type === "body")
                         ? `        .withFileParameters({ name: "${fileParameterName}", file: file })\n`
@@ -276,7 +239,7 @@ ${queryOptionsTypeDefinitions}
                     //     ? `        .withErrorCodes(${errorCodes})\n`
                     //     : "") +
                     `        .build()\n` +
-                    `        .execute(options.${methodType}.${httpMethod});\n` +
+                    `        .execute(options?.${methodType}?.${httpMethod} ?? methods.${httpMethod});\n` +
                     `}`,
             };
         });
@@ -295,10 +258,10 @@ ${queryOptionsTypeDefinitions}
 /**
  * Execute Options allow fine-grained control over each request
  * @typedef {Object} ExecOptions
- * @property {HttpManager} http Object containing standard http methods for GET,POST,PUT,DELETE
- * @property {boolean} [authentication] states that the route returns authentication information
- * @property {string} [baseURL] specifies the url to run this request against
- * @property {string} [version] specifies a particular version of the api to run this request on
+ * @property {HttpManager=} http Object containing standard http methods for GET,POST,PUT,DELETE
+ * @property {boolean=} [authentication] states that the route returns authentication information
+ * @property {string=} [baseURL] specifies the url to run this request against
+ * @property {string=} [version] specifies a particular version of the api to run this request on
  */
 
 `;
@@ -337,6 +300,7 @@ ${queryOptionsTypeDefinitions}
         const apiFullText =
             headerText +
             API_HEADER +
+            '/**\n'+typeDefs.map(t=> `    * @typedef {import("./types/${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
             execJSONDoc +
             methodCalls.map((m) => m.methodCallJS).join("\n\n");
         utils.writeToFile(path.join(outDirectory, "api-full.js"), apiFullText);
@@ -346,7 +310,6 @@ ${queryOptionsTypeDefinitions}
             headerText +
             WRAPPED_HEADER +
             '/**\n'+typeDefs.map(t=> `    * @typedef {import("./types/${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
-            execJSONDoc +
             methodCalls.map((m) => m.wrappedCallJS).join("\n\n\t") +
             WRAPPED_FOOTER;
 
@@ -382,19 +345,50 @@ if you are choosing to access the api methods directly for convenience, but the
 baseURL and token will usually be managed by the client or on a per-request basis
 */
 
-let baseURL;
-let authenticationToken;
-const defaultOptions = { baseURL: null, http:methods };
+/** @type {string} */
+let baseURL = "";
+/** @type {string} */
+let authenticationToken = "";
+/** @type {ExecOptions} */
+const defaultOptions = { baseURL: "", http:methods };
+/**
+ * Sets the Base URL
+ * @param {string} url the base URl
+ */
 export function setBaseURL(url) { baseURL=url; }
+/**
+ * Sets the security Token
+ * @param {string} token the security token
+ */
 export function setToken(token) { authenticationToken=token; }
+/**
+ * Gets the base url from either provided  opts or baseURL property
+ * @param {ExecOptions} options options object
+ */
 export function getBaseURL(options) { return getOpt("baseURL", options, baseURL); }
+/**
+ * Gets the token from either provided opts or authenticationToken property
+ * @param {ExecOptions} options options object
+ */
 export function getToken(options) { return getOpt("token", options, authenticationToken); }
+/**
+ * Retrieves an option from either opts object or default value
+ * @param {string} name the name of the option
+ * @param {ExecOptions} opts an existing opts object
+ * @param {string} dflt a default value to be returned if object does not have the property
+ */
 function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? opts[name] : dflt; }
+
 
 `;
 
 const WRAPPED_HEADER = `
 import * as api from './api-full'
+
+/**
+ * @typedef {import("./api-full").ExecOptions} ExecOptions
+ * @typedef {import("./api-full").HttpManager} HttpManager
+ */
 
 export class WrappedApiCalls {
     
