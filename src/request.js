@@ -111,12 +111,11 @@ export class TableauRestRequest {
     }
 
     /**
-     * Executes the method and retuns either a Promise or - if a callback is provided - undefined.
+     * Executes the method and retuns a promise.
      * @param {function} method The Http method handler that is used to execute the request
-     * @param {function} callback An optional callback that can be used instead of the standard Promise implementation
      */
-    execute(method, callback) {
-        return method(this, callback);
+    execute(method) {
+        return method(this);
     }
 }
 

@@ -23,20 +23,20 @@ export class TableauRestExecutive {
         this.axiosInstance.defaults.headers.common["X-Tableau-Auth"] = token;
     }
 
-    get(request, callback) {
-        return methods.get(request, callback, this.axiosInstance);
+    get(request) {
+        return methods.get(request, this.axiosInstance);
     }
 
-    put(request, callback) {
-        return methods.put(request, callback, this.axiosInstance);
+    put(request) {
+        return methods.put(request, this.axiosInstance);
     }
 
-    post(request, callback) {
-        return methods.post(request, callback, this.axiosInstance);
+    post(request) {
+        return methods.post(request, this.axiosInstance);
     }
 
-    del(request, callback) {
-        return methods.del(request, callback, this.axiosInstance);
+    del(request) {
+        return methods.del(request, this.axiosInstance);
     }
 }
 

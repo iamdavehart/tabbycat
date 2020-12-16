@@ -1,4 +1,4 @@
-export * as api from "./api-full";
+export * as api from "tabbycat/api-full";
 import { WrappedApiCalls } from "./api-wrapped";
 import { TableauAuthorisationRestExecutive, TableauAuthorisedRestExecutive } from "./executive";
 import { DEFAULT_API_VERSION } from "./request";

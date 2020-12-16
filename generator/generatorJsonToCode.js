@@ -1,8 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const _ = require("lodash");
 const config = require("./generator.config.json");
 const extendedMethods = require("./out/rest-api-doc.json");
 const utils = require("./utils");
+const { uniqWith } = require("lodash");
 const camel = utils.camel;
 
 function generateCodeFromJson(config) {
@@ -15,12 +17,21 @@ function generateCodeFromJson(config) {
             const params = m.uriParams.slice(0).map((p) => ({ paramType: "string", ...p  }));
             const siteSpecific = m.uriParams.some((p) => p.name === "site-id");
 
+            
+            // response and request types
+            const rqstType = m.requestBodyType ? m.requestBodyType.substr(0,1).toUpperCase()    
+            + m.requestBodyType.substr(1) + "Request" : "";
+            const rspType = m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase()    
+            + m.responseBodyType.substr(1) + "Response" : "";
+
+
+
             if (m.requestBodyType) {
                 params.push({
                     name: m.requestBodyType,
                     desc: m.requestBodyType,
                     type: "body",
-                    paramType: "Object",
+                    paramType: rqstType,
                 });
             }
 
@@ -41,14 +52,6 @@ function generateCodeFromJson(config) {
                     paramType: "string",
                 });
             }
-
-            params.push({
-                name: "callback",
-                desc: "optional callback",
-                required: false,
-                paramType: "Function",
-                type: "option",
-            });
 
             params.push({
                 name: "http",
@@ -133,13 +136,7 @@ function generateCodeFromJson(config) {
                           },
                           ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], name: "queryOptions."+signatureParams.query[k].name })))
                       ]
-                    : []),
-                {
-                    name: "callback",
-                    desc: "optional callback",
-                    optional: true,
-                    paramType: "Function",
-                },
+                    : [])
             ];
 
             const signatureWrappedJS = [
@@ -164,7 +161,7 @@ function generateCodeFromJson(config) {
                     .map((p) => ({ ...p, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
                     .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
-            comments.push(` * @returns Promise | undefined`);
+            comments.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
             comments.push(" */");
 
             const commentsWrapped = [];
@@ -175,7 +172,7 @@ function generateCodeFromJson(config) {
                     .map((p) => ({ ...p, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
                     .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
-            commentsWrapped.push(` * @returns Promise | undefined`);
+            commentsWrapped.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
             commentsWrapped.push(" */");
 
             const queryParams = params
@@ -240,20 +237,23 @@ ${queryOptionsTypeDefinitions}
  */
 `;
 
+
+
             return {
                 ...m,
+
+                requestTypeJS: rqstType,
+                responseTypeJS: rspType,
 
                 wrappedCallJS:
                     // (queryParams.length ? queryJSONDoc : "") +
                     commentsWrapped.join("\n\t") +
                     "\n\t" +
-                    `${name}(${
-                        signatureWrappedJS + (signatureWrappedJS.length ? ", " : "")
-                    }callback) {` +
+                    `${name}(${signatureWrappedJS}) {` +
                     (siteSpecific ? `\n        const siteId = this.getSite();` : "") +
                     `\n        const opts = this.execOpts({ ${
-                        authenticationRoute ? "authentication: true, " : ""
-                    }callback: callback });\n        return api.${name}(${
+                        authenticationRoute ? "authentication: true" : ""
+                    }});\n        return api.${name}(${
                         callWrappedJS + (callWrappedJS.length ? ", " : "")
                     }opts);\n    }`,
 
@@ -276,7 +276,7 @@ ${queryOptionsTypeDefinitions}
                     //     ? `        .withErrorCodes(${errorCodes})\n`
                     //     : "") +
                     `        .build()\n` +
-                    `        .execute(options.${methodType}.${httpMethod}, options.callback);\n` +
+                    `        .execute(options.${methodType}.${httpMethod});\n` +
                     `}`,
             };
         });
@@ -296,7 +296,6 @@ ${queryOptionsTypeDefinitions}
  * Execute Options allow fine-grained control over each request
  * @typedef {Object} ExecOptions
  * @property {HttpManager} http Object containing standard http methods for GET,POST,PUT,DELETE
- * @property {Object} [callback] an optional callback that can be used instead of the promise
  * @property {boolean} [authentication] states that the route returns authentication information
  * @property {string} [baseURL] specifies the url to run this request against
  * @property {string} [version] specifies a particular version of the api to run this request on
@@ -312,6 +311,12 @@ ${queryOptionsTypeDefinitions}
             o[m.area].push(m.methodCallJS);
             return o;
         }, {});
+
+        // response and return types to import
+        const typeDefs = _.concat(
+                        _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "api-requests", type: m })),
+                        _.uniq(methodCalls.filter(m => m.responseTypeJS).map(m=>m.responseTypeJS)).map(m=>({ file: "api-responses", type: m }))
+                        );
 
         // construct our file headers
         const headerText = config.header.join("\n");
@@ -340,6 +345,7 @@ ${queryOptionsTypeDefinitions}
         const wrappedCallsText =
             headerText +
             WRAPPED_HEADER +
+            '/**\n'+typeDefs.map(t=> `    * @typedef {import("./types/${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
             execJSONDoc +
             methodCalls.map((m) => m.wrappedCallJS).join("\n\n\t") +
             WRAPPED_FOOTER;
@@ -397,8 +403,11 @@ export class WrappedApiCalls {
         this.getSite = this.getSite.bind(this);
     }
 
-    /** retrieves a cached site id (overridden in clients) */
-    getSite() { return; }
+    /** 
+     * retrieves a cached site id (overridden in clients) 
+     * @returns {string} the siteId
+     */
+    getSite() { return ""; }
 
     /** 
      * retrieves an exec options object (overridden in clients) 

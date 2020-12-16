@@ -409,7 +409,7 @@ function generateReferenceIntermediate(config) {
             //  - permissions
             //  - flows
 
-            const urlToMethodMapping = config ? config.urlToMethodMapping || {} : {};
+            const urlToMethodMapping = config && config.reference ? config.reference.urlToMethodMapping || {} : {};
             const extraMethods = extendedMethods
                 .filter((m) => m.uris && m.uris.length)
                 .reduce((a, m) => {
