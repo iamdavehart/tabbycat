@@ -212,12 +212,12 @@ export declare class ViewsSortExpressionBuilder extends SortExpressionBuilder<Vi
 
 export declare class WorkbooksSortExpressionBuilder extends SortExpressionBuilder<WorkbooksSortExpressionBuilder> {
     
-        byName() :WorkbookSortExpressionBuilder;
-        byCreatedAt() :WorkbookSortExpressionBuilder;
-        byFavoritesTotal() :WorkbookSortExpressionBuilder;
-        byUpdatedAt() :WorkbookSortExpressionBuilder;
-        byTags() :WorkbookSortExpressionBuilder;
-        byOwnerName() :WorkbookSortExpressionBuilder;
+        byName() :WorkbooksSortExpressionBuilder;
+        byCreatedAt() :WorkbooksSortExpressionBuilder;
+        byFavoritesTotal() :WorkbooksSortExpressionBuilder;
+        byUpdatedAt() :WorkbooksSortExpressionBuilder;
+        byTags() :WorkbooksSortExpressionBuilder;
+        byOwnerName() :WorkbooksSortExpressionBuilder;
     
 }
 
