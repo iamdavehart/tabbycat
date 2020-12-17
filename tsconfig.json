@@ -6,7 +6,7 @@
       // "noImplicitReturns": true,
       // "esModuleInterop": true,
       // "noUnusedLocals": true,
-      // "noImplicitAny": true,
+      "noImplicitAny": false,
       "outDir": "dist",
       "declarationDir": "generator/out/types2",
       "declaration": true,
@@ -15,13 +15,13 @@
       "strict": true,
       "allowJs": true,
       "checkJs": true,
-      "moduleResolution": "node",
-      "typeRoots": [ "src/types" ]
+      "moduleResolution": "node"
     },
     "include": [
+      "/**/*.js",
       "src/*.js",
       "src/*.ts"
-    ],
+, "generator/expressions.js"    ],
     "exclude": [
       "src/__tests__",
       "src/__mocks__",
