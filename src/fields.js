@@ -33,7 +33,7 @@ export class FieldExpressionBuilder {
 }
 
 export class DatasourceFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor() { super("datasource"); }
+    constructor(parent) { super("datasource", parent); }
     addContentUrl() { this.addTerm("contentUrl"); return this; }
     addId() { this.addTerm("id"); return this; }
     addName() { this.addTerm("name"); return this; }
