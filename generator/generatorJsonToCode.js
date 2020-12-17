@@ -157,7 +157,7 @@ function generateCodeFromJson(config) {
             comments.push(m.desc.map((d) => ` * ${d}`).join("\n"));
             comments.push(
                 ...signatureParamsArray
-                    .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
+                    .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `${camel(p.name)}` : camel(p.name) }))
                     .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
             comments.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
@@ -168,7 +168,7 @@ function generateCodeFromJson(config) {
             commentsWrapped.push(` * ${m.desc[0]}`);
             commentsWrapped.push(
                 ...signatureWrappedParamsArray
-                .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `[${camel(p.name)}]` : camel(p.name) }))
+                .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `${camel(p.name)}` : camel(p.name) }))
                 .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
             );
             commentsWrapped.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
@@ -276,8 +276,8 @@ function generateCodeFromJson(config) {
 
         // response and return types to import
         const typeDefs = _.concat(
-                        _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "index", type: m })),
-                        _.uniq(methodCalls.filter(m => m.responseTypeJS).map(m=>m.responseTypeJS)).map(m=>({ file: "index", type: m }))
+                        _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "./api-wrapped", type: m })),
+                        _.uniq(methodCalls.filter(m => m.responseTypeJS).map(m=>m.responseTypeJS)).map(m=>({ file: "./api-wrapped", type: m }))
                         );
 
         // construct our file headers
