@@ -23,7 +23,7 @@ export class FieldExpressionBuilder {
     addTerm(term) { this.terms.push(term); }
     withAllFields() { this.addKeyword("_all_"); return this; }
     withDefaultFields() { this.addKeyword("_default_"); return this; }
-    and() { if(!this.parent) { throw new Exception("no parent set"); } return this.parent; }
+    and() { if(!this.parent) { throw "no parent set"; } return this.parent; }
     build() { 
         if (this.parent) { this.terms.forEach(t => this.parent.addTerm(`${this.prefix}.${t}`)) }
         return this.parent 
