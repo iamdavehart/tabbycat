@@ -1,4 +1,17 @@
 
+
+export class FieldExpression {
+    static forDatasources() { return new DatasourceFieldExpressionBuilder(); }
+    static forUsers() { return new UserFieldExpressionBuilder(); }
+    static forViews() { return new ViewFieldExpressionBuilder(); }
+    static forWorkbooks() { return new WorkbookFieldExpressionBuilder(); }
+    static forFavorites() { return new FavoritesFieldExpressionBuilder(); }
+    static forMetrics() { return new MetricsFieldExpressionBuilder(); }
+    static forJobs() { return new JobFieldExpressionBuilder(); }
+    static forGroups() { return new GroupFieldExpressionBuilder(); }
+    static forProjects() { return new ProjectFieldExpressionBuilder(); }
+}
+
 export class FieldExpressionBuilder {
     constructor(prefix, parent) { 
         this.prefix = prefix; 
@@ -92,7 +105,7 @@ export class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder {
     withOwnerResource() { return new OwnerFieldExpressionBuilder(this); }
 }
 
-export class JobFieldExpresionBuilder extends FieldExpressionBuilder {
+export class JobFieldExpressionBuilder extends FieldExpressionBuilder {
     constructor(parent) { super("job", parent); }
     addId() { this.addTerm("id"); return this; }
     addStatus() { this.addTerm("status"); return this; }

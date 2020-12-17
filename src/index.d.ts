@@ -341,7 +341,17 @@ implements IFieldExpressionBuilderWithParent<TParent> {
   and(): TParent;
 }
 
-
+export declare class FieldExpression {
+  static forDatasources() : DatasourceFieldExpressionBuilder;
+  static forUsers() : UserFieldExpressionBuilder;
+  static forViews() : ViewFieldExpressionBuilder;
+  static forWorkbooks() : WorkbookFieldExpressionBuilder;
+  static forFavorites() : FavoritesFieldExpressionBuilder;
+  static forMetrics() : MetricsFieldExpressionBuilder;
+  static forJobs() : JobFieldExpressionBuilder;
+  static forGroups() : GroupFieldExpressionBuilder;
+  static forProjects() : ProjectFieldExpressionBuilder;
+}
 
 
 

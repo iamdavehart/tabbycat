@@ -77,16 +77,16 @@ export class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder<Workb
     withOwnerResource() : OwnerFieldExpressionBuilderWithParent<WorkbookFieldExpressionBuilder>;
 }
 
-export class JobFieldExpresionBuilder extends FieldExpressionBuilder<JobFieldExpresionBuilder> {
-    addId() : JobFieldExpresionBuilder;
-    addStatus() : JobFieldExpresionBuilder;
-    addCreatedAt() : JobFieldExpresionBuilder;
-    addStartedAt() : JobFieldExpresionBuilder;
-    addEndedAt() : JobFieldExpresionBuilder;
-    addPriority() : JobFieldExpresionBuilder;
-    addJobType() : JobFieldExpresionBuilder;
-    addTitle() : JobFieldExpresionBuilder;
-    addSubtitle() : JobFieldExpresionBuilder;
+export class JobFieldExpressionBuilder extends FieldExpressionBuilder<JobFieldExpressionBuilder> {
+    addId() : JobFieldExpressionBuilder;
+    addStatus() : JobFieldExpressionBuilder;
+    addCreatedAt() : JobFieldExpressionBuilder;
+    addStartedAt() : JobFieldExpressionBuilder;
+    addEndedAt() : JobFieldExpressionBuilder;
+    addPriority() : JobFieldExpressionBuilder;
+    addJobType() : JobFieldExpressionBuilder;
+    addTitle() : JobFieldExpressionBuilder;
+    addSubtitle() : JobFieldExpressionBuilder;
 }
 
 export class GroupFieldExpressionBuilder extends FieldExpressionBuilder<GroupFieldExpressionBuilder> {
@@ -165,4 +165,16 @@ export class OwnerFieldExpressionBuilderWithParent<TParent>
 extends OwnerFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
+}
+
+export declare class FieldExpression {
+    static forDatasources() : DatasourceFieldExpressionBuilder;
+    static forUsers() : UserFieldExpressionBuilder;
+    static forViews() : ViewFieldExpressionBuilder;
+    static forWorkbooks() : WorkbookFieldExpressionBuilder;
+    static forFavorites() : FavoritesFieldExpressionBuilder;
+    static forMetrics() : MetricsFieldExpressionBuilder;
+    static forJobs() : JobFieldExpressionBuilder;
+    static forGroups() : GroupFieldExpressionBuilder;
+    static forProjects() : ProjectFieldExpressionBuilder;
 }
