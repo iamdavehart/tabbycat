@@ -5,23 +5,25 @@ using axios
 
 ## Version 0.1.0
 
-> :warning: **Under Active Development**
+> :warning: **Under Active Development** :warning:
 >
 > This API client is built using code generation and there are many routes that have not been tested yet.
 > Until version 1.0.0 is reached breaking api changes may be released, see changelog for details
+> 
 
-## Table of Contents
-* [Features](#features)
-* [Installation](#installation)
-* [Browser Support](#browser-support)
-* [Example](#example)
-* [tabbycat API](#tabbycat-api)
+## Table of Contents
+
+* [Features](#features)
+* [Installation](#installation)
+* [Browser Support](#browser-support)
+* [Example](#example)
+* [tabbycat API](#tabbycat-api)
 * [Filtering and Expression Building](#filtering-and-expression-building)
-* [Handling Errors](#handling-errors)
-* [Development](#development)
-* [Typescript](#typescript)
-* [Credits](#credits)
-* [Licence](#licence)
+* [Handling Errors](#handling-errors)
+* [Development](#development)
+* [Typescript](#typescript)
+* [Credits](#credits)
+* [Licence](#licence)
 
 
 ## Installation
