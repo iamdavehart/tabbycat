@@ -13,7 +13,7 @@ function generateReferenceIntermediate(config) {
 
         // read the file in.
         // we're using a local file but you can pass a url here
-        fs.readFile("./generator/reference/reference.html", (err, data) => {
+        fs.readFile("./generator/reference/reference_3.9.html", (err, data) => {
             // check for errors on reading the file
             if (err) {
                 throw err;
@@ -40,7 +40,7 @@ function generateReferenceIntermediate(config) {
                 const name = $(nameNode).text().trim();
                 const link = $(nameNode).find("a").attr("href");
                 const tableauOnline = $(tableauOnlineNode).text().trim().toUpperCase() == "YES";
-                area = $(areaNode).text().trim() || area;
+                area = $(areaNode).text().replace(/[<>]/g,"").trim() || area;
                 allMethods.push({
                     index: idx,
                     area: area,
@@ -267,7 +267,7 @@ function generateReferenceIntermediate(config) {
                                     name: p.name,
                                     desc: "<parameter documentation missing>",
                                     type: p.type,
-                                    qsKey: "",
+                                    qsKey: p.qsKey,
                                 });
                             }
                         });

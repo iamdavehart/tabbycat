@@ -1,9 +1,10 @@
 const fs = require("fs");
-const jsonSchema = require("./out/rest-api-schema.json");
+
 const jsonSchemaToTypescript = require("json-schema-to-typescript");
 
 function generateTsDefsFromJson() {
     try {
+        const jsonSchema = require("./out/rest-api-schema.json");
         const compile = jsonSchemaToTypescript.compile;
         compile(jsonSchema, "tableau schema").then((ts) => {
             fs.writeFile(

@@ -1,23 +1,12 @@
 
 
 const fs = require("fs");
-const jsonDoc = require("./out/rest-api-doc.json");
-const camel = (s) => {
-    return s
-        .split(/[\s\-]/g)
-        .map(
-            (s1, i) =>
-                (i == 0
-                    ? s1.substr(0, 1).toLowerCase()
-                    : s1.substr(0, 1).toUpperCase()) + s1.substr(1)
-        )
-        .join("");
-};
-
+const utils = require("./utils");
+const camel = utils.camel;
 
 function generateTestsFromJson() {
     try {
-
+        const jsonDoc = require("./out/rest-api-doc.json");
         const tests = jsonDoc.map(api => `test("${camel(api.name)} is defined", ()=> { expect(api.${camel(api.name)}).toBeDefined(); });`)
         const testCode = tests.join("\n");
             fs.writeFileSync(

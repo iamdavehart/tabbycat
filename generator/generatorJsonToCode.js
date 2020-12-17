@@ -1,13 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
-const config = require("./generator.config.json");
-const extendedMethods = require("./out/rest-api-doc.json");
 const utils = require("./utils");
 const { uniqWith } = require("lodash");
 const camel = utils.camel;
 
 function generateCodeFromJson(config) {
+    const extendedMethods = require("./out/rest-api-doc.json");
     const outDirectory = config ? config.outputDirectory || "./generator/out" : "./generator/out";
     utils.ensureDir(outDirectory);
 
@@ -99,7 +98,7 @@ function generateCodeFromJson(config) {
                               paramType: "Object", // name.substr(0, 1).toUpperCase() + name.substr(1) + "Options"
                               optional: false,
                           },
-                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], optional:true, name: "queryOptions."+signatureParams.query[k].name })))
+                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], optional:true, name: "queryOptions."+(signatureParams.query[k].qsKey || signatureParams.query[k].name) })))
                       ]
                     : []),
                 ...(Object.keys(signatureParams.option).length
@@ -134,7 +133,7 @@ function generateCodeFromJson(config) {
                               paramType: "Object", // name.substr(0, 1).toUpperCase() + name.substr(1) + "Options"
                               optional: false,
                           },
-                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], name: "queryOptions."+signatureParams.query[k].name })))
+                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], name: "queryOptions."+(signatureParams.query[k].qsKey || signatureParams.query[k].name) })))
                       ]
                     : [])
             ];
