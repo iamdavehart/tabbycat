@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import qs from 'qs';
 import { TableauRestRequest } from './request';
 import * as methods from "./execute";
 
@@ -12,12 +13,21 @@ export class TableauRestExecutive {
      * @param {AxiosRequestConfig} options an options object that is passed to the underlying axios instance
      */
     constructor(options) {
-        this.axiosInstance = axios.create(options);
+        this.axiosInstance = axios.create({ paramsSerializer: this.serializeQueryOptions, ...options });
         this.setAccessToken = this.setAccessToken.bind(this);
         this.get = this.get.bind(this);
         this.put = this.put.bind(this);
         this.post = this.post.bind(this);
         this.del = this.del.bind(this);
+    }
+
+    /**
+     * Serializes Query Options into URL parameters
+     * Note: this is overridden to allow control over encoding which has an effect on how expressions with embedded spaces are parsed
+     * @param {Object} params an object representing the query parameters
+     */
+    serializeQueryOptions(params) {
+        return qs.stringify(params, { format: "RFC3986" });
     }
 
     /**
