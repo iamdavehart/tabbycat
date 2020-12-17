@@ -1,4 +1,4 @@
-export * as api from "./api-full";
+
 import { WrappedApiCalls } from "./api-wrapped";
 import { TableauAuthorisationRestExecutive, TableauAuthorisedRestExecutive } from "./executive";
 import { DEFAULT_API_VERSION } from "./request";
@@ -27,7 +27,10 @@ export class TableauRestApiClient extends WrappedApiCalls {
         // set up api executives
         const axiosOptions = options.axios || {};
         this.authHttp = new TableauAuthorisedRestExecutive(axiosOptions);
-        this.http = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
+        this.http = new TableauAuthorisationRestExecutive(
+            axiosOptions,
+            this.updateCurrentCredentials
+        );
     }
 
     /**
@@ -70,5 +73,4 @@ export class TableauRestApiClient extends WrappedApiCalls {
     getSite() {
         return this.currentSite ? this.currentSite.id || "" : "";
     }
-
 }

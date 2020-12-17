@@ -1,14 +1,14 @@
-export class FieldExpressionBuilder<TSelf> {
+declare class FieldExpressionBuilder<TSelf> {
     withAllFields(): TSelf;
     withDefaultFields(): TSelf;
     build(): string;
 }
 
-export interface IFieldExpressionBuilderWithParent<TParent> {
+declare interface IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class DatasourceFieldExpressionBuilder extends FieldExpressionBuilder<DatasourceFieldExpressionBuilder> {
+declare class DatasourceFieldExpressionBuilder extends FieldExpressionBuilder<DatasourceFieldExpressionBuilder> {
     addContentUrl(): DatasourceFieldExpressionBuilder;
     addId(): DatasourceFieldExpressionBuilder;
     addName(): DatasourceFieldExpressionBuilder;
@@ -33,7 +33,7 @@ export class DatasourceFieldExpressionBuilder extends FieldExpressionBuilder<Dat
     withOwnerResource(): OwnerFieldExpressionBuilderWithParent<DatasourceFieldExpressionBuilder>;
 }
 
-export class UserFieldExpressionBuilder extends FieldExpressionBuilder<UserFieldExpressionBuilder> {
+declare class UserFieldExpressionBuilder extends FieldExpressionBuilder<UserFieldExpressionBuilder> {
     addExternalAuthUserId() : UserFieldExpressionBuilder;
     addId() : UserFieldExpressionBuilder;
     addName() : UserFieldExpressionBuilder;
@@ -44,7 +44,7 @@ export class UserFieldExpressionBuilder extends FieldExpressionBuilder<UserField
     addAuthSetting() : UserFieldExpressionBuilder;
 }
 
-export class ViewFieldExpressionBuilder extends FieldExpressionBuilder<ViewFieldExpressionBuilder> {
+declare class ViewFieldExpressionBuilder extends FieldExpressionBuilder<ViewFieldExpressionBuilder> {
     addId() : ViewFieldExpressionBuilder;
     addName() : ViewFieldExpressionBuilder;
     addContentUrl() : ViewFieldExpressionBuilder;
@@ -58,7 +58,7 @@ export class ViewFieldExpressionBuilder extends FieldExpressionBuilder<ViewField
     withOwnerResource() : OwnerFieldExpressionBuilderWithParent<ViewFieldExpressionBuilder>;
 }
 
-export class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder<WorkbookFieldExpressionBuilder> {
+declare class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder<WorkbookFieldExpressionBuilder> {
     addDescription() : WorkbookFieldExpressionBuilder;
     addId() : WorkbookFieldExpressionBuilder;
     addName() : WorkbookFieldExpressionBuilder;
@@ -77,7 +77,7 @@ export class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder<Workb
     withOwnerResource() : OwnerFieldExpressionBuilderWithParent<WorkbookFieldExpressionBuilder>;
 }
 
-export class JobFieldExpressionBuilder extends FieldExpressionBuilder<JobFieldExpressionBuilder> {
+declare class JobFieldExpressionBuilder extends FieldExpressionBuilder<JobFieldExpressionBuilder> {
     addId() : JobFieldExpressionBuilder;
     addStatus() : JobFieldExpressionBuilder;
     addCreatedAt() : JobFieldExpressionBuilder;
@@ -89,7 +89,7 @@ export class JobFieldExpressionBuilder extends FieldExpressionBuilder<JobFieldEx
     addSubtitle() : JobFieldExpressionBuilder;
 }
 
-export class GroupFieldExpressionBuilder extends FieldExpressionBuilder<GroupFieldExpressionBuilder> {
+declare class GroupFieldExpressionBuilder extends FieldExpressionBuilder<GroupFieldExpressionBuilder> {
     addId() : GroupFieldExpressionBuilder;
     addName() : GroupFieldExpressionBuilder;
     addDomainName() : GroupFieldExpressionBuilder;
@@ -97,7 +97,7 @@ export class GroupFieldExpressionBuilder extends FieldExpressionBuilder<GroupFie
     addMinimumSiteRole() : GroupFieldExpressionBuilder;
 }
 
-export class FavoritesFieldExpressionBuilder extends FieldExpressionBuilder<FavoritesFieldExpressionBuilder> { 
+declare class FavoritesFieldExpressionBuilder extends FieldExpressionBuilder<FavoritesFieldExpressionBuilder> { 
     addLabel() : FavoritesFieldExpressionBuilder;
     addParentProjectName   () : FavoritesFieldExpressionBuilder;
     addTargetOwnerName() : FavoritesFieldExpressionBuilder;
@@ -108,7 +108,7 @@ export class FavoritesFieldExpressionBuilder extends FieldExpressionBuilder<Favo
     withViewResource() : ViewFieldExpressionBuilderWithParent<FavoritesFieldExpressionBuilder>;
 }
 
-export class MetricsFieldExpressionBuilder extends FieldExpressionBuilder<MetricsFieldExpressionBuilder> {
+declare class MetricsFieldExpressionBuilder extends FieldExpressionBuilder<MetricsFieldExpressionBuilder> {
     addId() : MetricsFieldExpressionBuilder;
     addName() : MetricsFieldExpressionBuilder;
     withProjectResource() : ProjectFieldExpressionBuilderWithParent<MetricsFieldExpressionBuilder>;
@@ -116,13 +116,13 @@ export class MetricsFieldExpressionBuilder extends FieldExpressionBuilder<Metric
 }
 
 
-export class ProjectFieldExpressionBuilder extends FieldExpressionBuilder<ProjectFieldExpressionBuilder> {
+declare class ProjectFieldExpressionBuilder extends FieldExpressionBuilder<ProjectFieldExpressionBuilder> {
     addId(): ProjectFieldExpressionBuilder;
     addName(): ProjectFieldExpressionBuilder;
     addDescription(): ProjectFieldExpressionBuilder;
 }
 
-export class OwnerFieldExpressionBuilder extends FieldExpressionBuilder<OwnerFieldExpressionBuilder> {
+declare class OwnerFieldExpressionBuilder extends FieldExpressionBuilder<OwnerFieldExpressionBuilder> {
     addId(): OwnerFieldExpressionBuilder;
     addName(): OwnerFieldExpressionBuilder;
     addFullName(): OwnerFieldExpressionBuilder;
@@ -131,37 +131,37 @@ export class OwnerFieldExpressionBuilder extends FieldExpressionBuilder<OwnerFie
     addEmail(): OwnerFieldExpressionBuilder;
 }
 
-export class ProjectFieldExpressionBuilderWithParent<TParent> 
+declare class ProjectFieldExpressionBuilderWithParent<TParent> 
 extends ProjectFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class ViewFieldExpressionBuilderWithParent<TParent> 
+declare class ViewFieldExpressionBuilderWithParent<TParent> 
 extends ViewFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class WorkbookFieldExpressionBuilderWithParent<TParent> 
+declare class WorkbookFieldExpressionBuilderWithParent<TParent> 
 extends WorkbookFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class DatasourceFieldExpressionBuilderWithParent<TParent> 
+declare class DatasourceFieldExpressionBuilderWithParent<TParent> 
 extends DatasourceFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class UserFieldExpressionBuilderWithParent<TParent> 
+declare class UserFieldExpressionBuilderWithParent<TParent> 
 extends UserFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
 }
 
-export class OwnerFieldExpressionBuilderWithParent<TParent> 
+declare class OwnerFieldExpressionBuilderWithParent<TParent> 
 extends OwnerFieldExpressionBuilder
 implements IFieldExpressionBuilderWithParent<TParent> {
     and(): TParent;
