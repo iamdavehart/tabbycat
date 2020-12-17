@@ -50,64 +50,64 @@ function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? o
 
 
 /**
-    * @typedef {import("./index").CredentialsRequest} CredentialsRequest
-    * @typedef {import("./index").SiteRequest} SiteRequest
-    * @typedef {import("./index").UserRequest} UserRequest
-    * @typedef {import("./index").DataAlertRequest} DataAlertRequest
-    * @typedef {import("./index").PermissionsRequest} PermissionsRequest
-    * @typedef {import("./index").TaskRequest} TaskRequest
-    * @typedef {import("./index").FlowRequest} FlowRequest
-    * @typedef {import("./index").ProjectRequest} ProjectRequest
-    * @typedef {import("./index").WorkbookRequest} WorkbookRequest
-    * @typedef {import("./index").TagsRequest} TagsRequest
-    * @typedef {import("./index").RecommendationDismissalRequest} RecommendationDismissalRequest
-    * @typedef {import("./index").ConnectionRequest} ConnectionRequest
-    * @typedef {import("./index").DatasourceRequest} DatasourceRequest
-    * @typedef {import("./index").GroupRequest} GroupRequest
-    * @typedef {import("./index").TableRequest} TableRequest
-    * @typedef {import("./index").ColumnRequest} ColumnRequest
-    * @typedef {import("./index").DataQualityWarningRequest} DataQualityWarningRequest
-    * @typedef {import("./index").TagBatchRequest} TagBatchRequest
-    * @typedef {import("./index").ScheduleRequest} ScheduleRequest
-    * @typedef {import("./index").SubscriptionRequest} SubscriptionRequest
-    * @typedef {import("./index").FavoriteRequest} FavoriteRequest
-    * @typedef {import("./index").DatasourcesRequest} DatasourcesRequest
-    * @typedef {import("./index").CredentialsResponse} CredentialsResponse
-    * @typedef {import("./index").SiteResponse} SiteResponse
-    * @typedef {import("./index").SitesResponse} SitesResponse
-    * @typedef {import("./index").ViewsResponse} ViewsResponse
-    * @typedef {import("./index").DataAlertResponse} DataAlertResponse
-    * @typedef {import("./index").DataAlertsResponse} DataAlertsResponse
-    * @typedef {import("./index").UserResponse} UserResponse
-    * @typedef {import("./index").PermissionsResponse} PermissionsResponse
-    * @typedef {import("./index").ProjectResponse} ProjectResponse
-    * @typedef {import("./index").ProjectsResponse} ProjectsResponse
-    * @typedef {import("./index").WorkbookResponse} WorkbookResponse
-    * @typedef {import("./index").TagsResponse} TagsResponse
-    * @typedef {import("./index").ConnectionsResponse} ConnectionsResponse
-    * @typedef {import("./index").ViewResponse} ViewResponse
-    * @typedef {import("./index").RevisionsResponse} RevisionsResponse
-    * @typedef {import("./index").WorkbooksResponse} WorkbooksResponse
-    * @typedef {import("./index").ConnectionResponse} ConnectionResponse
-    * @typedef {import("./index").JobResponse} JobResponse
-    * @typedef {import("./index").DataAccelerationReportResponse} DataAccelerationReportResponse
-    * @typedef {import("./index").DatasourceResponse} DatasourceResponse
-    * @typedef {import("./index").DatasourcesResponse} DatasourcesResponse
-    * @typedef {import("./index").GroupResponse} GroupResponse
-    * @typedef {import("./index").GroupsResponse} GroupsResponse
-    * @typedef {import("./index").UsersResponse} UsersResponse
-    * @typedef {import("./index").TaskResponse} TaskResponse
-    * @typedef {import("./index").ParentResponse} ParentResponse
-    * @typedef {import("./index").BackgroundJobsResponse} BackgroundJobsResponse
-    * @typedef {import("./index").TasksResponse} TasksResponse
-    * @typedef {import("./index").ScheduleResponse} ScheduleResponse
-    * @typedef {import("./index").ExtractsResponse} ExtractsResponse
-    * @typedef {import("./index").SchedulesResponse} SchedulesResponse
-    * @typedef {import("./index").SubscriptionResponse} SubscriptionResponse
-    * @typedef {import("./index").SubscriptionsResponse} SubscriptionsResponse
-    * @typedef {import("./index").FavoritesResponse} FavoritesResponse
-    * @typedef {import("./index").FileUploadResponse} FileUploadResponse
-    * @typedef {import("./index").ServerInfoResponse} ServerInfoResponse
+    * @typedef {import("index").CredentialsRequest} CredentialsRequest
+    * @typedef {import("index").SiteRequest} SiteRequest
+    * @typedef {import("index").UserRequest} UserRequest
+    * @typedef {import("index").DataAlertRequest} DataAlertRequest
+    * @typedef {import("index").PermissionsRequest} PermissionsRequest
+    * @typedef {import("index").TaskRequest} TaskRequest
+    * @typedef {import("index").FlowRequest} FlowRequest
+    * @typedef {import("index").ProjectRequest} ProjectRequest
+    * @typedef {import("index").WorkbookRequest} WorkbookRequest
+    * @typedef {import("index").TagsRequest} TagsRequest
+    * @typedef {import("index").RecommendationDismissalRequest} RecommendationDismissalRequest
+    * @typedef {import("index").ConnectionRequest} ConnectionRequest
+    * @typedef {import("index").DatasourceRequest} DatasourceRequest
+    * @typedef {import("index").GroupRequest} GroupRequest
+    * @typedef {import("index").TableRequest} TableRequest
+    * @typedef {import("index").ColumnRequest} ColumnRequest
+    * @typedef {import("index").DataQualityWarningRequest} DataQualityWarningRequest
+    * @typedef {import("index").TagBatchRequest} TagBatchRequest
+    * @typedef {import("index").ScheduleRequest} ScheduleRequest
+    * @typedef {import("index").SubscriptionRequest} SubscriptionRequest
+    * @typedef {import("index").FavoriteRequest} FavoriteRequest
+    * @typedef {import("index").DatasourcesRequest} DatasourcesRequest
+    * @typedef {import("index").CredentialsResponse} CredentialsResponse
+    * @typedef {import("index").SiteResponse} SiteResponse
+    * @typedef {import("index").SitesResponse} SitesResponse
+    * @typedef {import("index").ViewsResponse} ViewsResponse
+    * @typedef {import("index").DataAlertResponse} DataAlertResponse
+    * @typedef {import("index").DataAlertsResponse} DataAlertsResponse
+    * @typedef {import("index").UserResponse} UserResponse
+    * @typedef {import("index").PermissionsResponse} PermissionsResponse
+    * @typedef {import("index").ProjectResponse} ProjectResponse
+    * @typedef {import("index").ProjectsResponse} ProjectsResponse
+    * @typedef {import("index").WorkbookResponse} WorkbookResponse
+    * @typedef {import("index").TagsResponse} TagsResponse
+    * @typedef {import("index").ConnectionsResponse} ConnectionsResponse
+    * @typedef {import("index").ViewResponse} ViewResponse
+    * @typedef {import("index").RevisionsResponse} RevisionsResponse
+    * @typedef {import("index").WorkbooksResponse} WorkbooksResponse
+    * @typedef {import("index").ConnectionResponse} ConnectionResponse
+    * @typedef {import("index").JobResponse} JobResponse
+    * @typedef {import("index").DataAccelerationReportResponse} DataAccelerationReportResponse
+    * @typedef {import("index").DatasourceResponse} DatasourceResponse
+    * @typedef {import("index").DatasourcesResponse} DatasourcesResponse
+    * @typedef {import("index").GroupResponse} GroupResponse
+    * @typedef {import("index").GroupsResponse} GroupsResponse
+    * @typedef {import("index").UsersResponse} UsersResponse
+    * @typedef {import("index").TaskResponse} TaskResponse
+    * @typedef {import("index").ParentResponse} ParentResponse
+    * @typedef {import("index").BackgroundJobsResponse} BackgroundJobsResponse
+    * @typedef {import("index").TasksResponse} TasksResponse
+    * @typedef {import("index").ScheduleResponse} ScheduleResponse
+    * @typedef {import("index").ExtractsResponse} ExtractsResponse
+    * @typedef {import("index").SchedulesResponse} SchedulesResponse
+    * @typedef {import("index").SubscriptionResponse} SubscriptionResponse
+    * @typedef {import("index").SubscriptionsResponse} SubscriptionsResponse
+    * @typedef {import("index").FavoritesResponse} FavoritesResponse
+    * @typedef {import("index").FileUploadResponse} FileUploadResponse
+    * @typedef {import("index").ServerInfoResponse} ServerInfoResponse
     */
 
 /**
@@ -199,7 +199,7 @@ export function createSite(site, options=defaultOptions) {
  * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
  * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {boolean=} [queryOptions.includeUsage] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
@@ -218,7 +218,7 @@ export function querySite(siteId, siteName, contentUrl, queryOptions={}, options
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} siteId The ID of the site to get information for.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {boolean=} [queryOptions.includeUsage] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
@@ -237,7 +237,7 @@ export function querySiteByID(siteId, queryOptions={}, options=defaultOptions) {
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {boolean=} [queryOptions.includeUsage] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
@@ -256,7 +256,7 @@ export function querySiteByName(siteName, queryOptions={}, options=defaultOption
  * Note: You can only get site information for the site that you have signed in to.
  * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.includeUsageFlag] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+ * @param {boolean=} [queryOptions.includeUsage] The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
@@ -303,12 +303,12 @@ export function getRecentlyViewedForSite(siteId, options=defaultOptions) {
  * Note: After you create a resource, the server updates its search index. If you make a query immediately to see a new resource, the query results might not be up to date.
  * @param {string} siteId The ID of the site that contains the views.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.getUsageInformation] (Optional) true to return usage statistics. The default is false.
+ * @param {boolean=} [queryOptions.includeUsageStatistics] (Optional) true to return usage statistics. The default is false.
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
- * @param {string=} [queryOptions.filterExpression] <parameter documentation missing>
- * @param {string=} [queryOptions.sortExpression] <parameter documentation missing>
+ * @param {string=} [queryOptions.fields] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {string=} [queryOptions.filter] <parameter documentation missing>
+ * @param {string=} [queryOptions.sort] <parameter documentation missing>
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewsResponse>} Promise | undefined
  */
@@ -777,7 +777,7 @@ export function updateFlowConnection(siteId, flowId, connectionId, options=defau
  * @param {string} siteId The ID of the site to create the project in.
  * @param {ProjectRequest} project project
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.publishValue] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+ * @param {boolean=} [queryOptions.publishSamples] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectResponse>} Promise | undefined
  */
@@ -797,8 +797,8 @@ export function createProject(siteId, project, queryOptions={}, options=defaultO
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.filter] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sort] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectsResponse>} Promise | undefined
  */
@@ -816,7 +816,7 @@ export function queryProjects(siteId, queryOptions={}, options=defaultOptions) {
  * @param {string} projectId The ID of the project to update.
  * @param {ProjectRequest} project project
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.publishValue] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+ * @param {boolean=} [queryOptions.publishSamples] (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ProjectResponse>} Promise | undefined
  */
@@ -855,11 +855,11 @@ export function deleteProject(siteId, projectId, options=defaultOptions) {
  * @param {WorkbookRequest} workbook workbook
  * @param {Object} file File Contents
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.overwriteFlag] (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
- * @param {boolean=} [queryOptions.asJobValue] (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
- * @param {boolean=} [queryOptions.skipConnectionCheckFlag] (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
+ * @param {boolean=} [queryOptions.overwrite] (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
+ * @param {boolean=} [queryOptions.asJob] (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
+ * @param {boolean=} [queryOptions.skipConnectionCheck] (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
  * @param {string=} [queryOptions.uploadSessionId] If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
- * @param {string=} [queryOptions.workbookFileType] twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+ * @param {string=} [queryOptions.workbookType] twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbookResponse>} Promise | undefined
  */
@@ -912,7 +912,7 @@ export function addTagsToWorkbook(siteId, workbookId, tags, options=defaultOptio
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to get the views for.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.getUsageInformation] true to return usage statistics. The default is false.
+ * @param {boolean=} [queryOptions.includeUsageStatistics] true to return usage statistics. The default is false.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<ViewsResponse>} Promise | undefined
  */
@@ -932,8 +932,8 @@ export function queryViewsForWorkbook(siteId, workbookId, queryOptions={}, optio
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to render as data.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.vf_<fieldname>] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -953,9 +953,9 @@ export function queryViewData(siteId, viewId, queryOptions={}, options=defaultOp
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to return an image for.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.imageResolution] (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {string=} [queryOptions.resolution] (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.vf_<fieldname>] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -974,10 +974,10 @@ export function queryViewImage(siteId, viewId, queryOptions={}, options=defaultO
  * @param {string} siteId The ID of the site that contains the view.
  * @param {string} viewId The ID of the view to render as a .pdf file.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.filterValue] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string=} [queryOptions.pageOrientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
- * @param {string=} [queryOptions.pageType] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+ * @param {string=} [queryOptions.vf_<fieldname>] The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.orientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+ * @param {string=} [queryOptions.type] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1116,7 +1116,7 @@ export function hideViewRecommendations(siteId, recommendationDismissal, options
  * Unhides a view from being recommended by the server by removing it from the list of views that are dimissed for a user. If the unhidden view meets the criteria for being recommended, then it will be displayed on the server Home or Recommendation pages.
  * @param {string} siteId The ID of the site that contains the group.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.viewLuid] The LUID of the view to be removed from the list of views hidden from recommendation for a user.
+ * @param {string=} [queryOptions.id] The LUID of the view to be removed from the list of views hidden from recommendation for a user.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1148,11 +1148,11 @@ export function queryWorkbookPreviewImage(siteId, workbookId, options=defaultOpt
  * If the user is not an administrator, the method returns just the workbooks that the user has permissions to view.
  * @param {string} siteId The ID of the site that contains the workbooks.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.filter] (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sort] (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {string=} [queryOptions.fields] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<WorkbooksResponse>} Promise | undefined
  */
@@ -1170,7 +1170,7 @@ export function queryWorkbooksForSite(siteId, queryOptions={}, options=defaultOp
  * @param {string} siteId The ID of the site that contains the user.
  * @param {string} userId The ID of the user to get workbooks for.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.isOwner] (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
+ * @param {boolean=} [queryOptions.ownedBy] (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
@@ -1190,7 +1190,7 @@ export function queryWorkbooksForUser(siteId, userId, queryOptions={}, options=d
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} viewId The ID of the view to use as the source of the crosstab to be downloaded as an .xlsx file.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1207,7 +1207,7 @@ export function downloadViewCrosstabExcel(siteId, viewId, queryOptions={}, optio
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to download.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {string=} [queryOptions.includeExtract] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1225,9 +1225,9 @@ export function downloadWorkbook(siteId, workbookId, queryOptions={}, options=de
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to use as the source of the .pdf file to be downloaded.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
- * @param {string=} [queryOptions.pageOrientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
- * @param {string=} [queryOptions.pageType] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {string=} [queryOptions.orientation] (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+ * @param {string=} [queryOptions.type] (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1245,7 +1245,7 @@ export function downloadWorkbookPDF(siteId, workbookId, queryOptions={}, options
  * @param {string} siteId The ID of the site that contains the workbook.
  * @param {string} workbookId The ID of the workbook to use as the source of the .pptx file to be downloaded.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {number=} [queryOptions.maxAgeMinutes] (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+ * @param {number=} [queryOptions.maxAge] (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1264,7 +1264,7 @@ export function downloadWorkbookPowerpoint(siteId, workbookId, queryOptions={}, 
  * @param {string} workbookId The ID of the workbook to download.
  * @param {number} revisionNumber The revision number of the workbook to download. To determine what versions are available, call Get Workbook Revisions. Note that the current revision of a workbook cannot be accessed by this call; use Download Workbook instead.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {string=} [queryOptions.includeExtract] (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1396,11 +1396,11 @@ export function getDataAccelerationReportForASite(siteId, options=defaultOptions
  * @param {DatasourceRequest} datasource datasource
  * @param {Object} file File Contents
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.overwriteFlag] (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
- * @param {boolean=} [queryOptions.asJobValue] (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
- * @param {boolean=} [queryOptions.appendFlag] (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
+ * @param {boolean=} [queryOptions.overwrite] (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
+ * @param {boolean=} [queryOptions.asJob] (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
+ * @param {boolean=} [queryOptions.append] (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
  * @param {string=} [queryOptions.uploadSessionId] If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
- * @param {string=} [queryOptions.datasourceFileType] hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+ * @param {string=} [queryOptions.datasourceType] hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
@@ -1468,9 +1468,9 @@ export function queryDataSource(siteId, datasourceId, options=defaultOptions) {
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
+ * @param {string=} [queryOptions.filter] (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sort] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.fields] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<DatasourcesResponse>} Promise | undefined
  */
@@ -1521,7 +1521,7 @@ export function getDataSourceRevisions(siteId, datasourceId, queryOptions={}, op
  * @param {string} siteId The ID of the site that contains the data source.
  * @param {string} datasourceId The ID of the data source to download.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {string=} [queryOptions.includeExtract] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1540,7 +1540,7 @@ export function downloadDataSource(siteId, datasourceId, queryOptions={}, option
  * @param {string} datasourceId The ID of the data source to download.
  * @param {number} revisionNumber The revision number of the data source to download. To determine what versions are available, call Get Data Source Revisions.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.extractValue] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+ * @param {string=} [queryOptions.includeExtract] (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -1643,7 +1643,7 @@ export function removeDataSourceRevision(siteId, datasourceId, revisionNumber, o
  * @param {string} siteId The ID of the site to create the group in.
  * @param {GroupRequest} group group
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.asJobValue] A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
+ * @param {boolean=} [queryOptions.asJob] A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<GroupResponse>} Promise | undefined
  */
@@ -1734,11 +1734,11 @@ export function getUsersInGroup(siteId, groupId, queryOptions={}, options=defaul
  * Returns the users associated with the specified site.
  * @param {string} siteId The ID of the site that contains the users.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.filter] (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sort] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.fieldExpression] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+ * @param {string=} [queryOptions.fields] (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<UsersResponse>} Promise | undefined
  */
@@ -1757,8 +1757,8 @@ export function getUsersOnSite(siteId, queryOptions={}, options=defaultOptions) 
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {number=} [queryOptions.pageSize] (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
  * @param {number=} [queryOptions.pageNumber] (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
- * @param {string=} [queryOptions.filterExpression] (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
- * @param {string=} [queryOptions.sortExpression] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.filter] (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+ * @param {string=} [queryOptions.sort] (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<GroupsResponse>} Promise | undefined
  */
@@ -3596,7 +3596,7 @@ export function getCurrentServerSessionDetails(options=defaultOptions) {
  * @param {string} siteId The LUID of the site.
  * @param {string} datasourceId The LUID of the datasource.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.encryptionFlag] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+ * @param {boolean=} [queryOptions.encrypt] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
@@ -3630,7 +3630,7 @@ export function deleteAnExtractFromADataSource(siteId, datasourceId, options=def
  * @param {string} workbookId The LUID of the workbook.
  * @param {DatasourcesRequest} datasources datasources
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {boolean=} [queryOptions.encryptionFlag] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+ * @param {boolean=} [queryOptions.encrypt] If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
  * @param {ExecOptions=} [options] an object containing the execution options for this request
  * @returns {Promise<any>} Promise | undefined
  */
