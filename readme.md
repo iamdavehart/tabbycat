@@ -11,15 +11,15 @@ using axios
 > Until version 1.0.0 is reached breaking api changes may be released, see changelog for details
 > 
 
-## Table of Contents
+## Table of Contents
 
 * [Features](#features)
 * [Installation](#installation)
-* [Browser Support](#browser-support)
+* [Browser Support](#browser-support)
 * [Example](#example)
-* [tabbycat API](#tabbycat-api)
+* [tabbycat API](#tabbycat-api)
 * [Filtering and Expression Building](#filtering-and-expression-building)
-* [Handling Errors](#handling-errors)
+* [Handling Errors](#handling-errors)
 * [Development](#development)
 * [Typescript](#typescript)
 * [Credits](#credits)
@@ -58,28 +58,28 @@ const doStuff = async () => {
 
 ```
 
-## tabbycat API reference
+## tabbycat API reference
 
 ## Filtering and Expression Building
 
-## Handling Errors
+## Handling Errors
 
-## Development
+## Development
 
-See something you think can be improved? Open an issue or clone the project and send a pull request with your changes.
+See something you think can be improved? Open an issue or clone the project and send a pull request with your changes.
 
-### Typescript
+### Typescript
 
-the library is in javacript with JSDoc comments but type definition files exist for all files. you can generate type files for source using `npm run build:types`  
+the library is in javacript with JSDoc comments but type definition files exist for all files. you can generate type files for source using `npm run build:types`  
 
-### Documentation and Code Generation
+### Documentation and Code Generation
 
-### Tests
+### Tests
 
-You can run unit tests `npm test`
+You can run unit tests `npm test`
 
-## Credits
+## Credits
 
-## Licence
+## Licence
 
 
