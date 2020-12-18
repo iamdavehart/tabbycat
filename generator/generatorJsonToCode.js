@@ -147,6 +147,7 @@ function generateCodeFromJson(config) {
                 ...m,
                 requestTypeJS: rqstType,
                 responseTypeJS: rspType,
+                unifiedSignature: `// ${m.name}\n${name}(${signatureWrappedJS})`,
                 unifiedCallJS:
                     commentsWrapped.join("\n\t")+
 `
@@ -172,10 +173,10 @@ function generateCodeFromJson(config) {
 
         // reduce by area
         const areas = methodCalls.reduce((o, m) => {
-            if (!o.hasOwnProperty(m.area)) {
-                o[m.area] = [];
-            }
-            o[m.area].push(m.methodCallJS);
+            m.areas.forEach(a => {
+                if (!o.hasOwnProperty(a)) { o[a] = []; }
+                o[a].push(m);
+            })
             return o;
         }, {});
 
@@ -209,6 +210,11 @@ function generateCodeFromJson(config) {
        UNIFIED_FOOTER;
 
         utils.writeToFile(path.join(outDirectory, "api-unified.js"), unifiedCallsText);
+
+        // output one full file for api listing
+       const readmeOutput =
+            Object.keys(areas).map(k => `### ${k} Calls\n\n\`\`\`js\n` + areas[k].map((m) => `${m.unifiedSignature}`).join("\n") + "\n```").join("\n\n");
+        utils.writeToFile(path.join(outDirectory, "api-listing.md"), readmeOutput);
 
         // output our re-export
         // const reexportText =
