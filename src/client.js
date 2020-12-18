@@ -23,7 +23,7 @@ export class TableauRestApiClient extends ApiCalls {
         this.currentSite = null;
         this.currentSiteId = null;
         // set up api executives
-        const axiosOptions = options.axios || {};
+        const axiosOptions = options?.axios || {};
         this.updateCurrentCredentials = this.updateCurrentCredentials.bind(this);
         this.authenticatedHttp = new TableauAuthorisedRestExecutive(axiosOptions);
         this.authenticationHttp = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
