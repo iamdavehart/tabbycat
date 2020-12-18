@@ -698,7 +698,7 @@ the library is in javacript with JSDoc comments but type definition files exist 
 
 ### Documentation and Code Generation
 
-
+The code is generated from Tableau's REST API documentation using cheerio and xml-js. I've tried to make the generator code as reusable as possible to keep up with Tableau changes until they move fully to an openAPI spec. In some cases the documentation page has a few problems so there is a configuration file that tries to fill in the blanks. The generator code is not production so don't generate directly into the source unless you're feeling brave!
 
 ### Tests
 
@@ -706,6 +706,10 @@ You can run unit tests `npm test`
 
 ## Credits
 
+* Seeing the [Spotify Web Api](https://github.com/thelinmichael/spotify-web-api-node) library by [thelinmichael](https://github.com/thelinmichael/) reminded me how much I liked builders and fluent APIs back when I was doing C#, so the style is based on that.
+* Dependent on axios, form-data, qs (to help with query string encoding), lodash and loglevel
+* I learned most of what i know about Tableau while working for [Interworks](https://interworks.com) who are great!
+
 ## Licence
 
-
+MIT. Go do stuff!
