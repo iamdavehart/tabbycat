@@ -1,27 +1,3 @@
-export const DEFAULT_API_VERSION = "3.8";
-
-export class AuthenticatedRequest {
-    /**
-     * Returns a builder to construct your authenticated request
-     * @param {string} baseUrl The baseUrl for the request to use
-     * @param {string} token The security token returned from the APIs signin method
-     */
-    static builder(baseUrl, token) {
-        return new TableauRestRequestBuilder(baseUrl)
-            .withVersion(DEFAULT_API_VERSION)
-            .withAuthToken(token);
-    }
-}
-
-export class AuthenticationRequest {
-    /**
-     * Returns a builder to construct your authenticated request
-     * @param {string} baseUrl The baseUrl for the request to use
-     */
-    static builder(baseUrl) {
-        return new TableauRestRequestBuilder(baseUrl).withVersion(DEFAULT_API_VERSION);
-    }
-}
 
 /**
  * Creates a request to execute against the Tableau Rest API
@@ -45,6 +21,14 @@ export class TableauRestRequest {
         this.headers = builder.headers;
         this.path = builder.path;
     }
+
+     /**
+     * Returns a builder to construct your authenticated request
+     * @param {string} baseUrl The baseUrl for the request to use
+     */
+    static builder(baseUrl) {
+        return new TableauRestRequestBuilder(baseUrl);
+    }   
 
     /** The api or resource version for the request */
     version;

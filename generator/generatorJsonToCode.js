@@ -87,38 +87,6 @@ function generateCodeFromJson(config) {
                 console.log(signatureParams);
             }
 
-            const signatureParamsArray = [
-                ...Object.keys(signatureParams.path).map((k) => signatureParams.path[k]),
-                ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k]),
-                ...(Object.keys(signatureParams.query).length
-                    ? [
-                          {
-                              name: "queryOptions",
-                              desc: "an object containing the query options for this request",
-                              paramType: "Object", // name.substr(0, 1).toUpperCase() + name.substr(1) + "Options"
-                              optional: false,
-                          },
-                          ...(Object.keys(signatureParams.query).map(k=>({ ...signatureParams.query[k], optional:true, name: "queryOptions."+(signatureParams.query[k].qsKey || signatureParams.query[k].name) })))
-                      ]
-                    : []),
-                ...(Object.keys(signatureParams.option).length
-                    ? [
-                          {
-                              name: "options",
-                              desc: "an object containing the execution options for this request",
-                              paramType: "ExecOptions",
-                              optional: true,
-                          },
-                      ]
-                    : []),
-            ];
-
-            const signatureJS = [
-                ...Object.keys(signatureParams.path).map((k) => signatureParams.path[k].name),
-                ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k].name),
-                ...(Object.keys(signatureParams.query).length ? ["queryOptions={}"] : []),
-                ...(Object.keys(signatureParams.option).length ? ["options=defaultOptions"] : []),
-            ].join(", ");
 
             const signatureWrappedParamsArray = [
                 ...Object.keys(signatureParams.path)
@@ -146,23 +114,6 @@ function generateCodeFromJson(config) {
                 ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
             ].join(", ");
 
-            const callWrappedJS = [
-                ...Object.keys(signatureParams.path).map((k) => signatureParams.path[k].name),
-                ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k].name),
-                ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
-            ].join(", ");
-
-            const comments = [];
-            comments.push("/**");
-            comments.push(m.desc.map((d) => ` * ${d}`).join("\n"));
-            comments.push(
-                ...signatureParamsArray
-                    .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `${camel(p.name)}` : camel(p.name) }))
-                    .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
-            );
-            comments.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
-            comments.push(" */");
-
             const commentsWrapped = [];
             commentsWrapped.push("/**");
             commentsWrapped.push(` * ${m.desc[0]}`);
@@ -175,19 +126,10 @@ function generateCodeFromJson(config) {
             commentsWrapped.push(" */");
 
 
-            const versionlessUri = m.uri.replace("${apiVersion}", "{apiVersion}");
             const httpMethod = m.method.toLowerCase() === "delete" ? "del" : m.method.toLowerCase();
             const requestType =
-                m.name != "Sign In" ? "AuthenticatedRequest" : "AuthenticationRequest";
-            const authenticationRoute = requestType === "AuthenticationRequest";
-            const buildArgs =
-                m.name != "Sign In"
-                    ? "getBaseURL(options), getToken(options)"
-                    : "getBaseURL(options)";
-            const methodType = "http";
+                (m.name === "Sign In" || m.name === "Switch Site") ? "AuthenticationRequest" : "AuthenticatedRequest";
 
-            const errorCodes =
-                m.errorCodes && m.errorCodes.length ? JSON.stringify(m.errorCodes, null, 2) : "";
 
             // file handling
             // we need to use the correct parameter name for our uploaded content
@@ -203,67 +145,30 @@ function generateCodeFromJson(config) {
 
             return {
                 ...m,
-
                 requestTypeJS: rqstType,
                 responseTypeJS: rspType,
+                unifiedCallJS:
+                    commentsWrapped.join("\n\t")+
+`
+    ${name}(${signatureWrappedJS}) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = \`${m.uri}\`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+`
++(m.requestContentType != "application/json" ? `            .withHeaders({"Content-Type":"${m.requestContentType}"})\n` : "")
++(Object.keys(signatureParams.query).length ? `            .withQueryParameters(queryOptions)\n` : "")
++(m.requestBody ? `            .withBodyParameters(${m.requestBodyType})\n` : "")
++(params.some((p) => p.name === "file" && p.type === "body") ? `            .withFileParameters({ name: "${fileParameterName}", file: file })\n` : "") + 
+`            .build()
+            .execute(this.${requestType === "AuthenticationRequest" ? "authenticationHttp" : "authenticatedHttp"}.${httpMethod});
+    }
+`
 
-                wrappedCallJS:
-                    // (queryParams.length ? queryJSONDoc : "") +
-                    commentsWrapped.join("\n\t") +
-                    "\n\t" +
-                    `${name}(${signatureWrappedJS}) {` +
-                    (siteSpecific ? `\n        const siteId = this.getSite();` : "") +
-                    `\n        const opts = this.execOpts({ ${
-                        authenticationRoute ? "authentication: true" : ""
-                    }});\n        return api.${name}(${
-                        callWrappedJS + (callWrappedJS.length ? ", " : "")
-                    }opts);\n    }`,
 
-                methodCallJS:
-                    // (queryParams.length ? queryJSONDoc : "") +
-                    comments.join("\n") +
-                    "\n" +
-                    `export function ${name}(${signatureJS}) { \n` +
-                    `    return ${requestType}.builder(${buildArgs})\n` +
-                    `        .withPath(\`${versionlessUri}\`)\n` +
-                    (m.requestContentType != "application/json"
-                        ? `        .withHeaders({ "Content-Type": "${m.requestContentType}" })\n`
-                        : "") +
-                    (Object.keys(signatureParams.query).length ? `        .withQueryParameters(queryOptions)\n` : "") +
-                    (m.requestBody ? `        .withBodyParameters(${m.requestBodyType})\n` : "") +
-                    (params.some((p) => p.name === "file" && p.type === "body")
-                        ? `        .withFileParameters({ name: "${fileParameterName}", file: file })\n`
-                        : "") +
-                    // (errorCodes
-                    //     ? `        .withErrorCodes(${errorCodes})\n`
-                    //     : "") +
-                    `        .build()\n` +
-                    `        .execute(options?.${methodType}?.${httpMethod} ?? methods.${httpMethod});\n` +
-                    `}`,
+
             };
         });
-
-        // JSONDoc types for exec options and query return
-        const execJSONDoc = `
-/**
- * HttpManager object containing standard http methods for GET,POST,PUT,DELETE
- * @typedef {Object} HttpManager
- * @property {Function} get HTTP GET method
- * @property {Function} put HTTP PUT method
- * @property {Function} post HTTP POST method
- * @property {Function} del HTTP DEL method
- */
-    
-/**
- * Execute Options allow fine-grained control over each request
- * @typedef {Object} ExecOptions
- * @property {HttpManager=} http Object containing standard http methods for GET,POST,PUT,DELETE
- * @property {boolean=} [authentication] states that the route returns authentication information
- * @property {string=} [baseURL] specifies the url to run this request against
- * @property {string=} [version] specifies a particular version of the api to run this request on
- */
-
-`;
 
         // reduce by area
         const areas = methodCalls.reduce((o, m) => {
@@ -295,24 +200,15 @@ function generateCodeFromJson(config) {
 
         utils.writeToFile(path.join(outDirectory, "api-errors.js"), apiErrorText);
 
-        // output one full file for easier syntax checking
-        const apiFullText =
-            headerText +
-            API_HEADER +
-            '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
-            execJSONDoc +
-            methodCalls.map((m) => m.methodCallJS).join("\n\n");
-        utils.writeToFile(path.join(outDirectory, "api-full.js"), apiFullText);
+       // output one full file for easier syntax checking
+       const unifiedCallsText =
+       headerText +
+       UNIFIED_HEADER +
+       '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
+       methodCalls.map((m) => m.unifiedCallJS).join("\n\n\t") +
+       UNIFIED_FOOTER;
 
-        // output one full file for easier syntax checking
-        const wrappedCallsText =
-            headerText +
-            WRAPPED_HEADER +
-            '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
-            methodCalls.map((m) => m.wrappedCallJS).join("\n\n\t") +
-            WRAPPED_FOOTER;
-
-        utils.writeToFile(path.join(outDirectory, "api-wrapped.js"), wrappedCallsText);
+        utils.writeToFile(path.join(outDirectory, "api-unified.js"), unifiedCallsText);
 
         // output our re-export
         // const reexportText =
@@ -329,89 +225,32 @@ function generateCodeFromJson(config) {
         //     const apiAreaText = headerText + API_HEADER + execJSONDoc + areas[a].join("\n\n");
         //     utils.writeToFile(path.join(outDirectory, `api-${area_name}.js`), apiAreaText);
         // }
+
     } catch (ex) {
         throw ex;
     }
 }
 
-const API_HEADER = `
-import { AuthenticationRequest, AuthenticatedRequest } from './request'
-import * as methods from './execute'
+const UNIFIED_HEADER = `
+import { DEFAULT_URL, DEFAULT_VERSION } from './defaults';
+import { TableauRestRequest } from './request';
+import { get, post, put, del } from './execute';
 
-/* 
-the base url and authentication token can be stored here at a module level
-if you are choosing to access the api methods directly for convenience, but the
-baseURL and token will usually be managed by the client or on a per-request basis
-*/
-
-/** @type {string} */
-let baseURL = "";
-/** @type {string} */
-let authenticationToken = "";
-/** @type {ExecOptions} */
-const defaultOptions = { baseURL: "", http:methods };
-/**
- * Sets the Base URL
- * @param {string} url the base URl
- */
-export function setBaseURL(url) { baseURL=url; }
-/**
- * Sets the security Token
- * @param {string} token the security token
- */
-export function setToken(token) { authenticationToken=token; }
-/**
- * Gets the base url from either provided  opts or baseURL property
- * @param {ExecOptions} options options object
- */
-export function getBaseURL(options) { return getOpt("baseURL", options, baseURL); }
-/**
- * Gets the token from either provided opts or authenticationToken property
- * @param {ExecOptions} options options object
- */
-export function getToken(options) { return getOpt("token", options, authenticationToken); }
-/**
- * Retrieves an option from either opts object or default value
- * @param {string} name the name of the option
- * @param {ExecOptions} opts an existing opts object
- * @param {string} dflt a default value to be returned if object does not have the property
- */
-function getOpt(name,opts,dflt) { return (opts && opts.hasOwnProperty(name)) ? opts[name] : dflt; }
-
-
-`;
-
-const WRAPPED_HEADER = `
-import * as api from './api-full'
-
-/**
- * @typedef {import("./api-full").ExecOptions} ExecOptions
- * @typedef {import("./api-full").HttpManager} HttpManager
- */
-
-export class WrappedApiCalls {
-    
-    constructor() {
-        this.execOpts = this.execOpts.bind(this);
-        this.getSite = this.getSite.bind(this);
+export class ApiCalls {
+    constructor() { 
+        this.baseURL = DEFAULT_URL;
+        this.version = DEFAULT_VERSION;
+        this.currentSiteId = "";
+        this.authenticationHttp = { get: get, post: post, put: put, del: del };
+        this.authenticatedHttp = { get: get, post: post, put: put, del: del };
     }
+    getOptions() {
+        return ({ url: this.baseURL, apiVersion: this.version, siteId: this.currentSiteId });
+    }
+`
 
-    /** 
-     * retrieves a cached site id (overridden in clients) 
-     * @returns {string} the siteId
-     */
-    getSite() { return ""; }
-
-    /** 
-     * retrieves an exec options object (overridden in clients) 
-     * @returns {ExecOptions} executeOptions
-     */
-    execOpts(obj) { return { ...obj } }
-
-    `;
-
-const WRAPPED_FOOTER = `
+const UNIFIED_FOOTER = `
 }
-`;
+`
 
 module.exports.generateCodeFromJson = generateCodeFromJson;

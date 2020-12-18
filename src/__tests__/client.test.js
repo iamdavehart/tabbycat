@@ -5,7 +5,7 @@ const {
 } = require("tabbycat/executive");
 const { DEFAULT_API_VERSION } = require("tabbycat/request");
 
-jest.mock("tabbycat/request", () => ({ DEFAULT_API_VERSION: "9.9" }));
+jest.mock("tabbycat/defaults", () => ({ DEFAULT_URL: "http://localhost", DEFAULT_VERSION: "9.9" }));
 jest.mock("tabbycat/executive");
 
 describe("Rest API Client Tests", () => {
@@ -56,40 +56,8 @@ describe("Rest API Client Tests", () => {
             const site = { name: "alley" };
             const creds = { user: user, site: site, token: "secrettokenforaccess" };
             client.updateCurrentCredentials(creds);
-            expect(client.http.setAccessToken).toHaveBeenCalledWith("secrettokenforaccess");
-            expect(client.authHttp.setAccessToken).toHaveBeenCalledWith("secrettokenforaccess");
+            expect(client.authenticationHttp.setAccessToken).toHaveBeenCalledWith("secrettokenforaccess");
+            expect(client.authenticatedHttp.setAccessToken).toHaveBeenCalledWith("secrettokenforaccess");
         });
-    });
-    describe("Override option methods for api execution",()=> {
-        test("GetSite method returns the current site's id", ()=> {
-            const client = new TableauRestApiClient();
-            const site = { id:"hoagys-alley-id", name: "alley" };
-            client.currentSite = site;
-            const s = client.getSite();
-            expect(s).toBe("hoagys-alley-id");
-        });
-        test("execOptions returns an object with url, version and http agent", ()=> {
-            const client = new TableauRestApiClient({ baseURL: "http://topcatserver.com", version: "9.9" });
-            const opts = client.execOpts();
-            expect(opts).toBeTruthy();
-            expect(opts.baseURL).toBe("http://topcatserver.com");
-            expect(opts.version).toBe("9.9");
-            expect(opts.http).toBeDefined();
-        });
-        test("execOptions returns the correct http agent based on authentication option", ()=> {
-            const client = new TableauRestApiClient();
-            const authRouteOpts = { authentication: true }
-            const nonAuthRouteOpts = { authentication: false }
-            const authorisationRouteExec = client.execOpts(authRouteOpts);
-            const nonAuthorisationRouteExec = client.execOpts(nonAuthRouteOpts);
-            expect(authorisationRouteExec.http).toBe(client.http);
-            expect(nonAuthorisationRouteExec.http).toBe(client.authHttp);
-        });
-        test("execOptions properties are preserved in returned object",()=> {
-            const client = new TableauRestApiClient();
-            const opts = { favouriteFood: "fish" };
-            const execOpts = client.execOpts(opts);
-            expect(execOpts.favouriteFood).toBe("fish");
-        })
     });
 });

@@ -1,15 +1,8 @@
-
-
-
 declare interface ApiRequest {}
-
 
 declare interface RecommendationDismissalRequest extends ApiRequest {}
 declare interface TagBatchRequest extends ApiRequest {}
 declare interface DatasourcesRequest extends ApiRequest {}
-
-
-
 
 declare interface ColumnRequest extends ApiRequest {
     column: ColumnType;
@@ -102,14 +95,11 @@ declare interface TaskRequest extends ApiRequest {
     task: TaskType;
 }
 
-
-
 declare interface ApiResponse {}
 
 declare interface PaginatedApiResponse extends ApiResponse {
     pagination: PaginationType;
 }
-
 
 declare interface DataAccelerationReportResponse extends ApiResponse {}
 declare interface ParentResponse extends ApiResponse {}
@@ -313,13 +303,6 @@ declare interface SubscriptionsResponse extends PaginatedApiResponse {
     subscriptions: SubscriptionListType;
 }
 
-
-
-
-
-
-
-
 declare type ResourceIdType = string;
 declare type SiteQuotaType = number;
 declare type SiteCapacityType = number;
@@ -329,1081 +312,1100 @@ declare type StateType = "Active" | "Suspended";
  */
 declare type RevisionLimitType = "-1";
 declare type SiteRoleType =
-  | "Creator"
-  | "Explorer"
-  | "ExplorerCanPublish"
-  | "Guest"
-  | "Interactor"
-  | "Publisher"
-  | "ReadOnly"
-  | "ServerAdministrator"
-  | "SiteAdministrator"
-  | "SiteAdministratorCreator"
-  | "SiteAdministratorExplorer"
-  | "Unlicensed"
-  | "UnlicensedWithPublish"
-  | "Viewer"
-  | "ViewerWithPublish";
+    | "Creator"
+    | "Explorer"
+    | "ExplorerCanPublish"
+    | "Guest"
+    | "Interactor"
+    | "Publisher"
+    | "ReadOnly"
+    | "ServerAdministrator"
+    | "SiteAdministrator"
+    | "SiteAdministratorCreator"
+    | "SiteAdministratorExplorer"
+    | "Unlicensed"
+    | "UnlicensedWithPublish"
+    | "Viewer"
+    | "ViewerWithPublish";
 declare type SiteUserAuthSettingType = "ServerDefault" | "SAML";
 declare type NameCharacteristicsType =
-  | {
-      textPattern?: TextPatternType;
-      [k: string]: unknown;
-    }
-  | {
-      [k: string]: unknown;
-    };
-declare type DataTypeType = "DATA_TYPE_UNSPECIFIED" | "DATE" | "DATETIME" | "STRING" | "INT" | "FLOAT" | "BOOL";
+    | {
+          textPattern?: TextPatternType;
+          [k: string]: unknown;
+      }
+    | {
+          [k: string]: unknown;
+      };
+declare type DataTypeType =
+    | "DATA_TYPE_UNSPECIFIED"
+    | "DATE"
+    | "DATETIME"
+    | "STRING"
+    | "INT"
+    | "FLOAT"
+    | "BOOL";
 declare type FieldRoleType = "FIELD_ROLE_UNSPECIFIED" | "DIMENSION" | "MEASURE";
 declare type ValueCharacteristicsType =
-  | {
-      textPattern?: TextPatternType;
-      [k: string]: unknown;
-    }
-  | {
-      [k: string]: unknown;
-    };
+    | {
+          textPattern?: TextPatternType;
+          [k: string]: unknown;
+      }
+    | {
+          [k: string]: unknown;
+      };
 declare type ValueSourceType =
-  | {
-      datasourceValueStore?: DataSourceValueStoreType;
-      [k: string]: unknown;
-    }
-  | {
-      [k: string]: unknown;
-    };
+    | {
+          datasourceValueStore?: DataSourceValueStoreType;
+          [k: string]: unknown;
+      }
+    | {
+          [k: string]: unknown;
+      };
 declare type DatabaseTypeType = "DatabaseServer" | "File" | "WebDataConnector" | "CloudFile";
 declare type SemanticsValueType =
-  | (
-      | {
-          numberValue?: number;
+    | (
+          | {
+                numberValue?: number;
+                [k: string]: unknown;
+            }
+          | {
+                stringValue?: string;
+                [k: string]: unknown;
+            }
+          | {
+                timeValue?: string;
+                [k: string]: unknown;
+            }
+          | {
+                boolValue?: boolean | number;
+                [k: string]: unknown;
+            }
+      )
+    | {
           [k: string]: unknown;
-        }
-      | {
-          stringValue?: string;
-          [k: string]: unknown;
-        }
-      | {
-          timeValue?: string;
-          [k: string]: unknown;
-        }
-      | {
-          boolValue?: boolean | number;
-          [k: string]: unknown;
-        }
-    )
-  | {
-      [k: string]: unknown;
-    };
+      };
 declare type FavoriteType =
-  | {
-      view: ViewType;
-      [k: string]: unknown;
-    }
-  | {
-      workbook: WorkbookType;
-      [k: string]: unknown;
-    }
-  | {
-      datasource: DataSourceType;
-      [k: string]: unknown;
-    }
-  | {
-      project: ProjectType;
-      [k: string]: unknown;
-    }
-  | {
-      flow: FlowType;
-      [k: string]: unknown;
-    };
-declare type FavoriteTypeType = "view" | "workbook" | "flow" | "metric" | "datasource" | "project" | "datarole";
-declare type FlowWarningsListContainerType =
-  | {
-      connectionWarnings?: WarningListType;
-      [k: string]: unknown;
-    }
-  | {
-      nodeWarnings?: WarningListType;
-      [k: string]: unknown;
-    };
-declare type ImportSourceType = "ActiveDirectory";
-declare type PermissionsType =
-  | (
-      | {
-          flow: FlowType;
-          [k: string]: unknown;
-        }
-      | {
-          datasource: DataSourceType;
-          [k: string]: unknown;
-        }
-      | {
-          project: ProjectType;
-          [k: string]: unknown;
-        }
-      | {
+    | {
           view: ViewType;
           [k: string]: unknown;
-        }
-      | {
+      }
+    | {
           workbook: WorkbookType;
           [k: string]: unknown;
-        }
-      | {
-          metric: MetricType;
+      }
+    | {
+          datasource: DataSourceType;
           [k: string]: unknown;
-        }
-    )
-  | {
-      [k: string]: unknown;
-    };
+      }
+    | {
+          project: ProjectType;
+          [k: string]: unknown;
+      }
+    | {
+          flow: FlowType;
+          [k: string]: unknown;
+      };
+declare type FavoriteTypeType =
+    | "view"
+    | "workbook"
+    | "flow"
+    | "metric"
+    | "datasource"
+    | "project"
+    | "datarole";
+declare type FlowWarningsListContainerType =
+    | {
+          connectionWarnings?: WarningListType;
+          [k: string]: unknown;
+      }
+    | {
+          nodeWarnings?: WarningListType;
+          [k: string]: unknown;
+      };
+declare type ImportSourceType = "ActiveDirectory";
+declare type PermissionsType =
+    | (
+          | {
+                flow: FlowType;
+                [k: string]: unknown;
+            }
+          | {
+                datasource: DataSourceType;
+                [k: string]: unknown;
+            }
+          | {
+                project: ProjectType;
+                [k: string]: unknown;
+            }
+          | {
+                view: ViewType;
+                [k: string]: unknown;
+            }
+          | {
+                workbook: WorkbookType;
+                [k: string]: unknown;
+            }
+          | {
+                metric: MetricType;
+                [k: string]: unknown;
+            }
+      )
+    | {
+          [k: string]: unknown;
+      };
 declare type WebhookSourceType =
-  | {
-      "webhook-source-event-datasource-refresh-started": WebhookSourceEventDatasourceRefreshStartedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-datasource-refresh-succeeded": WebhookSourceEventDatasourceRefreshSucceededType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-datasource-refresh-failed": WebhookSourceEventDatasourceRefreshFailedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-datasource-updated": WebhookSourceEventDatasourceUpdatedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-datasource-created": WebhookSourceEventDatasourceCreatedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-datasource-deleted": WebhookSourceEventDatasourceDeletedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-updated": WebhookSourceEventWorkbookUpdatedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-created": WebhookSourceEventWorkbookCreatedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-deleted": WebhookSourceEventWorkbookDeletedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-view-deleted": WebhookSourceEventViewDeletedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-refresh-started": WebhookSourceEventWorkbookRefreshStartedType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-refresh-succeeded": WebhookSourceEventWorkbookRefreshSucceededType;
-      [k: string]: unknown;
-    }
-  | {
-      "webhook-source-event-workbook-refresh-failed": WebhookSourceEventWorkbookRefreshFailedType;
-      [k: string]: unknown;
-    };
+    | {
+          "webhook-source-event-datasource-refresh-started": WebhookSourceEventDatasourceRefreshStartedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-datasource-refresh-succeeded": WebhookSourceEventDatasourceRefreshSucceededType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-datasource-refresh-failed": WebhookSourceEventDatasourceRefreshFailedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-datasource-updated": WebhookSourceEventDatasourceUpdatedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-datasource-created": WebhookSourceEventDatasourceCreatedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-datasource-deleted": WebhookSourceEventDatasourceDeletedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-updated": WebhookSourceEventWorkbookUpdatedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-created": WebhookSourceEventWorkbookCreatedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-deleted": WebhookSourceEventWorkbookDeletedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-view-deleted": WebhookSourceEventViewDeletedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-refresh-started": WebhookSourceEventWorkbookRefreshStartedType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-refresh-succeeded": WebhookSourceEventWorkbookRefreshSucceededType;
+          [k: string]: unknown;
+      }
+    | {
+          "webhook-source-event-workbook-refresh-failed": WebhookSourceEventWorkbookRefreshFailedType;
+          [k: string]: unknown;
+      };
 declare type WebhookDestinationType = {
-  "webhook-destination-http": WebhookDestinationHttpType;
-  [k: string]: unknown;
+    "webhook-destination-http": WebhookDestinationHttpType;
+    [k: string]: unknown;
 };
 declare type TaskType =
-  | {
-      extractRefresh: TaskExtractRefreshType;
-      [k: string]: unknown;
-    }
-  | {
-      flowRun: TaskRunFlowType;
-      [k: string]: unknown;
-    }
-  | {
-      dataAcceleration: TaskDataAccelerationType;
-      [k: string]: unknown;
-    }
-  | {
-      schedule?: ScheduleType;
-      [k: string]: unknown;
-    };
+    | {
+          extractRefresh: TaskExtractRefreshType;
+          [k: string]: unknown;
+      }
+    | {
+          flowRun: TaskRunFlowType;
+          [k: string]: unknown;
+      }
+    | {
+          dataAcceleration: TaskDataAccelerationType;
+          [k: string]: unknown;
+      }
+    | {
+          schedule?: ScheduleType;
+          [k: string]: unknown;
+      };
 declare type TaskExtractRefreshType =
-  | {
-      view: ViewType;
-      [k: string]: unknown;
-    }
-  | {
-      workbook: WorkbookType;
-      [k: string]: unknown;
-    }
-  | {
-      datasource: DataSourceType;
-      [k: string]: unknown;
-    };
+    | {
+          view: ViewType;
+          [k: string]: unknown;
+      }
+    | {
+          workbook: WorkbookType;
+          [k: string]: unknown;
+      }
+    | {
+          datasource: DataSourceType;
+          [k: string]: unknown;
+      };
 declare type TaskDataAccelerationType = {
-  workbook: WorkbookType;
-  [k: string]: unknown;
+    workbook: WorkbookType;
+    [k: string]: unknown;
 };
 declare type FileUploadSessionIdType = string;
 declare type ExtractRefreshJobType =
-  | {
-      view: ViewType;
-      [k: string]: unknown;
-    }
-  | {
-      workbook: WorkbookType;
-      [k: string]: unknown;
-    }
-  | {
-      datasource: DataSourceType;
-      [k: string]: unknown;
-    };
+    | {
+          view: ViewType;
+          [k: string]: unknown;
+      }
+    | {
+          workbook: WorkbookType;
+          [k: string]: unknown;
+      }
+    | {
+          datasource: DataSourceType;
+          [k: string]: unknown;
+      };
 declare type ProductVersion = string;
 declare type RestApiVersion = string;
 declare type ExtractType =
-  | {
-      datasource: DataSourceType;
-      [k: string]: unknown;
-    }
-  | {
-      workbook: WorkbookType;
-      [k: string]: unknown;
-    };
-
+    | {
+          datasource: DataSourceType;
+          [k: string]: unknown;
+      }
+    | {
+          workbook: WorkbookType;
+          [k: string]: unknown;
+      };
 
 declare interface ColumnType {
-  site?: SiteType;
-  tags: TagListType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  remoteType?: string;
-  parentTableId?: ResourceIdType;
-  [k: string]: unknown;
+    site?: SiteType;
+    tags: TagListType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    remoteType?: string;
+    parentTableId?: ResourceIdType;
+    [k: string]: unknown;
 }
 declare interface SiteType {
-  usage?: {
-    numUsers: number;
-    numCreators?: number;
-    numExplorers?: number;
-    numViewers?: number;
-    storage: number;
+    usage?: {
+        numUsers: number;
+        numCreators?: number;
+        numExplorers?: number;
+        numViewers?: number;
+        storage: number;
+        [k: string]: unknown;
+    };
+    id?: ResourceIdType;
+    name?: string;
+    contentUrl?: string;
+    adminMode?: "ContentOnly" | "ContentAndUsers";
+    userQuota?: SiteQuotaType;
+    storageQuota?: SiteQuotaType;
+    tierCreatorCapacity?: SiteCapacityType;
+    tierExplorerCapacity?: SiteCapacityType;
+    tierViewerCapacity?: SiteCapacityType;
+    disableSubscriptions?: boolean | number;
+    state?: StateType;
+    revisionHistoryEnabled?: boolean | number;
+    revisionLimit?: RevisionLimitType;
+    subscribeOthersEnabled?: boolean | number;
+    allowSubscriptionAttachments?: boolean | number;
+    guestAccessEnabled?: boolean | number;
+    cacheWarmupEnabled?: boolean | number;
+    dataAlertsEnabled?: boolean | number;
+    commentingEnabled?: boolean | number;
+    commentingMentionsEnabled?: boolean | number;
+    cacheeWarmupThreshold?: number;
+    flowsEnabled?: boolean | number;
+    extractEncryptionMode?: string;
+    dataAccelerationMode?: string;
+    mobileBiometricsEnabled?: boolean | number;
+    sheetImageEnabled?: boolean | number;
+    catalogingEnabled?: boolean | number;
+    derivedPermissionsEnabled?: boolean | number;
+    askDataMode?: "EnabledByDefault" | "DisabledByDefault" | "DisabledAlways";
+    authoringEnabled?: boolean | number;
+    customSubscriptionEmailEnabled?: boolean | number;
+    customSubscriptionEmail?: string;
+    customSubscriptionFooterEnabled?: boolean | number;
+    customSubscriptionFooter?: string;
+    userVisibilityMode?: string;
+    requestAccessEnabled?: boolean | number;
+    catalogObfuscationEnabled?: boolean | number;
+    flowAutoSaveEnabled?: boolean | number;
+    webExtractionEnabled?: boolean | number;
+    runNowEnabled?: boolean | number;
+    metricsContentTypeEnabled?: boolean | number;
+    notifySiteAdminsOnThrottle?: boolean | number;
+    namedSharingEnabled?: boolean | number;
+    useDefaultTimeZone?: boolean | number;
+    timeZone?: string;
+    autoSuspendRefreshEnabled?: boolean | number;
+    autoSuspendRefreshInactivityWindow?: number;
     [k: string]: unknown;
-  };
-  id?: ResourceIdType;
-  name?: string;
-  contentUrl?: string;
-  adminMode?: "ContentOnly" | "ContentAndUsers";
-  userQuota?: SiteQuotaType;
-  storageQuota?: SiteQuotaType;
-  tierCreatorCapacity?: SiteCapacityType;
-  tierExplorerCapacity?: SiteCapacityType;
-  tierViewerCapacity?: SiteCapacityType;
-  disableSubscriptions?: boolean | number;
-  state?: StateType;
-  revisionHistoryEnabled?: boolean | number;
-  revisionLimit?: RevisionLimitType;
-  subscribeOthersEnabled?: boolean | number;
-  allowSubscriptionAttachments?: boolean | number;
-  guestAccessEnabled?: boolean | number;
-  cacheWarmupEnabled?: boolean | number;
-  dataAlertsEnabled?: boolean | number;
-  commentingEnabled?: boolean | number;
-  commentingMentionsEnabled?: boolean | number;
-  cacheeWarmupThreshold?: number;
-  flowsEnabled?: boolean | number;
-  extractEncryptionMode?: string;
-  dataAccelerationMode?: string;
-  mobileBiometricsEnabled?: boolean | number;
-  sheetImageEnabled?: boolean | number;
-  catalogingEnabled?: boolean | number;
-  derivedPermissionsEnabled?: boolean | number;
-  askDataMode?: "EnabledByDefault" | "DisabledByDefault" | "DisabledAlways";
-  authoringEnabled?: boolean | number;
-  customSubscriptionEmailEnabled?: boolean | number;
-  customSubscriptionEmail?: string;
-  customSubscriptionFooterEnabled?: boolean | number;
-  customSubscriptionFooter?: string;
-  userVisibilityMode?: string;
-  requestAccessEnabled?: boolean | number;
-  catalogObfuscationEnabled?: boolean | number;
-  flowAutoSaveEnabled?: boolean | number;
-  webExtractionEnabled?: boolean | number;
-  runNowEnabled?: boolean | number;
-  metricsContentTypeEnabled?: boolean | number;
-  notifySiteAdminsOnThrottle?: boolean | number;
-  namedSharingEnabled?: boolean | number;
-  useDefaultTimeZone?: boolean | number;
-  timeZone?: string;
-  autoSuspendRefreshEnabled?: boolean | number;
-  autoSuspendRefreshInactivityWindow?: number;
-  [k: string]: unknown;
 }
 declare interface TagListType {
-  tag?: TagType | TagType[];
-  [k: string]: unknown;
+    tag?: TagType | TagType[];
+    [k: string]: unknown;
 }
 declare interface TagType {
-  label: string;
-  [k: string]: unknown;
+    label: string;
+    [k: string]: unknown;
 }
 declare interface ConnectionType {
-  datasource?: DataSourceType;
-  connectionCredentials?: ConnectionCredentialsType;
-  id?: ResourceIdType;
-  type?: string;
-  dbClass?: string;
-  scope?: string;
-  filename?: string;
-  googleSheetId?: string;
-  embedPassword?: boolean | number;
-  serverAddress?: string;
-  serverPort?: number;
-  userName?: string;
-  password?: string;
-  [k: string]: unknown;
+    datasource?: DataSourceType;
+    connectionCredentials?: ConnectionCredentialsType;
+    id?: ResourceIdType;
+    type?: string;
+    dbClass?: string;
+    scope?: string;
+    filename?: string;
+    googleSheetId?: string;
+    embedPassword?: boolean | number;
+    serverAddress?: string;
+    serverPort?: number;
+    userName?: string;
+    password?: string;
+    [k: string]: unknown;
 }
 declare interface DataSourceType {
-  connectionCredentials?: ConnectionCredentialsType;
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  tags?: TagListType;
-  askData?: AskDataType;
-  id?: ResourceIdType;
-  name?: string;
-  contentUrl?: string;
-  webpageUrl?: string;
-  description?: string;
-  type?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  isCertified?: boolean | number;
-  certificationNote?: string;
-  serverName?: string;
-  databaseName?: string;
-  hasExtracts?: boolean | number;
-  hasAlert?: boolean | number;
-  size?: number;
-  isPublished?: boolean | number;
-  connectedWorkbooksCount?: number;
-  favoritesTotal?: number;
-  encryptExtracts?: string;
-  useRemoteQueryAgent?: boolean | number;
-  [k: string]: unknown;
+    connectionCredentials?: ConnectionCredentialsType;
+    site?: SiteType;
+    project?: ProjectType;
+    owner?: UserType;
+    tags?: TagListType;
+    askData?: AskDataType;
+    id?: ResourceIdType;
+    name?: string;
+    contentUrl?: string;
+    webpageUrl?: string;
+    description?: string;
+    type?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    isCertified?: boolean | number;
+    certificationNote?: string;
+    serverName?: string;
+    databaseName?: string;
+    hasExtracts?: boolean | number;
+    hasAlert?: boolean | number;
+    size?: number;
+    isPublished?: boolean | number;
+    connectedWorkbooksCount?: number;
+    favoritesTotal?: number;
+    encryptExtracts?: string;
+    useRemoteQueryAgent?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface ConnectionCredentialsType {
-  name?: string;
-  password?: string;
-  embed?: boolean | number;
-  oAuth?: boolean | number;
-  [k: string]: unknown;
+    name?: string;
+    password?: string;
+    embed?: boolean | number;
+    oAuth?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface ProjectType {
-  owner?: UserType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  topLevelProject?: boolean | number;
-  parentProjectId?: ResourceIdType;
-  controllingPermissionsProjectId?: ResourceIdType;
-  createdAt?: string;
-  updatedAt?: string;
-  favoritesTotal?: number;
-  contentPermissions?: "LockedToProject" | "ManagedByOwner" | "LockedToProjectWithoutNested";
-  [k: string]: unknown;
+    owner?: UserType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    topLevelProject?: boolean | number;
+    parentProjectId?: ResourceIdType;
+    controllingPermissionsProjectId?: ResourceIdType;
+    createdAt?: string;
+    updatedAt?: string;
+    favoritesTotal?: number;
+    contentPermissions?: "LockedToProject" | "ManagedByOwner" | "LockedToProjectWithoutNested";
+    [k: string]: unknown;
 }
 declare interface UserType {
-  domain?: DomainDirectiveType;
-  id?: ResourceIdType;
-  name?: string;
-  fullName?: string;
-  email?: string;
-  password?: string;
-  siteRole?: SiteRoleType;
-  authSetting?: SiteUserAuthSettingType;
-  lastLogin?: string;
-  externalAuthUserId?: string;
-  [k: string]: unknown;
+    domain?: DomainDirectiveType;
+    id?: ResourceIdType;
+    name?: string;
+    fullName?: string;
+    email?: string;
+    password?: string;
+    siteRole?: SiteRoleType;
+    authSetting?: SiteUserAuthSettingType;
+    lastLogin?: string;
+    externalAuthUserId?: string;
+    [k: string]: unknown;
 }
 declare interface DomainDirectiveType {
-  name: string;
-  [k: string]: unknown;
+    name: string;
+    [k: string]: unknown;
 }
 declare interface AskDataType {
-  enablement?: "Enabled" | "Disabled" | "SiteDefault";
-  [k: string]: unknown;
+    enablement?: "Enabled" | "Disabled" | "SiteDefault";
+    [k: string]: unknown;
 }
 declare interface ConnectionListType {
-  connection?: ConnectionType | ConnectionType[];
-  [k: string]: unknown;
+    connection?: ConnectionType | ConnectionType[];
+    [k: string]: unknown;
 }
 declare interface TableauCredentialsType {
-  site: SiteType;
-  user?: UserType;
-  name?: string;
-  password?: string;
-  token?: string;
-  personalAccessTokenName?: string;
-  personalAccessTokenSecret?: string;
-  [k: string]: unknown;
+    site: SiteType;
+    user?: UserType;
+    name?: string;
+    password?: string;
+    token?: string;
+    personalAccessTokenName?: string;
+    personalAccessTokenSecret?: string;
+    [k: string]: unknown;
 }
 declare interface DataAlertType {
-  owner: UserType;
-  view: ViewType;
-  recipients?: DataAlertsRecipientListType;
-  id?: ResourceIdType;
-  subject?: string;
-  creatorId?: ResourceIdType;
-  createdAt?: string;
-  updatedAt?: string;
-  frequency?: "AsFrequentlyAsPossible" | "Hourly" | "Daily" | "Weekly" | "Once";
-  alertCondition?: string;
-  alertThreshold?: string;
-  [k: string]: unknown;
+    owner: UserType;
+    view: ViewType;
+    recipients?: DataAlertsRecipientListType;
+    id?: ResourceIdType;
+    subject?: string;
+    creatorId?: ResourceIdType;
+    createdAt?: string;
+    updatedAt?: string;
+    frequency?: "AsFrequentlyAsPossible" | "Hourly" | "Daily" | "Weekly" | "Once";
+    alertCondition?: string;
+    alertThreshold?: string;
+    [k: string]: unknown;
 }
 declare interface ViewType {
-  workbook?: WorkbookType;
-  owner?: UserType;
-  project?: ProjectType;
-  tags?: TagListType;
-  usage?: {
-    totalViewCount: number;
+    workbook?: WorkbookType;
+    owner?: UserType;
+    project?: ProjectType;
+    tags?: TagListType;
+    usage?: {
+        totalViewCount: number;
+        [k: string]: unknown;
+    };
+    id?: ResourceIdType;
+    name?: string;
+    contentUrl?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    sheetType?: string;
+    favoritesTotal?: number;
+    hidden?: boolean | number;
+    recentlyViewed?: boolean | number;
+    viewUrlName?: string;
     [k: string]: unknown;
-  };
-  id?: ResourceIdType;
-  name?: string;
-  contentUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  sheetType?: string;
-  favoritesTotal?: number;
-  hidden?: boolean | number;
-  recentlyViewed?: boolean | number;
-  viewUrlName?: string;
-  [k: string]: unknown;
 }
 declare interface WorkbookType {
-  connections?: ConnectionListType;
-  connectionCredentials?: ConnectionCredentialsType;
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  tags?: TagListType;
-  views?: ViewListType;
-  dataAccelerationConfig?: DataAccelerationInfoType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  contentUrl?: string;
-  webpageUrl?: string;
-  showTabs?: boolean | number;
-  thumbnailsUserId?: ResourceIdType;
-  size?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  sheetCount?: number;
-  hasExtracts?: boolean | number;
-  encryptExtracts?: string;
-  recentlyViewed?: boolean | number;
-  defaultViewId?: ResourceIdType;
-  [k: string]: unknown;
+    connections?: ConnectionListType;
+    connectionCredentials?: ConnectionCredentialsType;
+    site?: SiteType;
+    project?: ProjectType;
+    owner?: UserType;
+    tags?: TagListType;
+    views?: ViewListType;
+    dataAccelerationConfig?: DataAccelerationInfoType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    contentUrl?: string;
+    webpageUrl?: string;
+    showTabs?: boolean | number;
+    thumbnailsUserId?: ResourceIdType;
+    size?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    sheetCount?: number;
+    hasExtracts?: boolean | number;
+    encryptExtracts?: string;
+    recentlyViewed?: boolean | number;
+    defaultViewId?: ResourceIdType;
+    [k: string]: unknown;
 }
 declare interface ViewListType {
-  view?: ViewType | ViewType[];
-  [k: string]: unknown;
+    view?: ViewType | ViewType[];
+    [k: string]: unknown;
 }
 declare interface DataAccelerationInfoType {
-  accelerationEnabled?: boolean | number;
-  accelerateNow?: boolean | number;
-  [k: string]: unknown;
+    accelerationEnabled?: boolean | number;
+    accelerateNow?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface DataAlertsRecipientListType {
-  recipient?: DataAlertsRecipientType | DataAlertsRecipientType[];
-  [k: string]: unknown;
+    recipient?: DataAlertsRecipientType | DataAlertsRecipientType[];
+    [k: string]: unknown;
 }
 declare interface DataAlertsRecipientType {
-  id?: ResourceIdType;
-  name?: string;
-  lastSent?: string;
-  [k: string]: unknown;
+    id?: ResourceIdType;
+    name?: string;
+    lastSent?: string;
+    [k: string]: unknown;
 }
 declare interface DataQualityWarningType {
-  site?: SiteType;
-  owner?: UserType;
-  id?: ResourceIdType;
-  userDisplayName?: string;
-  contentId?: ResourceIdType;
-  contentType?: string;
-  message?: string;
-  type?: string;
-  isActive?: boolean | number;
-  createdAt?: string;
-  updatedAt?: string;
-  [k: string]: unknown;
+    site?: SiteType;
+    owner?: UserType;
+    id?: ResourceIdType;
+    userDisplayName?: string;
+    contentId?: ResourceIdType;
+    contentType?: string;
+    message?: string;
+    type?: string;
+    isActive?: boolean | number;
+    createdAt?: string;
+    updatedAt?: string;
+    [k: string]: unknown;
 }
 declare interface DataRoleType {
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  name: string;
-  description?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  fieldConcept: FieldConceptType;
-  url: string;
-  [k: string]: unknown;
+    site?: SiteType;
+    project?: ProjectType;
+    owner?: UserType;
+    name: string;
+    description?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    fieldConcept: FieldConceptType;
+    url: string;
+    [k: string]: unknown;
 }
 declare interface FieldConceptType {
-  uri: string;
-  objectConceptURI: string;
-  names?: NameType | NameType[];
-  nameCharacteristics?: NameCharacteristicsType;
-  description?: string;
-  parentFieldConceptURI?: string;
-  dataTypes?: DataTypeType | DataTypeType[];
-  fieldRoles?: FieldRoleType | FieldRoleType[];
-  defaultFormats?: unknown;
-  valueCharacteristics?: ValueCharacteristicsType;
-  ownerID?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  valueSource?: ValueSourceType;
-  [k: string]: unknown;
+    uri: string;
+    objectConceptURI: string;
+    names?: NameType | NameType[];
+    nameCharacteristics?: NameCharacteristicsType;
+    description?: string;
+    parentFieldConceptURI?: string;
+    dataTypes?: DataTypeType | DataTypeType[];
+    fieldRoles?: FieldRoleType | FieldRoleType[];
+    defaultFormats?: unknown;
+    valueCharacteristics?: ValueCharacteristicsType;
+    ownerID?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    valueSource?: ValueSourceType;
+    [k: string]: unknown;
 }
 declare interface NameType {
-  locale?: string;
-  name?: string;
-  weight?: number;
-  isPrimary?: boolean | number;
-  [k: string]: unknown;
+    locale?: string;
+    name?: string;
+    weight?: number;
+    isPrimary?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface TextPatternType {
-  regex?: unknown;
-  [k: string]: unknown;
+    regex?: unknown;
+    [k: string]: unknown;
 }
 declare interface DataSourceValueStoreType {
-  datasourceID?: string;
-  fieldName?: string;
-  [k: string]: unknown;
+    datasourceID?: string;
+    fieldName?: string;
+    [k: string]: unknown;
 }
 declare interface DatabaseType {
-  site?: SiteType;
-  contact: UserType;
-  certifier: UserType;
-  tags: TagListType;
-  id?: ResourceIdType;
-  name?: string;
-  connectionType?: string;
-  isEmbedded?: boolean | number;
-  description?: string;
-  isCertified?: boolean | number;
-  certificationNote?: string;
-  type?: DatabaseTypeType;
-  hostName?: string;
-  port?: number;
-  filePath?: string;
-  provider?: string;
-  mimeType?: string;
-  fileId?: string;
-  connectorUrl?: string;
-  requestUrl?: string;
-  fileExtension?: string;
-  contentPermissions?: "LockedToDatabase" | "ManagedByOwner";
-  [k: string]: unknown;
+    site?: SiteType;
+    contact: UserType;
+    certifier: UserType;
+    tags: TagListType;
+    id?: ResourceIdType;
+    name?: string;
+    connectionType?: string;
+    isEmbedded?: boolean | number;
+    description?: string;
+    isCertified?: boolean | number;
+    certificationNote?: string;
+    type?: DatabaseTypeType;
+    hostName?: string;
+    port?: number;
+    filePath?: string;
+    provider?: string;
+    mimeType?: string;
+    fileId?: string;
+    connectorUrl?: string;
+    requestUrl?: string;
+    fileExtension?: string;
+    contentPermissions?: "LockedToDatabase" | "ManagedByOwner";
+    [k: string]: unknown;
 }
 declare interface DatabaseGroupType {
-  database?: DatabaseIdType | DatabaseIdType[];
-  metadataDatabaseId?: ResourceIdType;
-  [k: string]: unknown;
+    database?: DatabaseIdType | DatabaseIdType[];
+    metadataDatabaseId?: ResourceIdType;
+    [k: string]: unknown;
 }
 declare interface DatabaseIdType {
-  id?: ResourceIdType;
-  [k: string]: unknown;
+    id?: ResourceIdType;
+    [k: string]: unknown;
 }
 declare interface DistinctValueListType {
-  distinctValue?: DistinctValueType | DistinctValueType[];
-  [k: string]: unknown;
+    distinctValue?: DistinctValueType | DistinctValueType[];
+    [k: string]: unknown;
 }
 declare interface DistinctValueType {
-  value: SemanticsValueType;
-  frequency: number;
-  [k: string]: unknown;
+    value: SemanticsValueType;
+    frequency: number;
+    [k: string]: unknown;
 }
 declare interface FlowType {
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  tags?: TagListType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  webpageUrl?: string;
-  fileType?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  [k: string]: unknown;
+    site?: SiteType;
+    project?: ProjectType;
+    owner?: UserType;
+    tags?: TagListType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    webpageUrl?: string;
+    fileType?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    [k: string]: unknown;
 }
 declare interface FavoriteOrderingListType {
-  favoriteOrdering?: FavoriteOrderingType | FavoriteOrderingType[];
-  [k: string]: unknown;
+    favoriteOrdering?: FavoriteOrderingType | FavoriteOrderingType[];
+    [k: string]: unknown;
 }
 declare interface FavoriteOrderingType {
-  favoriteId: ResourceIdType;
-  favoriteType: FavoriteTypeType;
-  favoriteIdMoveAfter: ResourceIdType;
-  favoriteTypeMoveAfter: FavoriteTypeType;
-  [k: string]: unknown;
+    favoriteId: ResourceIdType;
+    favoriteType: FavoriteTypeType;
+    favoriteIdMoveAfter: ResourceIdType;
+    favoriteTypeMoveAfter: FavoriteTypeType;
+    [k: string]: unknown;
 }
 declare interface FieldType {
-  sampleValues?: DistinctValueType | DistinctValueType[];
-  dataType?: DataTypeType;
-  fieldRole?: FieldRoleType;
-  name?: string;
-  [k: string]: unknown;
+    sampleValues?: DistinctValueType | DistinctValueType[];
+    dataType?: DataTypeType;
+    fieldRole?: FieldRoleType;
+    name?: string;
+    [k: string]: unknown;
 }
 declare interface WarningListType {
-  warning?: WarningType | WarningType[];
-  [k: string]: unknown;
+    warning?: WarningType | WarningType[];
+    [k: string]: unknown;
 }
 declare interface WarningType {
-  message?: string;
-  id?: string;
-  errorCode?: string;
-  [k: string]: unknown;
+    message?: string;
+    id?: string;
+    errorCode?: string;
+    [k: string]: unknown;
 }
 declare interface GroupType {
-  domain?: DomainDirectiveType;
-  import?: ImportDirectiveType;
-  id?: ResourceIdType;
-  name?: string;
-  userCount?: number;
-  minimumSiteRole?: SiteRoleType;
-  [k: string]: unknown;
+    domain?: DomainDirectiveType;
+    import?: ImportDirectiveType;
+    id?: ResourceIdType;
+    name?: string;
+    userCount?: number;
+    minimumSiteRole?: SiteRoleType;
+    [k: string]: unknown;
 }
 declare interface ImportDirectiveType {
-  source: ImportSourceType;
-  domainName: string;
-  siteRole: SiteRoleType;
-  grantLicenseMode?: "onSync" | "onLogin";
-  [k: string]: unknown;
+    source: ImportSourceType;
+    domainName: string;
+    siteRole: SiteRoleType;
+    grantLicenseMode?: "onSync" | "onLogin";
+    [k: string]: unknown;
 }
 declare interface MetricType {
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  tags?: TagListType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  webpageUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  suspended?: boolean | number;
-  [k: string]: unknown;
+    site?: SiteType;
+    project?: ProjectType;
+    owner?: UserType;
+    tags?: TagListType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    webpageUrl?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    suspended?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface ScheduleType {
-  frequencyDetails?: FrequencyDetailsType;
-  id?: ResourceIdType;
-  name?: string;
-  state?: StateType;
-  priority?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  type?: "Extract" | "Subscription" | "ActiveDirectorySync" | "Flow" | "DataAcceleration";
-  frequency?: "Hourly" | "Daily" | "Weekly" | "Monthly";
-  nextRunAt?: string;
-  endScheduleAt?: string;
-  executionOrder?: "Parallel" | "Serial";
-  [k: string]: unknown;
+    frequencyDetails?: FrequencyDetailsType;
+    id?: ResourceIdType;
+    name?: string;
+    state?: StateType;
+    priority?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    type?: "Extract" | "Subscription" | "ActiveDirectorySync" | "Flow" | "DataAcceleration";
+    frequency?: "Hourly" | "Daily" | "Weekly" | "Monthly";
+    nextRunAt?: string;
+    endScheduleAt?: string;
+    executionOrder?: "Parallel" | "Serial";
+    [k: string]: unknown;
 }
 declare interface FrequencyDetailsType {
-  intervals: {
-    interval:
-      | IntervalType
-      | [IntervalType]
-      | [IntervalType, IntervalType]
-      | [IntervalType, IntervalType, IntervalType]
-      | [IntervalType, IntervalType, IntervalType, IntervalType]
-      | [IntervalType, IntervalType, IntervalType, IntervalType, IntervalType]
-      | [IntervalType, IntervalType, IntervalType, IntervalType, IntervalType, IntervalType]
-      | [IntervalType, IntervalType, IntervalType, IntervalType, IntervalType, IntervalType, IntervalType];
+    intervals: {
+        interval:
+            | IntervalType
+            | [IntervalType]
+            | [IntervalType, IntervalType]
+            | [IntervalType, IntervalType, IntervalType]
+            | [IntervalType, IntervalType, IntervalType, IntervalType]
+            | [IntervalType, IntervalType, IntervalType, IntervalType, IntervalType]
+            | [IntervalType, IntervalType, IntervalType, IntervalType, IntervalType, IntervalType]
+            | [
+                  IntervalType,
+                  IntervalType,
+                  IntervalType,
+                  IntervalType,
+                  IntervalType,
+                  IntervalType,
+                  IntervalType
+              ];
+        [k: string]: unknown;
+    };
+    start: string;
+    end?: string;
     [k: string]: unknown;
-  };
-  start: string;
-  end?: string;
-  [k: string]: unknown;
 }
 declare interface IntervalType {
-  minutes?: "15" | "30";
-  hours?: "1" | "2" | "4" | "6" | "8" | "12";
-  weekDay?: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
-  monthDay?: "LastDay";
-  [k: string]: unknown;
+    minutes?: "15" | "30";
+    hours?: "1" | "2" | "4" | "6" | "8" | "12";
+    weekDay?: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+    monthDay?: "LastDay";
+    [k: string]: unknown;
 }
 declare interface TableType {
-  site?: SiteType;
-  contact: UserType;
-  certifier: UserType;
-  tags: TagListType;
-  id?: ResourceIdType;
-  name?: string;
-  description?: string;
-  isEmbedded?: boolean | number;
-  isCertified?: boolean | number;
-  certificationNote?: string;
-  schema?: string;
-  [k: string]: unknown;
+    site?: SiteType;
+    contact: UserType;
+    certifier: UserType;
+    tags: TagListType;
+    id?: ResourceIdType;
+    name?: string;
+    description?: string;
+    isEmbedded?: boolean | number;
+    isCertified?: boolean | number;
+    certificationNote?: string;
+    schema?: string;
+    [k: string]: unknown;
 }
 declare interface WebhookType {
-  "webhook-source": WebhookSourceType;
-  "webhook-destination": WebhookDestinationType;
-  owner?: UserType;
-  id?: ResourceIdType;
-  name?: string;
-  event?: string;
-  enabled?: boolean | number;
-  createdAt?: string;
-  updatedAt?: string;
-  statusChangeReason?: string;
-  [k: string]: unknown;
+    "webhook-source": WebhookSourceType;
+    "webhook-destination": WebhookDestinationType;
+    owner?: UserType;
+    id?: ResourceIdType;
+    name?: string;
+    event?: string;
+    enabled?: boolean | number;
+    createdAt?: string;
+    updatedAt?: string;
+    statusChangeReason?: string;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceRefreshStartedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceRefreshSucceededType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceRefreshFailedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceUpdatedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceCreatedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventDatasourceDeletedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookUpdatedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookCreatedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookDeletedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventViewDeletedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookRefreshStartedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookRefreshSucceededType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookSourceEventWorkbookRefreshFailedType {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 declare interface WebhookDestinationHttpType {
-  method?: "POST";
-  url?: string;
-  [k: string]: unknown;
+    method?: "POST";
+    url?: string;
+    [k: string]: unknown;
 }
 declare interface SubscriptionType {
-  content: SubscriptionContentType;
-  schedule: ScheduleType;
-  user: UserType;
-  id?: ResourceIdType;
-  subject: string;
-  attachImage?: boolean | number;
-  attachPdf?: boolean | number;
-  [k: string]: unknown;
+    content: SubscriptionContentType;
+    schedule: ScheduleType;
+    user: UserType;
+    id?: ResourceIdType;
+    subject: string;
+    attachImage?: boolean | number;
+    attachPdf?: boolean | number;
+    [k: string]: unknown;
 }
 declare interface SubscriptionContentType {
-  id: ResourceIdType;
-  type: "Workbook" | "View";
-  name?: unknown;
-  [k: string]: unknown;
+    id: ResourceIdType;
+    type: "Workbook" | "View";
+    name?: unknown;
+    [k: string]: unknown;
 }
 declare interface TaskRunFlowType {
-  schedule?: ScheduleType;
-  flow: FlowType;
-  id?: string;
-  priority?: number;
-  consecutiveFailedCount?: number;
-  type?: string;
-  [k: string]: unknown;
+    schedule?: ScheduleType;
+    flow: FlowType;
+    id?: string;
+    priority?: number;
+    consecutiveFailedCount?: number;
+    type?: string;
+    [k: string]: unknown;
 }
 declare interface BackgroundJobType {
-  id?: ResourceIdType;
-  status?: "Pending" | "InProgress" | "Success" | "Failed" | "Cancelled";
-  createdAt?: string;
-  startedAt?: string;
-  endedAt?: string;
-  priority?: number;
-  jobType?: string;
-  title?: string;
-  subtitle?: string;
-  [k: string]: unknown;
+    id?: ResourceIdType;
+    status?: "Pending" | "InProgress" | "Success" | "Failed" | "Cancelled";
+    createdAt?: string;
+    startedAt?: string;
+    endedAt?: string;
+    priority?: number;
+    jobType?: string;
+    title?: string;
+    subtitle?: string;
+    [k: string]: unknown;
 }
 declare interface BackgroundJobListType {
-  backgroundJob?: BackgroundJobType | BackgroundJobType[];
-  [k: string]: unknown;
+    backgroundJob?: BackgroundJobType | BackgroundJobType[];
+    [k: string]: unknown;
 }
 declare interface DataAlertListType {
-  dataAlert?: DataAlertType | DataAlertType[];
-  [k: string]: unknown;
+    dataAlert?: DataAlertType | DataAlertType[];
+    [k: string]: unknown;
 }
 declare interface DataQualityWarningListType {
-  dataQualityWarning?: DataQualityWarningType | DataQualityWarningType[];
-  [k: string]: unknown;
+    dataQualityWarning?: DataQualityWarningType | DataQualityWarningType[];
+    [k: string]: unknown;
 }
 declare interface ErrorType {
-  summary: string;
-  detail: string;
-  code: number;
-  [k: string]: unknown;
+    summary: string;
+    detail: string;
+    code: number;
+    [k: string]: unknown;
 }
 declare interface FavoriteListType {
-  favorite?: FavoriteType | FavoriteType[];
-  [k: string]: unknown;
+    favorite?: FavoriteType | FavoriteType[];
+    [k: string]: unknown;
 }
 declare interface FileUploadType {
-  uploadSessionId: FileUploadSessionIdType;
-  fileSize?: number;
-  [k: string]: unknown;
+    uploadSessionId: FileUploadSessionIdType;
+    fileSize?: number;
+    [k: string]: unknown;
 }
 declare interface JobType {
-  statusNotes?: StatusNoteListType;
-  extractRefreshJob?: ExtractRefreshJobType;
-  runFlowJobType?: RunFlowJobType;
-  id?: ResourceIdType;
-  mode?: "Asynchronous";
-  type?: "GroupSync" | "RefreshExtract" | "PublishWorkbook" | "PublishDatasource" | "RunFlow";
-  progress?: number;
-  createdAt?: string;
-  startedAt?: string;
-  updatedAt?: string;
-  completedAt?: string;
-  finishCode?: number;
-  [k: string]: unknown;
+    statusNotes?: StatusNoteListType;
+    extractRefreshJob?: ExtractRefreshJobType;
+    runFlowJobType?: RunFlowJobType;
+    id?: ResourceIdType;
+    mode?: "Asynchronous";
+    type?: "GroupSync" | "RefreshExtract" | "PublishWorkbook" | "PublishDatasource" | "RunFlow";
+    progress?: number;
+    createdAt?: string;
+    startedAt?: string;
+    updatedAt?: string;
+    completedAt?: string;
+    finishCode?: number;
+    [k: string]: unknown;
 }
 declare interface StatusNoteListType {
-  statusNote?: StatusNoteType | StatusNoteType[];
-  [k: string]: unknown;
+    statusNote?: StatusNoteType | StatusNoteType[];
+    [k: string]: unknown;
 }
 declare interface StatusNoteType {
-  type:
-    | "CountOfUsersAddedToGroup"
-    | "CountOfUsersAddedToSite"
-    | "CountOfUsersWithInsufficientLicenses"
-    | "CountOfUsersInActiveDirectoryGroup"
-    | "CountOfUsersProcessed"
-    | "CountOfUsersSkipped"
-    | "CountOfUsersInformationUpdated"
-    | "CountOfUsersSiteRoleUpdated"
-    | "CountOfUsersRemovedFromGroup"
-    | "CountOfUsersUnlicensed";
-  value?: string;
-  text?: string;
-  [k: string]: unknown;
+    type:
+        | "CountOfUsersAddedToGroup"
+        | "CountOfUsersAddedToSite"
+        | "CountOfUsersWithInsufficientLicenses"
+        | "CountOfUsersInActiveDirectoryGroup"
+        | "CountOfUsersProcessed"
+        | "CountOfUsersSkipped"
+        | "CountOfUsersInformationUpdated"
+        | "CountOfUsersSiteRoleUpdated"
+        | "CountOfUsersRemovedFromGroup"
+        | "CountOfUsersUnlicensed";
+    value?: string;
+    text?: string;
+    [k: string]: unknown;
 }
 declare interface RunFlowJobType {
-  notes: string;
-  flow: FlowType;
-  flowRunId?: string;
-  [k: string]: unknown;
+    notes: string;
+    flow: FlowType;
+    flowRunId?: string;
+    [k: string]: unknown;
 }
 declare interface ServerInfo {
-  productVersion: ProductVersion;
-  prepConductorVersion: string;
-  restApiVersion: RestApiVersion;
-  platform: string;
-  serverSettings: ServerSettings;
-  [k: string]: unknown;
+    productVersion: ProductVersion;
+    prepConductorVersion: string;
+    restApiVersion: RestApiVersion;
+    platform: string;
+    serverSettings: ServerSettings;
+    [k: string]: unknown;
 }
 declare interface ServerSettings {
-  oAuthEnabled: boolean | number;
-  sheetImageMaxAgeFloor: number;
-  sheetImageMaxAgeCeiling: number;
-  offlineInteractionSupportedPhase: number;
-  [k: string]: unknown;
+    oAuthEnabled: boolean | number;
+    sheetImageMaxAgeFloor: number;
+    sheetImageMaxAgeCeiling: number;
+    offlineInteractionSupportedPhase: number;
+    [k: string]: unknown;
 }
 declare interface WebhookListType {
-  webhook?: WebhookType | WebhookType[];
-  [k: string]: unknown;
+    webhook?: WebhookType | WebhookType[];
+    [k: string]: unknown;
 }
 declare interface WebhookTestResultType {
-  body: string;
-  id?: ResourceIdType;
-  status?: number;
-  [k: string]: unknown;
+    body: string;
+    id?: ResourceIdType;
+    status?: number;
+    [k: string]: unknown;
 }
 declare interface TaskListType {
-  task?: TaskType | TaskType[];
-  [k: string]: unknown;
+    task?: TaskType | TaskType[];
+    [k: string]: unknown;
 }
 declare interface DegradationListType {
-  degradation?: DegradationType | DegradationType[];
-  [k: string]: unknown;
+    degradation?: DegradationType | DegradationType[];
+    [k: string]: unknown;
 }
 declare interface DegradationType {
-  name?: string;
-  severity?: string;
-  [k: string]: unknown;
+    name?: string;
+    severity?: string;
+    [k: string]: unknown;
 }
 declare interface ListFieldConceptsType {
-  fieldConcepts?: FieldConceptType | FieldConceptType[];
-  nextPageToken: string;
-  [k: string]: unknown;
+    fieldConcepts?: FieldConceptType | FieldConceptType[];
+    nextPageToken: string;
+    [k: string]: unknown;
 }
 declare interface FieldMatchListType {
-  fieldMatch?: FieldMatchType | FieldMatchType[];
-  [k: string]: unknown;
+    fieldMatch?: FieldMatchType | FieldMatchType[];
+    [k: string]: unknown;
 }
 declare interface FieldMatchType {
-  fieldConceptURI: string;
-  weight: number;
-  fieldConcept?: FieldConceptType;
-  valueMatches?: ValueMatchType | ValueMatchType[];
-  [k: string]: unknown;
+    fieldConceptURI: string;
+    weight: number;
+    fieldConcept?: FieldConceptType;
+    valueMatches?: ValueMatchType | ValueMatchType[];
+    [k: string]: unknown;
 }
 declare interface ValueMatchType {
-  value?: SemanticsValueType;
-  weight?: number;
-  valueConcept?: ValueConceptType;
-  valueConceptURI?: string;
-  fieldConceptURI?: string;
-  [k: string]: unknown;
+    value?: SemanticsValueType;
+    weight?: number;
+    valueConcept?: ValueConceptType;
+    valueConceptURI?: string;
+    fieldConceptURI?: string;
+    [k: string]: unknown;
 }
 declare interface ValueConceptType {
-  uri: string;
-  fieldConceptURI: string;
-  names?: NameType | NameType[];
-  nameCharacteristics?: NameCharacteristicsType;
-  description?: string;
-  parentValueConceptURI?: string;
-  value?: SemanticsValueType;
-  [k: string]: unknown;
+    uri: string;
+    fieldConceptURI: string;
+    names?: NameType | NameType[];
+    nameCharacteristics?: NameCharacteristicsType;
+    description?: string;
+    parentValueConceptURI?: string;
+    value?: SemanticsValueType;
+    [k: string]: unknown;
 }
 declare interface MatchValuesResultType {
-  averageMatchWeight?: number;
-  valueMatches?: ValueMatchType | ValueMatchType[];
-  [k: string]: unknown;
+    averageMatchWeight?: number;
+    valueMatches?: ValueMatchType | ValueMatchType[];
+    [k: string]: unknown;
 }
 declare interface ValueConceptCountType {
-  count: number;
-  [k: string]: unknown;
+    count: number;
+    [k: string]: unknown;
 }
 declare interface ListValueConceptsType {
-  valueConcepts?: ValueConceptType | ValueConceptType[];
-  nextPageToken?: string;
-  [k: string]: unknown;
+    valueConcepts?: ValueConceptType | ValueConceptType[];
+    nextPageToken?: string;
+    [k: string]: unknown;
 }
 declare interface IndexingStatusType {
-  indexingStatusCode: string;
-  indexingErrorCode: string;
-  indexedValueConceptVersion?: number;
-  [k: string]: unknown;
+    indexingStatusCode: string;
+    indexingErrorCode: string;
+    indexedValueConceptVersion?: number;
+    [k: string]: unknown;
 }
 declare interface DatabaseIdListType {
-  database?: DatabaseIdType | DatabaseIdType[];
-  [k: string]: unknown;
+    database?: DatabaseIdType | DatabaseIdType[];
+    [k: string]: unknown;
 }
 declare interface PaginationType {
-  pageNumber: number;
-  pageSize: number;
-  totalAvailable: number;
-  [k: string]: unknown;
+    pageNumber: number;
+    pageSize: number;
+    totalAvailable: number;
+    [k: string]: unknown;
 }
 declare interface ColumnListType {
-  column?: ColumnType | ColumnType[];
-  [k: string]: unknown;
+    column?: ColumnType | ColumnType[];
+    [k: string]: unknown;
 }
 declare interface DatabaseListType {
-  database?: DatabaseType | DatabaseType[];
-  [k: string]: unknown;
+    database?: DatabaseType | DatabaseType[];
+    [k: string]: unknown;
 }
 declare interface DataSourceListType {
-  datasource?: DataSourceType | DataSourceType[];
-  [k: string]: unknown;
+    datasource?: DataSourceType | DataSourceType[];
+    [k: string]: unknown;
 }
 declare interface ExtractListType {
-  extract?: ExtractType | ExtractType[];
-  [k: string]: unknown;
+    extract?: ExtractType | ExtractType[];
+    [k: string]: unknown;
 }
 declare interface FlowListType {
-  flow?: FlowType | FlowType[];
-  [k: string]: unknown;
+    flow?: FlowType | FlowType[];
+    [k: string]: unknown;
 }
 declare interface FlowOutputStepListType {
-  flowOutputStep?: FlowOutputStepType | FlowOutputStepType[];
-  [k: string]: unknown;
+    flowOutputStep?: FlowOutputStepType | FlowOutputStepType[];
+    [k: string]: unknown;
 }
 declare interface FlowOutputStepType {
-  id?: ResourceIdType;
-  name?: string;
-  [k: string]: unknown;
+    id?: ResourceIdType;
+    name?: string;
+    [k: string]: unknown;
 }
 declare interface GroupListType {
-  group?: GroupType | GroupType[];
-  [k: string]: unknown;
+    group?: GroupType | GroupType[];
+    [k: string]: unknown;
 }
 declare interface MetricListType {
-  metric?: MetricType | MetricType[];
-  [k: string]: unknown;
+    metric?: MetricType | MetricType[];
+    [k: string]: unknown;
 }
 declare interface ProjectListType {
-  project?: ProjectType | ProjectType[];
-  [k: string]: unknown;
+    project?: ProjectType | ProjectType[];
+    [k: string]: unknown;
 }
 declare interface RevisionListType {
-  revision?: RevisionType | RevisionType[];
-  [k: string]: unknown;
+    revision?: RevisionType | RevisionType[];
+    [k: string]: unknown;
 }
 declare interface RevisionType {
-  publisher?: UserType;
-  revisionNumber?: number;
-  publishedAt?: string;
-  deleted?: boolean | number;
-  current?: boolean | number;
-  sizeInBytes?: number;
-  [k: string]: unknown;
+    publisher?: UserType;
+    revisionNumber?: number;
+    publishedAt?: string;
+    deleted?: boolean | number;
+    current?: boolean | number;
+    sizeInBytes?: number;
+    [k: string]: unknown;
 }
 declare interface ScheduleListType {
-  schedule?: ScheduleType | ScheduleType[];
-  [k: string]: unknown;
+    schedule?: ScheduleType | ScheduleType[];
+    [k: string]: unknown;
 }
 declare interface SiteListType {
-  site?: SiteType | SiteType[];
-  [k: string]: unknown;
+    site?: SiteType | SiteType[];
+    [k: string]: unknown;
 }
 declare interface TableListType {
-  table?: TableType | TableType[];
-  [k: string]: unknown;
+    table?: TableType | TableType[];
+    [k: string]: unknown;
 }
 declare interface UserListType {
-  user?: UserType | UserType[];
-  [k: string]: unknown;
+    user?: UserType | UserType[];
+    [k: string]: unknown;
 }
 declare interface WorkbookListType {
-  workbook?: WorkbookType | WorkbookType[];
-  [k: string]: unknown;
+    workbook?: WorkbookType | WorkbookType[];
+    [k: string]: unknown;
 }
 declare interface SubscriptionListType {
-  subscription?: SubscriptionType | SubscriptionType[];
-  [k: string]: unknown;
+    subscription?: SubscriptionType | SubscriptionType[];
+    [k: string]: unknown;
 }
 
-
-
-export declare class WrappedApiCalls {
+export declare class ApiCalls {
     /**
      * Signs you in as a user on the specified site on Tableau Server. This call returns a credentials token that you use in subsequent calls to the server. Typically, a credentials token is valid for 240 minutes. You can change this timeout by using the tsm configuration set(Link opens in a new window) command and setting the wgserver.session.idle_limit option.
      * @param {CredentialsRequest} credentials credentials
@@ -1431,77 +1433,58 @@ export declare class WrappedApiCalls {
      * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
      * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
      * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
      * @returns {Promise<SiteResponse>} Promise | undefined
      */
     querySite(
         siteName: string,
         contentUrl: string,
-        queryOptions?:
-            | {
-                  includeUsageFlag: boolean;
-              }
-            | undefined
+        queryOptions: {
+            includeUsage: boolean;
+        }
     ): Promise<SiteResponse>;
     /**
      * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
      * @returns {Promise<SiteResponse>} Promise | undefined
      */
-    querySiteByID(
-        queryOptions?:
-            | {
-                  includeUsageFlag: boolean;
-              }
-            | undefined
-    ): Promise<SiteResponse>;
+    querySiteByID(queryOptions: { includeUsage: boolean }): Promise<SiteResponse>;
     /**
      * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
      * @param {string} siteName The name of the site to get information for. If you specify a site name, you must also include the parameter key=name.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
      * @returns {Promise<SiteResponse>} Promise | undefined
      */
     querySiteByName(
         siteName: string,
-        queryOptions?:
-            | {
-                  includeUsageFlag: boolean;
-              }
-            | undefined
+        queryOptions: {
+            includeUsage: boolean;
+        }
     ): Promise<SiteResponse>;
     /**
      * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
      * @param {string} contentUrl The URL of the site to get information for. If you specify a content URL, you must also include the parameter key=contentUrl.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.includeUsageFlag The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
      * @returns {Promise<SiteResponse>} Promise | undefined
      */
     querySiteByContentUrl(
         contentUrl: string,
-        queryOptions?:
-            | {
-                  includeUsageFlag: boolean;
-              }
-            | undefined
+        queryOptions: {
+            includeUsage: boolean;
+        }
     ): Promise<SiteResponse>;
     /**
      * Returns a list of the sites on the server that the caller of this method has access to. This method is not available for Tableau Online.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<SitesResponse>} Promise | undefined
      */
-    querySites(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
-    ): Promise<SitesResponse>;
+    querySites(queryOptions: { pageSize: number; pageNumber: number }): Promise<SitesResponse>;
     /**
      * Gets the details of the views and workbooks on a site that have been most recently created, updated, or accessed by the signed in user. The 24 most recently viewed items are returned, though it may take some minutes after being viewed for an item to appear in the results.
      * @returns {Promise<any>} Promise | undefined
@@ -1509,27 +1492,23 @@ export declare class WrappedApiCalls {
     getRecentlyViewedForSite(): Promise<any>;
     /**
      * Returns all the views for the specified site, optionally including usage statistics.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.getUsageInformation (Optional) true to return usage statistics. The default is false.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsageStatistics (Optional) true to return usage statistics. The default is false.
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
-     * @param {string} queryOptions.filterExpression <parameter documentation missing>
-     * @param {string} queryOptions.sortExpression <parameter documentation missing>
+     * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+     * @param {string} queryOptions.filter <parameter documentation missing>
+     * @param {string} queryOptions.sort <parameter documentation missing>
      * @returns {Promise<ViewsResponse>} Promise | undefined
      */
-    queryViewsForSite(
-        queryOptions?:
-            | {
-                  getUsageInformation: boolean;
-                  pageSize: number;
-                  pageNumber: number;
-                  fieldExpression: string;
-                  filterExpression: string;
-                  sortExpression: string;
-              }
-            | undefined
-    ): Promise<ViewsResponse>;
+    queryViewsForSite(queryOptions: {
+        includeUsageStatistics: boolean;
+        pageSize: number;
+        pageNumber: number;
+        fields: string;
+        filter: string;
+        sort: string;
+    }): Promise<ViewsResponse>;
     /**
      * Modifies settings for the specified site, including the content URL, administration mode, user quota, state (active or suspended), storage quota, whether flows are enabled, whether subscriptions are enabled, and whether revisions are enabled. If you're working with Tableau Online, this method can also be used to upload a new logo image for the site.
      * @param {SiteRequest} site site
@@ -1718,7 +1697,7 @@ export declare class WrappedApiCalls {
     /**
      * Returns the flows that the specified user owns in addition to those that the user has Read (view) permissions for.
      * @param {string} userId The ID of the user to get flows for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {boolean} queryOptions.isOwner (Optional) trueto return only flows that the specified user owns, or falseto return all flows that the specified user has at least read access to. The default is false.
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
@@ -1726,13 +1705,11 @@ export declare class WrappedApiCalls {
      */
     queryFlowsForUser(
         userId: string,
-        queryOptions?:
-            | {
-                  isOwner: boolean;
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            isOwner: boolean;
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<any>;
     /**
      * Runs the specified flow run task.
@@ -1756,53 +1733,45 @@ export declare class WrappedApiCalls {
     /**
      * Creates a project on the specified site. You can also create project hierarchies by creating a project under the specified parent project on the site. To make changes to an existing project, call Update Project.
      * @param {ProjectRequest} project project
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.publishValue (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.publishSamples (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
      * @returns {Promise<ProjectResponse>} Promise | undefined
      */
     createProject(
         project: ProjectRequest,
-        queryOptions?:
-            | {
-                  publishValue: boolean;
-              }
-            | undefined
+        queryOptions: {
+            publishSamples: boolean;
+        }
     ): Promise<ProjectResponse>;
     /**
      * Returns a list of projects on the specified site, with optional parameters for specifying the paging of large results.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.filter (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name, ownerName, and parentProjectId. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
      * @returns {Promise<ProjectsResponse>} Promise | undefined
      */
-    queryProjects(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-                  filterExpression: string;
-                  sortExpression: string;
-              }
-            | undefined
-    ): Promise<ProjectsResponse>;
+    queryProjects(queryOptions: {
+        pageSize: number;
+        pageNumber: number;
+        filter: string;
+        sort: string;
+    }): Promise<ProjectsResponse>;
     /**
      * Updates the name, description, or project hierarchy of the specified project. You can create or update project hierarchies by specifying a parent project for the project that you are updating using this method.
      * @param {string} projectId The ID of the project to update.
      * @param {ProjectRequest} project project
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.publishValue (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.publishSamples (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
      * @returns {Promise<ProjectResponse>} Promise | undefined
      */
     updateProject(
         projectId: string,
         project: ProjectRequest,
-        queryOptions?:
-            | {
-                  publishValue: boolean;
-              }
-            | undefined
+        queryOptions: {
+            publishSamples: boolean;
+        }
     ): Promise<ProjectResponse>;
     /**
      * Deletes the specified project on a specific site. When a project is deleted, all of its assets are also deleted: associated workbooks, data sources, project view options, and rights. Use this method with caution.
@@ -1814,26 +1783,24 @@ export declare class WrappedApiCalls {
      * Publishes a workbook on the specified site. To make changes to a published workbook, call Update Workbook or Update Workbook Connection.
      * @param {WorkbookRequest} workbook workbook
      * @param {Object} file File Contents
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.overwriteFlag (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
-     * @param {boolean} queryOptions.asJobValue (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
-     * @param {boolean} queryOptions.skipConnectionCheckFlag (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.overwrite (Optional) true to overwrite a workbook that has the same name, or false to fail if the specified workbook already exists. The default is false. If overwrite-flag is set to true but the workbook doesn't already exist, the operation succeeds.
+     * @param {boolean} queryOptions.asJob (Optional, boolean) If false, the workbook publishing process runs as a synchronous process. If a workbook is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job. Default value is false.
+     * @param {boolean} queryOptions.skipConnectionCheck (Optional, boolean) If true, then the Tableau server will not check if a non-published connection of a workbook is reachable. Publishing will succeed but unchecked connection issues may result in a non-functioning workbook. If you encounter this issue, follow Keep Data Fresh guidelines(Link opens in a new window). Default value is false.
      * @param {string} queryOptions.uploadSessionId If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
-     * @param {string} queryOptions.workbookFileType twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+     * @param {string} queryOptions.workbookType twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
      * @returns {Promise<WorkbookResponse>} Promise | undefined
      */
     publishWorkbook(
         workbook: WorkbookRequest,
         file: any,
-        queryOptions?:
-            | {
-                  overwriteFlag: boolean;
-                  asJobValue: boolean;
-                  skipConnectionCheckFlag: boolean;
-                  uploadSessionId: string;
-                  workbookFileType: string;
-              }
-            | undefined
+        queryOptions: {
+            overwrite: boolean;
+            asJob: boolean;
+            skipConnectionCheck: boolean;
+            uploadSessionId: string;
+            workbookType: string;
+        }
     ): Promise<WorkbookResponse>;
     /**
      * Adds one or more tags to the specified view.
@@ -1852,74 +1819,66 @@ export declare class WrappedApiCalls {
     /**
      * Returns all the views for the specified workbook, optionally including usage statistics.
      * @param {string} workbookId The ID of the workbook to get the views for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.getUsageInformation true to return usage statistics. The default is false.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.includeUsageStatistics true to return usage statistics. The default is false.
      * @returns {Promise<ViewsResponse>} Promise | undefined
      */
     queryViewsForWorkbook(
         workbookId: string,
-        queryOptions?:
-            | {
-                  getUsageInformation: boolean;
-              }
-            | undefined
+        queryOptions: {
+            includeUsageStatistics: boolean;
+        }
     ): Promise<ViewsResponse>;
     /**
      * Returns a specified view rendered as data in comma-separated-value (CSV) format.
      * @param {string} viewId The ID of the view to render as data.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
-     * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes view data will be cached before being refreshed. To prevent multiple view data requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {string} queryOptions.vf_<fieldname> The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
      * @returns {Promise<any>} Promise | undefined
      */
     queryViewData(
         viewId: string,
-        queryOptions?:
-            | {
-                  maxAgeMinutes: number;
-                  filterValue: string;
-              }
-            | undefined
+        queryOptions: {
+            maxAge: number;
+            vf_: string;
+        }
     ): Promise<any>;
     /**
      * Returns an image of the specified view.
      * @param {string} viewId The ID of the view to return an image for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.imageResolution (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
-     * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.resolution (Optional) The resolution of the image. Image width and actual pixel density are determined by the display context of the image. Aspect ratio is always preserved. Set the value to high to ensure maximum pixel density.
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes a view image will be cached before being refreshed. To prevent multiple image requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {string} queryOptions.vf_<fieldname> The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
      * @returns {Promise<any>} Promise | undefined
      */
     queryViewImage(
         viewId: string,
-        queryOptions?:
-            | {
-                  imageResolution: string;
-                  maxAgeMinutes: number;
-                  filterValue: string;
-              }
-            | undefined
+        queryOptions: {
+            resolution: string;
+            maxAge: number;
+            vf_: string;
+        }
     ): Promise<any>;
     /**
      * Returns a specified view rendered as a .pdf file.
      * @param {string} viewId The ID of the view to render as a .pdf file.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.filterValue The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
-     * @param {string} queryOptions.pageOrientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
-     * @param {string} queryOptions.pageType (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.vf_<fieldname> The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes a view PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {string} queryOptions.orientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+     * @param {string} queryOptions.type (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
      * @returns {Promise<any>} Promise | undefined
      */
     queryViewPDF(
         viewId: string,
-        queryOptions?:
-            | {
-                  filterValue: string;
-                  maxAgeMinutes: number;
-                  pageOrientation: string;
-                  pageType: string;
-              }
-            | undefined
+        queryOptions: {
+            vf_: string;
+            maxAge: number;
+            orientation: string;
+            type: string;
+        }
     ): Promise<any>;
     /**
      * Returns the thumbnail image for the specified view.
@@ -1948,17 +1907,11 @@ export declare class WrappedApiCalls {
     getView(viewId: string): Promise<ViewResponse>;
     /**
      * Gets the details of all views in a site with a specified name.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {string} queryOptions.viewName The name of the view as it appears in the URL to the view. For https://MY_SERVER/#/MY_SITE/views/workbook-name/Sheet1?:iid=1, the name would be Sheet1.
      * @returns {Promise<ViewResponse>} Promise | undefined
      */
-    getViewByPath(
-        queryOptions?:
-            | {
-                  viewName: string;
-              }
-            | undefined
-    ): Promise<ViewResponse>;
+    getViewByPath(queryOptions: { viewName: string }): Promise<ViewResponse>;
     /**
      * Gets a list of views that are recommended for a user. Using machine learning, the server will match preferences between similar users and recommend content that is most popular and recently viewed. When a recommended view is selected and not marked as hidden, it appears on the server Home and Recommendations pages.
      * @returns {Promise<any>} Promise | undefined
@@ -1967,19 +1920,17 @@ export declare class WrappedApiCalls {
     /**
      * Returns a list of revision information (history) for the specified workbook.
      * @param {string} workbookId The ID of the workbook to get revisions for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<RevisionsResponse>} Promise | undefined
      */
     getWorkbookRevisions(
         workbookId: string,
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<RevisionsResponse>;
     /**
      * Hides a view from being recommended by the server by adding it to a list of views that are dismissed for a user. If hidden, a view will not be displayed on the server Home or Recommendation pages.
@@ -1989,17 +1940,11 @@ export declare class WrappedApiCalls {
     hideViewRecommendations(recommendationDismissal: RecommendationDismissalRequest): Promise<any>;
     /**
      * Unhides a view from being recommended by the server by removing it from the list of views that are dimissed for a user. If the unhidden view meets the criteria for being recommended, then it will be displayed on the server Home or Recommendation pages.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.viewLuid The LUID of the view to be removed from the list of views hidden from recommendation for a user.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.id The LUID of the view to be removed from the list of views hidden from recommendation for a user.
      * @returns {Promise<any>} Promise | undefined
      */
-    unhideViewRecommendations(
-        queryOptions?:
-            | {
-                  viewLuid: string;
-              }
-            | undefined
-    ): Promise<any>;
+    unhideViewRecommendations(queryOptions: { id: string }): Promise<any>;
     /**
      * Returns the thumbnail image as a PNG file for the specified workbook. Usually the image that is returned is for the first sheet in the workbook.
      * @param {string} workbookId The ID of the workbook to return the thumbnail image for.
@@ -2008,124 +1953,108 @@ export declare class WrappedApiCalls {
     queryWorkbookPreviewImage(workbookId: string): Promise<any>;
     /**
      * Returns the workbooks on a site.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.filter (Optional) An expression that lets you specify a subset of workbooks to return. You can filter on predefined fields such as name, tags, and createdAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which workbook information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+     * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
      * @returns {Promise<WorkbooksResponse>} Promise | undefined
      */
-    queryWorkbooksForSite(
-        queryOptions?:
-            | {
-                  filterExpression: string;
-                  sortExpression: string;
-                  pageSize: number;
-                  pageNumber: number;
-                  fieldExpression: string;
-              }
-            | undefined
-    ): Promise<WorkbooksResponse>;
+    queryWorkbooksForSite(queryOptions: {
+        filter: string;
+        sort: string;
+        pageSize: number;
+        pageNumber: number;
+        fields: string;
+    }): Promise<WorkbooksResponse>;
     /**
      * Returns the workbooks that the specified user owns in addition to those that the user has Read (view) permissions for.
      * @param {string} userId The ID of the user to get workbooks for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.isOwner (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.ownedBy (Optional) true to return only workbooks that the specified user owns, or false to return all workbooks that the specified user has at least read access to. The default is false.
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<WorkbooksResponse>} Promise | undefined
      */
     queryWorkbooksForUser(
         userId: string,
-        queryOptions?:
-            | {
-                  isOwner: boolean;
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            ownedBy: boolean;
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<WorkbooksResponse>;
     /**
-     * Downloads an Excel (.xlsx) file containing crosstab data from a view that the user has permission to access in a workbook. If a crosstab is declareed from a dashboard, data from only the first view in the dashboard will appear in the .xlsx file. Downloads of data from story dashboards are not supported at this time.
+     * Downloads an Excel (.xlsx) file containing crosstab data from a view that the user has permission to access in a workbook. If a crosstab is exported from a dashboard, data from only the first view in the dashboard will appear in the .xlsx file. Downloads of data from story dashboards are not supported at this time.
      * @param {string} viewId The ID of the view to use as the source of the crosstab to be downloaded as an .xlsx file.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadViewCrosstabExcel(
         viewId: string,
-        queryOptions?:
-            | {
-                  maxAgeMinutes: number;
-              }
-            | undefined
+        queryOptions: {
+            maxAge: number;
+        }
     ): Promise<any>;
     /**
      * Downloads a workbook in .twb or .twbx format.
      * @param {string} workbookId The ID of the workbook to download.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadWorkbook(
         workbookId: string,
-        queryOptions?:
-            | {
-                  extractValue: string;
-              }
-            | undefined
+        queryOptions: {
+            includeExtract: string;
+        }
     ): Promise<any>;
     /**
      * Downloads a .pdf containing images of the sheets that the user has permission to view in a workbook. Download Images/PDF permissions must be enabled for the workbook (true by default). If Show sheets in tabs is not selected for the workbook, only the default tab will appear in the .pdf file.
      * @param {string} workbookId The ID of the workbook to use as the source of the .pdf file to be downloaded.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
-     * @param {string} queryOptions.pageOrientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
-     * @param {string} queryOptions.pageType (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes a workbook PDF will be cached before being refreshed. To prevent multiple PDF requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {string} queryOptions.orientation (Optional) The orientation of the pages in the .pdf file produced. The value can be Portrait or Landscape. If this parameter is not present the page orientation will default to Portrait.
+     * @param {string} queryOptions.type (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadWorkbookPDF(
         workbookId: string,
-        queryOptions?:
-            | {
-                  maxAgeMinutes: number;
-                  pageOrientation: string;
-                  pageType: string;
-              }
-            | undefined
+        queryOptions: {
+            maxAge: number;
+            orientation: string;
+            type: string;
+        }
     ): Promise<any>;
     /**
      * Downloads a PowerPoint (.pptx) file containing slides with images of the sheets that the user has permission to view in a workbook. Download Images/PDF permissions must be enabled for the workbook (true by default). If Show sheets in tabs is not selected for the workbook, only the default tab will appear in the .pptx file.
      * @param {string} workbookId The ID of the workbook to use as the source of the .pptx file to be downloaded.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {number} queryOptions.maxAgeMinutes (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadWorkbookPowerpoint(
         workbookId: string,
-        queryOptions?:
-            | {
-                  maxAgeMinutes: number;
-              }
-            | undefined
+        queryOptions: {
+            maxAge: number;
+        }
     ): Promise<any>;
     /**
      * Downloads a specific version of a workbook in .twb or .twbx format.
      * @param {string} workbookId The ID of the workbook to download.
      * @param {number} revisionNumber The revision number of the workbook to download. To determine what versions are available, call Get Workbook Revisions. Note that the current revision of a workbook cannot be accessed by this call; use Download Workbook instead.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadWorkbookRevision(
         workbookId: string,
         revisionNumber: number,
-        queryOptions?:
-            | {
-                  extractValue: string;
-              }
-            | undefined
+        queryOptions: {
+            includeExtract: string;
+        }
     ): Promise<any>;
     /**
      * Modifies an existing workbook, allowing you to change the owner or project that the workbook belongs to and whether the workbook shows views in tabs. Updated workbooks can optionally be marked to appear in the recently viewed list.
@@ -2181,26 +2110,24 @@ export declare class WrappedApiCalls {
      * Publishes a data source on the specified site, or appends data to an existing data source. To make other changes to a published data source, call Update Data Source or Update Data Source Connection.
      * @param {DatasourceRequest} datasource datasource
      * @param {Object} file File Contents
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.overwriteFlag (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
-     * @param {boolean} queryOptions.asJobValue (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
-     * @param {boolean} queryOptions.appendFlag (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.overwrite (Optional) true to overwrite a data source that has the same name, or false to fail if the specified data source already exists. The default is false. If overwrite-flag is set to true but the data source doesn't already exist, the operation succeeds. You can include both the overwrite and append parameters in a request, but they cannot both be true.
+     * @param {boolean} queryOptions.asJob (Optional) A Boolean value that is used to publish data sources asynchronously. If you set this value to false (the default), the publishing process runs as a synchronous process. If a data source is very large, the process might time out before it finishes. If you set this value to true, the process runs asynchronously, and a job will start to perform the publishing process and return the job ID. You can check the status of the import job by calling Query Job.
+     * @param {boolean} queryOptions.append (Optional) true to append the data being published to an existing data source that has the same name. The default is false. If append-flag is set to true but the data source doesn't already exist, the operation fails. In order to append data to an existing data source, both the data source on the server and the data source you are publishing must be extracts (.tde and .hyper files). The schemas of the two extracts must match. If an extract was stored using the multiple tables option, you can't append data to it.You can include both the overwrite and append parameters in a request, but they cannot both be true.
      * @param {string} queryOptions.uploadSessionId If you are calling this method to commit a file that was uploaded in parts, this value contains the upload session ID that was generated by a call to Initiate File Upload. If this value is not included, the server assumes that the body of the request contains the file to be published.
-     * @param {string} queryOptions.datasourceFileType hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
+     * @param {string} queryOptions.datasourceType hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
      * @returns {Promise<DatasourceResponse>} Promise | undefined
      */
     publishDataSource(
         datasource: DatasourceRequest,
         file: any,
-        queryOptions?:
-            | {
-                  overwriteFlag: boolean;
-                  asJobValue: boolean;
-                  appendFlag: boolean;
-                  uploadSessionId: string;
-                  datasourceFileType: string;
-              }
-            | undefined
+        queryOptions: {
+            overwrite: boolean;
+            asJob: boolean;
+            append: boolean;
+            uploadSessionId: string;
+            datasourceType: string;
+        }
     ): Promise<DatasourceResponse>;
     /**
      * Adds one or more tags to the specified data source.
@@ -2224,25 +2151,21 @@ export declare class WrappedApiCalls {
     queryDataSource(datasourceId: string): Promise<DatasourceResponse>;
     /**
      * Returns a list of published data sources on the specified site, with optional parameters for specifying the paging of large results. To get a list of data sources embedded in a workbook, use the Query Workbook Connections method.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
+     * @param {string} queryOptions.filter (Optional) An expression that lets you specify a subset of data sources to return. You can filter on predefined fields such as name and updatedAt. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
      * @returns {Promise<DatasourcesResponse>} Promise | undefined
      */
-    queryDataSources(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-                  filterExpression: string;
-                  sortExpression: string;
-                  fieldExpression: string;
-              }
-            | undefined
-    ): Promise<DatasourcesResponse>;
+    queryDataSources(queryOptions: {
+        pageSize: number;
+        pageNumber: number;
+        filter: string;
+        sort: string;
+        fields: string;
+    }): Promise<DatasourcesResponse>;
     /**
      * Returns a list of data connections for the specified data source.
      * @param {string} datasourceId The ID of the data source to return connection information about.
@@ -2252,51 +2175,45 @@ export declare class WrappedApiCalls {
     /**
      * Returns a list of revision information (history) for the specified data source.
      * @param {string} datasourceId The ID of the data source to get revisions for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<RevisionsResponse>} Promise | undefined
      */
     getDataSourceRevisions(
         datasourceId: string,
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<RevisionsResponse>;
     /**
      * Downloads a data source in .tdsx format.
      * @param {string} datasourceId The ID of the data source to download.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadDataSource(
         datasourceId: string,
-        queryOptions?:
-            | {
-                  extractValue: string;
-              }
-            | undefined
+        queryOptions: {
+            includeExtract: string;
+        }
     ): Promise<any>;
     /**
      * Downloads a specific version of a data source in .tdsx format.
      * @param {string} datasourceId The ID of the data source to download.
      * @param {number} revisionNumber The revision number of the data source to download. To determine what versions are available, call Get Data Source Revisions.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.extractValue (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
      * @returns {Promise<any>} Promise | undefined
      */
     downloadDataSourceRevision(
         datasourceId: string,
         revisionNumber: number,
-        queryOptions?:
-            | {
-                  extractValue: string;
-              }
-            | undefined
+        queryOptions: {
+            includeExtract: string;
+        }
     ): Promise<any>;
     /**
      * Updates the owner, project or certification status of the specified data source.
@@ -2342,17 +2259,15 @@ export declare class WrappedApiCalls {
     /**
      * Creates a group in Tableau Server. If the server is configured to use Active Directory for authentication, this method can create a group in Tableau Server and then import users from an Active Directory group.
      * @param {GroupRequest} group group
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.asJobValue A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.asJob A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
      * @returns {Promise<GroupResponse>} Promise | undefined
      */
     createGroup(
         group: GroupRequest,
-        queryOptions?:
-            | {
-                  asJobValue: boolean;
-              }
-            | undefined
+        queryOptions: {
+            asJob: boolean;
+        }
     ): Promise<GroupResponse>;
     /**
      * Adds a user to the specified group.
@@ -2370,77 +2285,65 @@ export declare class WrappedApiCalls {
     /**
      * Gets a list of groups of which the specified user is a member.
      * @param {string} userId The ID of the user whose group memberships are listed.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<GroupsResponse>} Promise | undefined
      */
     getGroupsForAUser(
         userId: string,
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<GroupsResponse>;
     /**
      * Gets a list of users in the specified group.
      * @param {string} groupId The ID of the group to get the users for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<UsersResponse>} Promise | undefined
      */
     getUsersInGroup(
         groupId: string,
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<UsersResponse>;
     /**
      * Returns the users associated with the specified site.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {string} queryOptions.filter (Optional) An expression that lets you specify a subset of users to return. You can filter on predefined fields such as name and lastLogin. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.fieldExpression (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
+     * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
      * @returns {Promise<UsersResponse>} Promise | undefined
      */
-    getUsersOnSite(
-        queryOptions?:
-            | {
-                  filterExpression: string;
-                  sortExpression: string;
-                  pageSize: number;
-                  pageNumber: number;
-                  fieldExpression: string;
-              }
-            | undefined
-    ): Promise<UsersResponse>;
+    getUsersOnSite(queryOptions: {
+        filter: string;
+        sort: string;
+        pageSize: number;
+        pageNumber: number;
+        fields: string;
+    }): Promise<UsersResponse>;
     /**
      * Returns a list of groups on the specified site, with optional parameters for specifying the paging of large results.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
-     * @param {string} queryOptions.filterExpression (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
-     * @param {string} queryOptions.sortExpression (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.filter (Optional) An expression that lets you specify a subset of groups to return. You can filter on predefined fields such as name. You can include multiple filter expressions. For more information, see Filtering and Sorting.
+     * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
      * @returns {Promise<GroupsResponse>} Promise | undefined
      */
-    queryGroups(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-                  filterExpression: string;
-                  sortExpression: string;
-              }
-            | undefined
-    ): Promise<GroupsResponse>;
+    queryGroups(queryOptions: {
+        pageSize: number;
+        pageNumber: number;
+        filter: string;
+        sort: string;
+    }): Promise<GroupsResponse>;
     /**
      * Returns information about the specified user.
      * @param {string} userId The ID of the user to get information for.
@@ -3226,35 +3129,29 @@ export declare class WrappedApiCalls {
     /**
      * Returns a list of the extract refresh tasks for a specified schedule on the specified site.
      * @param {string} scheduleId The ID of the schedule to get extract information for.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<ExtractsResponse>} Promise | undefined
      */
     queryExtractRefreshTasks(
         scheduleId: string,
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
+        queryOptions: {
+            pageSize: number;
+            pageNumber: number;
+        }
     ): Promise<ExtractsResponse>;
     /**
      * Returns a list of flows, extract and subscription schedules. For each schedule, the API returns the name, frequency, priority, and other information.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<SchedulesResponse>} Promise | undefined
      */
-    querySchedules(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
-    ): Promise<SchedulesResponse>;
+    querySchedules(queryOptions: {
+        pageSize: number;
+        pageNumber: number;
+    }): Promise<SchedulesResponse>;
     /**
      * Runs the specified extract refresh task.
      * @param {string} taskId The ID of the extract refresh task that you want to run.
@@ -3299,19 +3196,15 @@ export declare class WrappedApiCalls {
     querySubscription(subscriptionId: string): Promise<SubscriptionResponse>;
     /**
      * Returns a list of all the subscriptions on the specified site.
-     * @param {Object} [queryOptions] an object containing the query options for this request
+     * @param {Object} queryOptions an object containing the query options for this request
      * @param {number} queryOptions.pageSize (Optional) The number of items to return in one response. The minimum is 1. The maximum is 1000. The default is 100. For more information, see Paginating Results.
      * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
      * @returns {Promise<SubscriptionsResponse>} Promise | undefined
      */
-    querySubscriptions(
-        queryOptions?:
-            | {
-                  pageSize: number;
-                  pageNumber: number;
-              }
-            | undefined
-    ): Promise<SubscriptionsResponse>;
+    querySubscriptions(queryOptions: {
+        pageSize: number;
+        pageNumber: number;
+    }): Promise<SubscriptionsResponse>;
     /**
      * Modifies an existing subscription, allowing you to change the subject, schedule, and suspension state for the subscription.
      * @param {string} subscriptionId The ID of the subscription to update.
@@ -3415,17 +3308,15 @@ export declare class WrappedApiCalls {
     /**
      * Create an extract for a data source in a site. Optionally, encrypt the extract if the site and workbooks using it are configured to allow it.
      * @param {string} datasourceId The LUID of the datasource.
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.encryptionFlag If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.encrypt If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
      * @returns {Promise<any>} Promise | undefined
      */
     createAnExtractForADataSource(
         datasourceId: string,
-        queryOptions?:
-            | {
-                  encryptionFlag: boolean;
-              }
-            | undefined
+        queryOptions: {
+            encrypt: boolean;
+        }
     ): Promise<any>;
     /**
      * Delete the extract of a data source in a site.
@@ -3437,18 +3328,16 @@ export declare class WrappedApiCalls {
      * Create extracts for all embedded data sources of a workbook. Optionally, encrypt the extracts if the site and workbook using them are configured to allow it.
      * @param {string} workbookId The LUID of the workbook.
      * @param {DatasourcesRequest} datasources datasources
-     * @param {Object} [queryOptions] an object containing the query options for this request
-     * @param {boolean} queryOptions.encryptionFlag If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
+     * @param {Object} queryOptions an object containing the query options for this request
+     * @param {boolean} queryOptions.encrypt If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
      * @returns {Promise<any>} Promise | undefined
      */
     createExtractsForEmbeddedDataSourcesInAWorkbook(
         workbookId: string,
         datasources: DatasourcesRequest,
-        queryOptions?:
-            | {
-                  encryptionFlag: boolean;
-              }
-            | undefined
+        queryOptions: {
+            encrypt: boolean;
+        }
     ): Promise<any>;
     /**
      * Delete all extracts of embedded data sources in a workbook.

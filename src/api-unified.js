@@ -5,130 +5,143 @@
  */
 
 
-import * as api from './api-full'
+import { DEFAULT_URL, DEFAULT_VERSION } from './defaults';
+import { TableauRestRequest } from './request';
+import { get, post, put, del } from './execute';
 
-/**
- * @typedef {import("./api-full").ExecOptions} ExecOptions
- * @typedef {import("./api-full").HttpManager} HttpManager
- */
-
-export class WrappedApiCalls {
-    
-    constructor() {
-        this.execOpts = this.execOpts.bind(this);
-        this.getSite = this.getSite.bind(this);
+export class ApiCalls {
+    constructor() { 
+        this.baseURL = DEFAULT_URL;
+        this.version = DEFAULT_VERSION;
+        this.currentSiteId = "";
+        this.authenticationHttp = { get: get, post: post, put: put, del: del };
+        this.authenticatedHttp = { get: get, post: post, put: put, del: del };
+        this.getOptions = this.getOptions.bind(this);
     }
-
-    /** 
-     * retrieves a cached site id (overridden in clients) 
-     * @returns {string} the siteId
-     */
-    getSite() { return ""; }
-
-    /** 
-     * retrieves an exec options object (overridden in clients) 
-     * @returns {ExecOptions} executeOptions
-     */
-    execOpts(obj) { return { ...obj } }
-
-    /**
-    * @typedef {import("index").CredentialsRequest} CredentialsRequest
-    * @typedef {import("index").SiteRequest} SiteRequest
-    * @typedef {import("index").UserRequest} UserRequest
-    * @typedef {import("index").DataAlertRequest} DataAlertRequest
-    * @typedef {import("index").PermissionsRequest} PermissionsRequest
-    * @typedef {import("index").TaskRequest} TaskRequest
-    * @typedef {import("index").FlowRequest} FlowRequest
-    * @typedef {import("index").ProjectRequest} ProjectRequest
-    * @typedef {import("index").WorkbookRequest} WorkbookRequest
-    * @typedef {import("index").TagsRequest} TagsRequest
-    * @typedef {import("index").RecommendationDismissalRequest} RecommendationDismissalRequest
-    * @typedef {import("index").ConnectionRequest} ConnectionRequest
-    * @typedef {import("index").DatasourceRequest} DatasourceRequest
-    * @typedef {import("index").GroupRequest} GroupRequest
-    * @typedef {import("index").TableRequest} TableRequest
-    * @typedef {import("index").ColumnRequest} ColumnRequest
-    * @typedef {import("index").DataQualityWarningRequest} DataQualityWarningRequest
-    * @typedef {import("index").TagBatchRequest} TagBatchRequest
-    * @typedef {import("index").ScheduleRequest} ScheduleRequest
-    * @typedef {import("index").SubscriptionRequest} SubscriptionRequest
-    * @typedef {import("index").FavoriteRequest} FavoriteRequest
-    * @typedef {import("index").DatasourcesRequest} DatasourcesRequest
-    * @typedef {import("index").CredentialsResponse} CredentialsResponse
-    * @typedef {import("index").SiteResponse} SiteResponse
-    * @typedef {import("index").SitesResponse} SitesResponse
-    * @typedef {import("index").ViewsResponse} ViewsResponse
-    * @typedef {import("index").DataAlertResponse} DataAlertResponse
-    * @typedef {import("index").DataAlertsResponse} DataAlertsResponse
-    * @typedef {import("index").UserResponse} UserResponse
-    * @typedef {import("index").PermissionsResponse} PermissionsResponse
-    * @typedef {import("index").ProjectResponse} ProjectResponse
-    * @typedef {import("index").ProjectsResponse} ProjectsResponse
-    * @typedef {import("index").WorkbookResponse} WorkbookResponse
-    * @typedef {import("index").TagsResponse} TagsResponse
-    * @typedef {import("index").ConnectionsResponse} ConnectionsResponse
-    * @typedef {import("index").ViewResponse} ViewResponse
-    * @typedef {import("index").RevisionsResponse} RevisionsResponse
-    * @typedef {import("index").WorkbooksResponse} WorkbooksResponse
-    * @typedef {import("index").ConnectionResponse} ConnectionResponse
-    * @typedef {import("index").JobResponse} JobResponse
-    * @typedef {import("index").DataAccelerationReportResponse} DataAccelerationReportResponse
-    * @typedef {import("index").DatasourceResponse} DatasourceResponse
-    * @typedef {import("index").DatasourcesResponse} DatasourcesResponse
-    * @typedef {import("index").GroupResponse} GroupResponse
-    * @typedef {import("index").GroupsResponse} GroupsResponse
-    * @typedef {import("index").UsersResponse} UsersResponse
-    * @typedef {import("index").TaskResponse} TaskResponse
-    * @typedef {import("index").ParentResponse} ParentResponse
-    * @typedef {import("index").BackgroundJobsResponse} BackgroundJobsResponse
-    * @typedef {import("index").TasksResponse} TasksResponse
-    * @typedef {import("index").ScheduleResponse} ScheduleResponse
-    * @typedef {import("index").ExtractsResponse} ExtractsResponse
-    * @typedef {import("index").SchedulesResponse} SchedulesResponse
-    * @typedef {import("index").SubscriptionResponse} SubscriptionResponse
-    * @typedef {import("index").SubscriptionsResponse} SubscriptionsResponse
-    * @typedef {import("index").FavoritesResponse} FavoritesResponse
-    * @typedef {import("index").FileUploadResponse} FileUploadResponse
-    * @typedef {import("index").ServerInfoResponse} ServerInfoResponse
+    getOptions() {
+        return ({ url: this.baseURL, apiVersion: this.version, siteId: this.currentSiteId });
+    }
+/**
+    * @typedef {import("./api-unified").CredentialsRequest} CredentialsRequest
+    * @typedef {import("./api-unified").SiteRequest} SiteRequest
+    * @typedef {import("./api-unified").UserRequest} UserRequest
+    * @typedef {import("./api-unified").DataAlertRequest} DataAlertRequest
+    * @typedef {import("./api-unified").PermissionsRequest} PermissionsRequest
+    * @typedef {import("./api-unified").TaskRequest} TaskRequest
+    * @typedef {import("./api-unified").FlowRequest} FlowRequest
+    * @typedef {import("./api-unified").ProjectRequest} ProjectRequest
+    * @typedef {import("./api-unified").WorkbookRequest} WorkbookRequest
+    * @typedef {import("./api-unified").TagsRequest} TagsRequest
+    * @typedef {import("./api-unified").RecommendationDismissalRequest} RecommendationDismissalRequest
+    * @typedef {import("./api-unified").ConnectionRequest} ConnectionRequest
+    * @typedef {import("./api-unified").DatasourceRequest} DatasourceRequest
+    * @typedef {import("./api-unified").GroupRequest} GroupRequest
+    * @typedef {import("./api-unified").TableRequest} TableRequest
+    * @typedef {import("./api-unified").ColumnRequest} ColumnRequest
+    * @typedef {import("./api-unified").DataQualityWarningRequest} DataQualityWarningRequest
+    * @typedef {import("./api-unified").TagBatchRequest} TagBatchRequest
+    * @typedef {import("./api-unified").ScheduleRequest} ScheduleRequest
+    * @typedef {import("./api-unified").SubscriptionRequest} SubscriptionRequest
+    * @typedef {import("./api-unified").FavoriteRequest} FavoriteRequest
+    * @typedef {import("./api-unified").DatasourcesRequest} DatasourcesRequest
+    * @typedef {import("./api-unified").CredentialsResponse} CredentialsResponse
+    * @typedef {import("./api-unified").SiteResponse} SiteResponse
+    * @typedef {import("./api-unified").SitesResponse} SitesResponse
+    * @typedef {import("./api-unified").ViewsResponse} ViewsResponse
+    * @typedef {import("./api-unified").DataAlertResponse} DataAlertResponse
+    * @typedef {import("./api-unified").DataAlertsResponse} DataAlertsResponse
+    * @typedef {import("./api-unified").UserResponse} UserResponse
+    * @typedef {import("./api-unified").PermissionsResponse} PermissionsResponse
+    * @typedef {import("./api-unified").ProjectResponse} ProjectResponse
+    * @typedef {import("./api-unified").ProjectsResponse} ProjectsResponse
+    * @typedef {import("./api-unified").WorkbookResponse} WorkbookResponse
+    * @typedef {import("./api-unified").TagsResponse} TagsResponse
+    * @typedef {import("./api-unified").ConnectionsResponse} ConnectionsResponse
+    * @typedef {import("./api-unified").ViewResponse} ViewResponse
+    * @typedef {import("./api-unified").RevisionsResponse} RevisionsResponse
+    * @typedef {import("./api-unified").WorkbooksResponse} WorkbooksResponse
+    * @typedef {import("./api-unified").ConnectionResponse} ConnectionResponse
+    * @typedef {import("./api-unified").JobResponse} JobResponse
+    * @typedef {import("./api-unified").DataAccelerationReportResponse} DataAccelerationReportResponse
+    * @typedef {import("./api-unified").DatasourceResponse} DatasourceResponse
+    * @typedef {import("./api-unified").DatasourcesResponse} DatasourcesResponse
+    * @typedef {import("./api-unified").GroupResponse} GroupResponse
+    * @typedef {import("./api-unified").GroupsResponse} GroupsResponse
+    * @typedef {import("./api-unified").UsersResponse} UsersResponse
+    * @typedef {import("./api-unified").TaskResponse} TaskResponse
+    * @typedef {import("./api-unified").ParentResponse} ParentResponse
+    * @typedef {import("./api-unified").BackgroundJobsResponse} BackgroundJobsResponse
+    * @typedef {import("./api-unified").TasksResponse} TasksResponse
+    * @typedef {import("./api-unified").ScheduleResponse} ScheduleResponse
+    * @typedef {import("./api-unified").ExtractsResponse} ExtractsResponse
+    * @typedef {import("./api-unified").SchedulesResponse} SchedulesResponse
+    * @typedef {import("./api-unified").SubscriptionResponse} SubscriptionResponse
+    * @typedef {import("./api-unified").SubscriptionsResponse} SubscriptionsResponse
+    * @typedef {import("./api-unified").FavoritesResponse} FavoritesResponse
+    * @typedef {import("./api-unified").FileUploadResponse} FileUploadResponse
+    * @typedef {import("./api-unified").ServerInfoResponse} ServerInfoResponse
     */
 /**
 	 * Signs you in as a user on the specified site on Tableau Server. This call returns a credentials token that you use in subsequent calls to the server. Typically, a credentials token is valid for 240 minutes. You can change this timeout by using the tsm configuration set(Link opens in a new window) command and setting the wgserver.session.idle_limit option.
 	 * @param {CredentialsRequest} credentials credentials
 	 * @returns {Promise<CredentialsResponse>} Promise | undefined
 	 */
-	signIn(credentials) {
-        const opts = this.execOpts({ authentication: true});
-        return api.signIn(credentials, opts);
+    signIn(credentials) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/auth/signin`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(credentials)
+            .build()
+            .execute(this.authenticationHttp.post);
     }
+
 
 	/**
 	 * Signs you out of the current session. This call invalidates the authentication token that is created by a call to Sign In.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	signOut() {
-        const opts = this.execOpts({ });
-        return api.signOut(opts);
+    signOut() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/auth/signout`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Switches you onto another site without having to provide a user name and password again.
 	 * @param {SiteRequest} site site
 	 * @returns {Promise<CredentialsResponse>} Promise | undefined
 	 */
-	switchSite(site) {
-        const opts = this.execOpts({ });
-        return api.switchSite(site, opts);
+    switchSite(site) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/auth/switchSite`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(site)
+            .build()
+            .execute(this.authenticationHttp.post);
     }
+
 
 	/**
 	 * Creates a site on Tableau Server. To make changes to an existing site, call Update Site. This method is not available for Tableau Online.
 	 * @param {SiteRequest} site site
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	createSite(site) {
-        const opts = this.execOpts({ });
-        return api.createSite(site, opts);
+    createSite(site) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(site)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
@@ -138,11 +151,16 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	querySite(siteName, contentUrl, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.querySite(siteId, siteName, contentUrl, queryOptions, opts);
+    querySite(siteName, contentUrl, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
@@ -150,11 +168,16 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	querySiteByID(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.querySiteByID(siteId, queryOptions, opts);
+    querySiteByID(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
@@ -163,10 +186,16 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	querySiteByName(siteName, queryOptions) {
-        const opts = this.execOpts({ });
-        return api.querySiteByName(siteName, queryOptions, opts);
+    querySiteByName(siteName, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified site, with the option to return information about the storage space and user count for the site.
@@ -175,10 +204,16 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage metrics in the response body. If true, then the site element of the response will contain a usage node with the attributes numUsers (number of users) and storage (storage in megabytes). To set the flag to include usage in the response, append includeUsage=true as a querystring element any valid query site URI.
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	querySiteByContentUrl(contentUrl, queryOptions) {
-        const opts = this.execOpts({ });
-        return api.querySiteByContentUrl(contentUrl, queryOptions, opts);
+    querySiteByContentUrl(contentUrl, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${contentUrl}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of the sites on the server that the caller of this method has access to. This method is not available for Tableau Online.
@@ -187,20 +222,30 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<SitesResponse>} Promise | undefined
 	 */
-	querySites(queryOptions) {
-        const opts = this.execOpts({ });
-        return api.querySites(queryOptions, opts);
+    querySites(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Gets the details of the views and workbooks on a site that have been most recently created, updated, or accessed by the signed in user. The 24 most recently viewed items are returned, though it may take some minutes after being viewed for an item to appear in the results.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getRecentlyViewedForSite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getRecentlyViewedForSite(siteId, opts);
+    getRecentlyViewedForSite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/content/recent`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns all the views for the specified site, optionally including usage statistics.
@@ -213,22 +258,32 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.sort <parameter documentation missing>
 	 * @returns {Promise<ViewsResponse>} Promise | undefined
 	 */
-	queryViewsForSite(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewsForSite(siteId, queryOptions, opts);
+    queryViewsForSite(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Modifies settings for the specified site, including the content URL, administration mode, user quota, state (active or suspended), storage quota, whether flows are enabled, whether subscriptions are enabled, and whether revisions are enabled. If you're working with Tableau Online, this method can also be used to upload a new logo image for the site.
 	 * @param {SiteRequest} site site
 	 * @returns {Promise<SiteResponse>} Promise | undefined
 	 */
-	updateSite(site) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateSite(siteId, site, opts);
+    updateSite(site) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(site)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes the specified site.
@@ -236,73 +291,103 @@ export class WrappedApiCalls {
 	 * @param {string} contentUrl The URL of the site to delete. If you specify a content URL, you must also include the parameter key=contentUrl.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSite(siteName, contentUrl) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteSite(siteId, siteName, contentUrl, opts);
+    deleteSite(siteName, contentUrl) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified site.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSiteByID() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteSiteByID(siteId, opts);
+    deleteSiteByID() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified site.
 	 * @param {string} siteName The name of the site to delete. If you specify a site name, you must also include the parameter key=name.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSiteByName(siteName) {
-        const opts = this.execOpts({ });
-        return api.deleteSiteByName(siteName, opts);
+    deleteSiteByName(siteName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified site.
 	 * @param {string} contentUrl The URL of the site to delete. If you specify a content URL, you must also include the parameter key=contentUrl.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSiteByContentUrl(contentUrl) {
-        const opts = this.execOpts({ });
-        return api.deleteSiteByContentUrl(contentUrl, opts);
+    deleteSiteByContentUrl(contentUrl) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${contentUrl}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified data-driven alert from the specified site.
 	 * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataDrivenAlert(dataAlertId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataDrivenAlert(siteId, dataAlertId, opts);
+    deleteDataDrivenAlert(dataAlertId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns details on a specified data-driven alert, including the recipients of the alert.
 	 * @param {string} dataAlertId The ID of the data-driven alert. You can obtain this ID by calling Query Data-Driven Alerts.
 	 * @returns {Promise<DataAlertResponse>} Promise | undefined
 	 */
-	queryDataDrivenAlertDetails(dataAlertId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataDrivenAlertDetails(siteId, dataAlertId, opts);
+    queryDataDrivenAlertDetails(dataAlertId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of data-driven alerts in use on the specified site.
 	 * @returns {Promise<DataAlertsResponse>} Promise | undefined
 	 */
-	queryDataDrivenAlerts() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataDrivenAlerts(siteId, opts);
+    queryDataDrivenAlerts() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Adds a specified user to the recipients list for a data-driven alert.
@@ -310,11 +395,16 @@ export class WrappedApiCalls {
 	 * @param {UserRequest} user user
 	 * @returns {Promise<UserResponse>} Promise | undefined
 	 */
-	addUserToDataDrivenAlert(dataAlertId, user) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addUserToDataDrivenAlert(siteId, dataAlertId, user, opts);
+    addUserToDataDrivenAlert(dataAlertId, user) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(user)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Removes a specified user from the recipients list for a data-driven alert.
@@ -322,11 +412,15 @@ export class WrappedApiCalls {
 	 * @param {string} userId The ID (not name) of the user to remove from the data-driven alert.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteUserFromDataDrivenAlert(dataAlertId, userId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteUserFromDataDrivenAlert(siteId, dataAlertId, userId, opts);
+    deleteUserFromDataDrivenAlert(dataAlertId, userId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}/users/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Update one or more settings for the specified data-driven alert; including the alert subject, frequency, and owner.
@@ -334,11 +428,16 @@ export class WrappedApiCalls {
 	 * @param {DataAlertRequest} dataAlert dataAlert
 	 * @returns {Promise<DataAlertResponse>} Promise | undefined
 	 */
-	updateDataDrivenAlert(dataAlertId, dataAlert) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDataDrivenAlert(siteId, dataAlertId, dataAlert, opts);
+    updateDataDrivenAlert(dataAlertId, dataAlert) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAlerts/${dataAlertId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(dataAlert)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified flow for a Tableau Server user or group. You can specify multiple sets of permissions using one call.
@@ -346,11 +445,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	addFlowPermissions(flowId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addFlowPermissions(siteId, flowId, permissions, opts);
+    addFlowPermissions(flowId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Note: This method is unavailable if you do not have the Data Management Add-on or Tableau Prep Conductor is disabled for your site.
@@ -358,22 +462,31 @@ export class WrappedApiCalls {
 	 * @param {TaskRequest} task task
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addFlowTaskToSchedule(scheduleId, task) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addFlowTaskToSchedule(siteId, scheduleId, task, opts);
+    addFlowTaskToSchedule(scheduleId, task) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/schedules/${scheduleId}/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(task)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes a flow. When a flow is deleted, its associated connections, the output and input steps, any associated scheduled tasks, and run history are also deleted.
 	 * @param {string} flowId The ID of the flow to delete.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteFlow(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteFlow(siteId, flowId, opts);
+    deleteFlow(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified flow for a group or user.
@@ -384,11 +497,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteFlowPermission(flowId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteFlowPermission(siteId, flowId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteFlowPermission(flowId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified flow for a group or user.
@@ -398,11 +515,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteFlowPermissionsForGroup(flowId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteFlowPermissionsForGroup(siteId, flowId, groupId, capabilityName, capabilityMode, opts);
+    deleteFlowPermissionsForGroup(flowId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified flow for a group or user.
@@ -412,43 +533,59 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteFlowPermissionsForUser(flowId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteFlowPermissionsForUser(siteId, flowId, userId, capabilityName, capabilityMode, opts);
+    deleteFlowPermissionsForUser(flowId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Downloads a flow in .tlsx format.
 	 * @param {string} flowId The ID of the flow to download.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadFlow(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadFlow(siteId, flowId, opts);
+    downloadFlow(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/content`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified flow run task. This method shows you information about the scheduled task for the flow.
 	 * @param {string} taskId The ID of the scheduled flow run task that you want information about.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getFlowRunTask(taskId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getFlowRunTask(siteId, taskId, opts);
+    getFlowRunTask(taskId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of scheduled flow tasks for the site.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getFlowRunTasks() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getFlowRunTasks(siteId, opts);
+    getFlowRunTasks() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/runFlow`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Publishes a flow on the specified site. To make other changes to a published flow, call Update Flow or Update Flow Connection.
@@ -456,54 +593,77 @@ export class WrappedApiCalls {
 	 * @param {Object} file File Contents
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	publishFlow(flow, file) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.publishFlow(siteId, flow, file, opts);
+    publishFlow(flow, file) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withHeaders({"Content-Type":"multipart/mixed"})
+            .withBodyParameters(flow)
+            .withFileParameters({ name: "tableau_flow", file: file })
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Returns information about the specified flow, including information about the project, owner, and output steps.
 	 * @param {string} flowId The ID of the flow to return information about.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryFlow(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryFlow(siteId, flowId, opts);
+    queryFlow(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of data connections for the specific flow.
 	 * @param {string} flowId The ID of the flow to return connection information about.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryFlowConnections(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryFlowConnections(siteId, flowId, opts);
+    queryFlowConnections(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/connections`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of permissions for the specific flow.
 	 * @param {string} flowId The ID of the flow to get permissions for.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryFlowPermissions(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryFlowPermissions(siteId, flowId, opts);
+    queryFlowPermissions(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the flows on a site. If the user is not an administrator, the method returns just the flows that the user has permissions to view.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryFlowsForSite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryFlowsForSite(siteId, opts);
+    queryFlowsForSite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the flows that the specified user owns in addition to those that the user has Read (view) permissions for.
@@ -514,33 +674,46 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryFlowsForUser(userId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryFlowsForUser(siteId, userId, queryOptions, opts);
+    queryFlowsForUser(userId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Runs the specified flow run task.
 	 * @param {string} taskId The ID of the flow run task that you want to run.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	runFlowTask(taskId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.runFlowTask(siteId, taskId, opts);
+    runFlowTask(taskId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/runFlow/${taskId}/runNow`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Updates the owner, project, of the specified flow.
 	 * @param {string} flowId <parameter documentation missing>
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateFlow(flowId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateFlow(siteId, flowId, opts);
+    updateFlow(flowId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Updates the server address, port, username, or password for the specified flow connection. The connection can be an input or an output connection.
@@ -548,11 +721,15 @@ export class WrappedApiCalls {
 	 * @param {string} connectionId The ID of the connection to update. To determine what connections are available for a flow, call Query Flow Connections.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateFlowConnection(flowId, connectionId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateFlowConnection(siteId, flowId, connectionId, opts);
+    updateFlowConnection(flowId, connectionId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/flows/${flowId}/connections/${connectionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Creates a project on the specified site. You can also create project hierarchies by creating a project under the specified parent project on the site. To make changes to an existing project, call Update Project.
@@ -561,11 +738,17 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.publishSamples (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
 	 * @returns {Promise<ProjectResponse>} Promise | undefined
 	 */
-	createProject(project, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.createProject(siteId, project, queryOptions, opts);
+    createProject(project, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(project)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Returns a list of projects on the specified site, with optional parameters for specifying the paging of large results.
@@ -576,11 +759,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
 	 * @returns {Promise<ProjectsResponse>} Promise | undefined
 	 */
-	queryProjects(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryProjects(siteId, queryOptions, opts);
+    queryProjects(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Updates the name, description, or project hierarchy of the specified project. You can create or update project hierarchies by specifying a parent project for the project that you are updating using this method.
@@ -590,22 +778,32 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.publishSamples (Optional) A Boolean value that specifies whether to publish the sample workbooks provided by Tableau to the project when you update the project. When the publish-value is not specified in the request, or the publishSamples parameter is missing, no samples will be published. To publish the sample workbooks, set publishSamples parameter to true. This option is equivalent to the tabcmd command-line utility option, publishsamples. For more information, see tabcmd(Link opens in a new window).
 	 * @returns {Promise<ProjectResponse>} Promise | undefined
 	 */
-	updateProject(projectId, project, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateProject(siteId, projectId, project, queryOptions, opts);
+    updateProject(projectId, project, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(project)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes the specified project on a specific site. When a project is deleted, all of its assets are also deleted: associated workbooks, data sources, project view options, and rights. Use this method with caution.
 	 * @param {string} projectId The ID of the project to delete.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteProject(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteProject(siteId, projectId, opts);
+    deleteProject(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Publishes a workbook on the specified site. To make changes to a published workbook, call Update Workbook or Update Workbook Connection.
@@ -619,11 +817,19 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.workbookType twb or twbx to indicate whether you have uploaded a workbook file (twb) or a packaged workbook file (twbx). This value is required if you are calling Publish Workbook in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
 	 * @returns {Promise<WorkbookResponse>} Promise | undefined
 	 */
-	publishWorkbook(workbook, file, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.publishWorkbook(siteId, workbook, file, queryOptions, opts);
+    publishWorkbook(workbook, file, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withHeaders({"Content-Type":"multipart/mixed"})
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(workbook)
+            .withFileParameters({ name: "tableau_workbook", file: file })
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Adds one or more tags to the specified view.
@@ -631,11 +837,16 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<TagsResponse>} Promise | undefined
 	 */
-	addTagsToView(viewId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToView(siteId, viewId, tags, opts);
+    addTagsToView(viewId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds one or more tags to the specified workbook.
@@ -643,11 +854,16 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<TagsResponse>} Promise | undefined
 	 */
-	addTagsToWorkbook(workbookId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToWorkbook(siteId, workbookId, tags, opts);
+    addTagsToWorkbook(workbookId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Returns all the views for the specified workbook, optionally including usage statistics.
@@ -656,11 +872,16 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.includeUsageStatistics true to return usage statistics. The default is false.
 	 * @returns {Promise<ViewsResponse>} Promise | undefined
 	 */
-	queryViewsForWorkbook(workbookId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewsForWorkbook(siteId, workbookId, queryOptions, opts);
+    queryViewsForWorkbook(workbookId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/views`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a specified view rendered as data in comma-separated-value (CSV) format.
@@ -670,11 +891,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.vf_<fieldname> The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryViewData(viewId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewData(siteId, viewId, queryOptions, opts);
+    queryViewData(viewId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/data`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns an image of the specified view.
@@ -685,11 +911,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.vf_<fieldname> The value of the field that you want to use to filter the workbook view. For example, a workbook with the filter /data?vf_year=2017 would only display data from the year 2017. To learn more, see Filter query views.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryViewImage(viewId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewImage(siteId, viewId, queryOptions, opts);
+    queryViewImage(viewId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/image`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a specified view rendered as a .pdf file.
@@ -701,11 +932,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.type (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryViewPDF(viewId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewPDF(siteId, viewId, queryOptions, opts);
+    queryViewPDF(viewId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/pdf`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the thumbnail image for the specified view.
@@ -713,44 +949,60 @@ export class WrappedApiCalls {
 	 * @param {string} viewId The ID of the view to return a thumbnail image for.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryViewPreviewImage(workbookId, viewId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewPreviewImage(siteId, workbookId, viewId, opts);
+    queryViewPreviewImage(workbookId, viewId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/views/${viewId}/previewImage`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified workbook, including information about views and tags.
 	 * @param {string} workbookId The ID of the workbook to return information about.
 	 * @returns {Promise<WorkbookResponse>} Promise | undefined
 	 */
-	queryWorkbook(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbook(siteId, workbookId, opts);
+    queryWorkbook(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of data connections for the specific workbook.
 	 * @param {string} workbookId The ID of the workbook to return connection information about.
 	 * @returns {Promise<ConnectionsResponse>} Promise | undefined
 	 */
-	queryWorkbookConnections(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbookConnections(siteId, workbookId, opts);
+    queryWorkbookConnections(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Gets the details of a specific view.
 	 * @param {string} viewId The ID of the view whose details are requested.
 	 * @returns {Promise<ViewResponse>} Promise | undefined
 	 */
-	getView(viewId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getView(siteId, viewId, opts);
+    getView(viewId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Gets the details of all views in a site with a specified name.
@@ -758,21 +1010,30 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.viewName The name of the view as it appears in the URL to the view. For https://MY_SERVER/#/MY_SITE/views/workbook-name/Sheet1?:iid=1, the name would be Sheet1.
 	 * @returns {Promise<ViewResponse>} Promise | undefined
 	 */
-	getViewByPath(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getViewByPath(siteId, queryOptions, opts);
+    getViewByPath(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Gets a list of views that are recommended for a user. Using machine learning, the server will match preferences between similar users and recommend content that is most popular and recently viewed. When a recommended view is selected and not marked as hidden, it appears on the server Home and Recommendations pages.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getViewRecommendations() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getViewRecommendations(siteId, opts);
+    getViewRecommendations() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/recommendations/`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of revision information (history) for the specified workbook.
@@ -782,22 +1043,32 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<RevisionsResponse>} Promise | undefined
 	 */
-	getWorkbookRevisions(workbookId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getWorkbookRevisions(siteId, workbookId, queryOptions, opts);
+    getWorkbookRevisions(workbookId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Hides a view from being recommended by the server by adding it to a list of views that are dismissed for a user. If hidden, a view will not be displayed on the server Home or Recommendation pages.
 	 * @param {RecommendationDismissalRequest} recommendationDismissal recommendationDismissal
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	hideViewRecommendations(recommendationDismissal) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.hideViewRecommendations(siteId, recommendationDismissal, opts);
+    hideViewRecommendations(recommendationDismissal) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/recommendations/dismissals`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(recommendationDismissal)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Unhides a view from being recommended by the server by removing it from the list of views that are dimissed for a user. If the unhidden view meets the criteria for being recommended, then it will be displayed on the server Home or Recommendation pages.
@@ -805,22 +1076,31 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.id The LUID of the view to be removed from the list of views hidden from recommendation for a user.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	unhideViewRecommendations(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.unhideViewRecommendations(siteId, queryOptions, opts);
+    unhideViewRecommendations(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/recommendations/dismissals/`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns the thumbnail image as a PNG file for the specified workbook. Usually the image that is returned is for the first sheet in the workbook.
 	 * @param {string} workbookId The ID of the workbook to return the thumbnail image for.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryWorkbookPreviewImage(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbookPreviewImage(siteId, workbookId, opts);
+    queryWorkbookPreviewImage(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/previewImage`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the workbooks on a site.
@@ -832,11 +1112,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the workbooks or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
 	 * @returns {Promise<WorkbooksResponse>} Promise | undefined
 	 */
-	queryWorkbooksForSite(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbooksForSite(siteId, queryOptions, opts);
+    queryWorkbooksForSite(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the workbooks that the specified user owns in addition to those that the user has Read (view) permissions for.
@@ -847,11 +1132,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<WorkbooksResponse>} Promise | undefined
 	 */
-	queryWorkbooksForUser(userId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbooksForUser(siteId, userId, queryOptions, opts);
+    queryWorkbooksForUser(userId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads an Excel (.xlsx) file containing crosstab data from a view that the user has permission to access in a workbook. If a crosstab is exported from a dashboard, data from only the first view in the dashboard will appear in the .xlsx file. Downloads of data from story dashboards are not supported at this time.
@@ -860,11 +1150,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes an .xlsx file will be cached on the server before being refreshed. To prevent multiple .xlsx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadViewCrosstabExcel(viewId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadViewCrosstabExcel(siteId, viewId, queryOptions, opts);
+    downloadViewCrosstabExcel(viewId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/crosstab/excel`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a workbook in .twb or .twbx format.
@@ -873,11 +1168,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadWorkbook(workbookId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadWorkbook(siteId, workbookId, queryOptions, opts);
+    downloadWorkbook(workbookId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/content`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a .pdf containing images of the sheets that the user has permission to view in a workbook. Download Images/PDF permissions must be enabled for the workbook (true by default). If Show sheets in tabs is not selected for the workbook, only the default tab will appear in the .pdf file.
@@ -888,11 +1188,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.type (Optional) The type of page, which determines the page dimensions of the .pdf file returned. The value can be: A3, A4, A5, B5, Executive, Folio, Ledger, Legal, Letter, Note, Quarto, or Tabloid. If this parameter is not present the page type will default to Legal.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadWorkbookPDF(workbookId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadWorkbookPDF(siteId, workbookId, queryOptions, opts);
+    downloadWorkbookPDF(workbookId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/pdf`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a PowerPoint (.pptx) file containing slides with images of the sheets that the user has permission to view in a workbook. Download Images/PDF permissions must be enabled for the workbook (true by default). If Show sheets in tabs is not selected for the workbook, only the default tab will appear in the .pptx file.
@@ -901,11 +1206,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.maxAge (Optional) The maximum number of minutes a workbook .pptx will be cached before being refreshed. To prevent multiple .pptx requests from overloading the server, the shortest interval you can set is one minute. There is no maximum value, but the server job enacting the caching action may expire before a long cache period is reached.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadWorkbookPowerpoint(workbookId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadWorkbookPowerpoint(siteId, workbookId, queryOptions, opts);
+    downloadWorkbookPowerpoint(workbookId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/powerpoint`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a specific version of a workbook in .twb or .twbx format.
@@ -915,11 +1225,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the workbook specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the workbook. You can use this option to improve performance if you are downloading workbooks or data sources that have large extracts.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadWorkbookRevision(workbookId, revisionNumber, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadWorkbookRevision(siteId, workbookId, revisionNumber, queryOptions, opts);
+    downloadWorkbookRevision(workbookId, revisionNumber, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}/content`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Modifies an existing workbook, allowing you to change the owner or project that the workbook belongs to and whether the workbook shows views in tabs. Updated workbooks can optionally be marked to appear in the recently viewed list.
@@ -927,11 +1242,16 @@ export class WrappedApiCalls {
 	 * @param {WorkbookRequest} workbook workbook
 	 * @returns {Promise<WorkbookResponse>} Promise | undefined
 	 */
-	updateWorkbook(workbookId, workbook) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateWorkbook(siteId, workbookId, workbook, opts);
+    updateWorkbook(workbookId, workbook) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(workbook)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Updates the server address, port, username, or password for the specified workbook connection.
@@ -940,33 +1260,47 @@ export class WrappedApiCalls {
 	 * @param {ConnectionRequest} connection connection
 	 * @returns {Promise<ConnectionResponse>} Promise | undefined
 	 */
-	updateWorkbookConnection(workbookId, connectionId, connection) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateWorkbookConnection(siteId, workbookId, connectionId, connection, opts);
+    updateWorkbookConnection(workbookId, connectionId, connection) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/connections/${connectionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(connection)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Refreshes the specified workbook.
 	 * @param {string} workbookId The ID of the workbook to refresh.
 	 * @returns {Promise<JobResponse>} Promise | undefined
 	 */
-	updateWorkbookNow(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateWorkbookNow(siteId, workbookId, opts);
+    updateWorkbookNow(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/refresh`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters()
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Deletes a workbook. When a workbook is deleted, all of its assets are also deleted, including associated views, data connections, and so on.
 	 * @param {string} workbookId The ID of the workbook to remove.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteWorkbook(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteWorkbook(siteId, workbookId, opts);
+    deleteWorkbook(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes a tag from the specified view.
@@ -974,11 +1308,15 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The name of the tag to remove from the view.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromView(viewId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromView(siteId, viewId, tagName, opts);
+    deleteTagFromView(viewId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes a tag from the specified workbook.
@@ -986,21 +1324,29 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The name of the tag to remove from the workbook.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromWorkbook(workbookId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromWorkbook(siteId, workbookId, tagName, opts);
+    deleteTagFromWorkbook(workbookId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns a report about data acceleration for the site. It lets you compare page load times for before and after data acceleration is enabled.
 	 * @returns {Promise<DataAccelerationReportResponse>} Promise | undefined
 	 */
-	getDataAccelerationReportForASite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getDataAccelerationReportForASite(siteId, opts);
+    getDataAccelerationReportForASite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/dataAccelerationReport`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Publishes a data source on the specified site, or appends data to an existing data source. To make other changes to a published data source, call Update Data Source or Update Data Source Connection.
@@ -1014,11 +1360,19 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.datasourceType hyper, tds, tdsx, or tde the kind of file that you are uploading. This value is required if you are calling Publish Data Source in order to commit a file that was previously uploaded using Append to File Upload. The value is not used if you upload a file in the body of the request.
 	 * @returns {Promise<DatasourceResponse>} Promise | undefined
 	 */
-	publishDataSource(datasource, file, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.publishDataSource(siteId, datasource, file, queryOptions, opts);
+    publishDataSource(datasource, file, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withHeaders({"Content-Type":"multipart/mixed"})
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(datasource)
+            .withFileParameters({ name: "tableau_datasource", file: file })
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Adds one or more tags to the specified data source.
@@ -1026,11 +1380,16 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<TagsResponse>} Promise | undefined
 	 */
-	addTagsToDataSource(datasourceId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToDataSource(siteId, datasourceId, tags, opts);
+    addTagsToDataSource(datasourceId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes a tag from the specified data source.
@@ -1038,22 +1397,30 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The name of the tag to remove from the data source.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromDataSource(datasourceId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromDataSource(siteId, datasourceId, tagName, opts);
+    deleteTagFromDataSource(datasourceId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns information about the specified data source.
 	 * @param {string} datasourceId The ID of the data source to get.
 	 * @returns {Promise<DatasourceResponse>} Promise | undefined
 	 */
-	queryDataSource(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataSource(siteId, datasourceId, opts);
+    queryDataSource(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of published data sources on the specified site, with optional parameters for specifying the paging of large results. To get a list of data sources embedded in a workbook, use the Query Workbook Connections method.
@@ -1065,22 +1432,31 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the data sources or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the Rest API.
 	 * @returns {Promise<DatasourcesResponse>} Promise | undefined
 	 */
-	queryDataSources(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataSources(siteId, queryOptions, opts);
+    queryDataSources(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of data connections for the specified data source.
 	 * @param {string} datasourceId The ID of the data source to return connection information about.
 	 * @returns {Promise<ConnectionsResponse>} Promise | undefined
 	 */
-	queryDataSourceConnections(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataSourceConnections(siteId, datasourceId, opts);
+    queryDataSourceConnections(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of revision information (history) for the specified data source.
@@ -1090,11 +1466,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<RevisionsResponse>} Promise | undefined
 	 */
-	getDataSourceRevisions(datasourceId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getDataSourceRevisions(siteId, datasourceId, queryOptions, opts);
+    getDataSourceRevisions(datasourceId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a data source in .tdsx format.
@@ -1103,11 +1484,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadDataSource(datasourceId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadDataSource(siteId, datasourceId, queryOptions, opts);
+    downloadDataSource(datasourceId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/content`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Downloads a specific version of a data source in .tdsx format.
@@ -1117,11 +1503,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.includeExtract (Optional) The extract-value is a Boolean value (False or True). When the data source specified for download has an extract, if you add the parameter ?includeExtract=False, the extract is not included when you download the data source. You can use this parameter to improve performance if you are downloading workbooks or data sources that have large extracts.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	downloadDataSourceRevision(datasourceId, revisionNumber, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.downloadDataSourceRevision(siteId, datasourceId, revisionNumber, queryOptions, opts);
+    downloadDataSourceRevision(datasourceId, revisionNumber, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}/content`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Updates the owner, project or certification status of the specified data source.
@@ -1129,11 +1520,16 @@ export class WrappedApiCalls {
 	 * @param {DatasourceRequest} datasource datasource
 	 * @returns {Promise<DatasourceResponse>} Promise | undefined
 	 */
-	updateDataSource(datasourceId, datasource) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDataSource(siteId, datasourceId, datasource, opts);
+    updateDataSource(datasourceId, datasource) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(datasource)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Updates the server address, port, username, or password for the specified data source connection.
@@ -1142,33 +1538,47 @@ export class WrappedApiCalls {
 	 * @param {ConnectionRequest} connection connection
 	 * @returns {Promise<ConnectionResponse>} Promise | undefined
 	 */
-	updateDataSourceConnection(datasourceId, connectionId, connection) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDataSourceConnection(siteId, datasourceId, connectionId, connection, opts);
+    updateDataSourceConnection(datasourceId, connectionId, connection) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/connections/${connectionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(connection)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Runs an extract refresh on the specified data source.
 	 * @param {string} datasourceId The ID of the data source to refresh.
 	 * @returns {Promise<JobResponse>} Promise | undefined
 	 */
-	updateDataSourceNow(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDataSourceNow(siteId, datasourceId, opts);
+    updateDataSourceNow(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/refresh`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters()
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Deletes the specified data source from a site. When a data source is deleted, its associated data connection is also deleted. Workbooks that use the data source are not deleted, but they will no longer work properly.
 	 * @param {string} datasourceId The ID of the data source to delete.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataSource(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataSource(siteId, datasourceId, opts);
+    deleteDataSource(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes a specific version of a data source from the specified site.
@@ -1176,11 +1586,15 @@ export class WrappedApiCalls {
 	 * @param {number} revisionNumber The revision number of the data source to remove. To determine what versions are available, call Get Data Source Revisions.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeDataSourceRevision(datasourceId, revisionNumber) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeDataSourceRevision(siteId, datasourceId, revisionNumber, opts);
+    removeDataSourceRevision(datasourceId, revisionNumber) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/revisions/${revisionNumber}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Creates a group in Tableau Server. If the server is configured to use Active Directory for authentication, this method can create a group in Tableau Server and then import users from an Active Directory group.
@@ -1189,11 +1603,17 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.asJob A Boolean value that is used if you are importing from Active Directory. If you set this to false (the default), the import process runs as a synchronous process. If the Active Directory group contains many users, the process might time out before it finishes.  If you set this to true, the process runs asynchronously. In that case, Tableau Server starts a job to perform the import and returns the job ID in the Location header. You can check the status of the import job by calling Query Job. Note: This parameter has no effect if the server is configured to use local authentication.
 	 * @returns {Promise<GroupResponse>} Promise | undefined
 	 */
-	createGroup(group, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.createGroup(siteId, group, queryOptions, opts);
+    createGroup(group, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(group)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Adds a user to the specified group.
@@ -1201,22 +1621,32 @@ export class WrappedApiCalls {
 	 * @param {UserRequest} user user
 	 * @returns {Promise<UserResponse>} Promise | undefined
 	 */
-	addUserToGroup(groupId, user) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addUserToGroup(siteId, groupId, user, opts);
+    addUserToGroup(groupId, user) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups/${groupId}/users`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(user)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Adds a user to Tableau Server and assigns the user to the specified site.
 	 * @param {UserRequest} user user
 	 * @returns {Promise<UserResponse>} Promise | undefined
 	 */
-	addUserToSite(user) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addUserToSite(siteId, user, opts);
+    addUserToSite(user) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(user)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Gets a list of groups of which the specified user is a member.
@@ -1226,11 +1656,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<GroupsResponse>} Promise | undefined
 	 */
-	getGroupsForAUser(userId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getGroupsForAUser(siteId, userId, queryOptions, opts);
+    getGroupsForAUser(userId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}/groups`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Gets a list of users in the specified group.
@@ -1240,11 +1675,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<UsersResponse>} Promise | undefined
 	 */
-	getUsersInGroup(groupId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getUsersInGroup(siteId, groupId, queryOptions, opts);
+    getUsersInGroup(groupId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups/${groupId}/users`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns the users associated with the specified site.
@@ -1256,11 +1696,16 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.fields (Optional) An expression that lets you specify the set of available fields to return. You can qualify the return values based upon predefined keywords such as _all_ or _default_, and you can specify individual fields for the views or other supported resources. You can include multiple field expressions in a request. For more information, see Using Fields in the REST API.
 	 * @returns {Promise<UsersResponse>} Promise | undefined
 	 */
-	getUsersOnSite(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getUsersOnSite(siteId, queryOptions, opts);
+    getUsersOnSite(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of groups on the specified site, with optional parameters for specifying the paging of large results.
@@ -1271,22 +1716,31 @@ export class WrappedApiCalls {
 	 * @param {string} queryOptions.sort (Optional) An expression that lets you specify the order in which user information is returned. If you do not specify a sort expression, the sort order of the information that's returned is undefined. For more information, see Filtering and Sorting.
 	 * @returns {Promise<GroupsResponse>} Promise | undefined
 	 */
-	queryGroups(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryGroups(siteId, queryOptions, opts);
+    queryGroups(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified user.
 	 * @param {string} userId The ID of the user to get information for.
 	 * @returns {Promise<UserResponse>} Promise | undefined
 	 */
-	queryUserOnSite(userId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryUserOnSite(siteId, userId, opts);
+    queryUserOnSite(userId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Updates a group in Tableau Server.
@@ -1294,11 +1748,16 @@ export class WrappedApiCalls {
 	 * @param {GroupRequest} group group
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateGroup(groupId, group) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateGroup(siteId, groupId, group, opts);
+    updateGroup(groupId, group) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups/${groupId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(group)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Modifies information about the specified user.
@@ -1306,11 +1765,16 @@ export class WrappedApiCalls {
 	 * @param {UserRequest} user user
 	 * @returns {Promise<UserResponse>} Promise | undefined
 	 */
-	updateUser(userId, user) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateUser(siteId, userId, user, opts);
+    updateUser(userId, user) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(user)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Removes a user from the specified group.
@@ -1318,76 +1782,105 @@ export class WrappedApiCalls {
 	 * @param {string} userId The ID of the user to remove.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeUserFromGroup(groupId, userId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeUserFromGroup(siteId, groupId, userId, opts);
+    removeUserFromGroup(groupId, userId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups/${groupId}/users/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes a user from the specified site. If a user still owns content (assets) on Tableau Server, the user cannot be deleted unless the ownership is reassigned first.
 	 * @param {string} userId The ID of the user to remove.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeUserFromSite(userId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeUserFromSite(siteId, userId, opts);
+    removeUserFromSite(userId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/users/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the group on a specific site. Deleting a group does not delete the users in group, but users are no longer members of the group. Any permissions that were previously assigned to the group no longer apply.
 	 * @param {string} groupId The ID of the group to delete.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteGroup(groupId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteGroup(siteId, groupId, opts);
+    deleteGroup(groupId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/groups/${groupId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Get information about a database asset.
 	 * @param {string} databaseId The unique ID of the database asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDatabase(databaseId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDatabase(siteId, databaseId, opts);
+    queryDatabase(databaseId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Get information about all database assets for a site.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDatabases() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDatabases(siteId, opts);
+    queryDatabases() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Update the database description, certify a database, or assign a contact (must be a Tableau Server or Tableau Online user) to the database asset.
 	 * @param {string} databaseId The unique ID of the database asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateDatabase(databaseId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDatabase(siteId, databaseId, opts);
+    updateDatabase(databaseId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters()
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Permanently remove the database asset.
 	 * @param {string} databaseId The unique ID of the database asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeDatabase(databaseId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeDatabase(siteId, databaseId, opts);
+    removeDatabase(databaseId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Add permissions to a database asset. To add permissions, the database asset must be associated with a published data source.
@@ -1395,22 +1888,31 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDatabasePermissions(databaseId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDatabasePermissions(siteId, databaseId, permissions, opts);
+    addDatabasePermissions(databaseId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Get information about the permissions on a database asset.
 	 * @param {string} databaseId The unique ID of the database asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDatabasePermissions(databaseId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDatabasePermissions(siteId, databaseId, opts);
+    queryDatabasePermissions(databaseId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Applying default permissions to a database functions as a permissions template for the database's children table assets. How default permissions are enforced depends on whether the database is locked or unlocked.
@@ -1418,22 +1920,31 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDefaultDatabasePermissions(databaseId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDefaultDatabasePermissions(siteId, databaseId, permissions, opts);
+    addDefaultDatabasePermissions(databaseId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Get the default permissions applied to the database asset and its children tables.
 	 * @param {string} databaseId The unique ID of the database asset to set default permissions for.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDefaultDatabasePermissions(databaseId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDefaultDatabasePermissions(siteId, databaseId, opts);
+    queryDefaultDatabasePermissions(databaseId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Permanently remove the permissions applied to a database asset.
@@ -1444,11 +1955,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDatabasePermissions(databaseId, userId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDatabasePermissions(siteId, databaseId, userId, groupId, capabilityName, capabilityMode, opts);
+    deleteDatabasePermissions(databaseId, userId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the permissions applied to a database asset.
@@ -1458,11 +1973,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDatabasePermissionsForGroup(databaseId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDatabasePermissionsForGroup(siteId, databaseId, userId, capabilityName, capabilityMode, opts);
+    deleteDatabasePermissionsForGroup(databaseId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the permissions applied to a database asset.
@@ -1472,11 +1991,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode The permissions mode to remove. Modes that can be removed are Allow or Deny.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDatabasePermissionsForUser(databaseId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDatabasePermissionsForUser(siteId, databaseId, groupId, capabilityName, capabilityMode, opts);
+    deleteDatabasePermissionsForUser(databaseId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the default permissions on a database asset. Removing the default permissions from the database asset means that any new child table assets that are indexed by Catalog won't have any default permissions set.
@@ -1486,11 +2009,15 @@ export class WrappedApiCalls {
 	 * @param {string} groupId <parameter documentation missing>
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultDatabasePermissions(databaseId, userId, capabilityMode, groupId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultDatabasePermissions(siteId, databaseId, userId, capabilityMode, groupId, opts);
+    deleteDefaultDatabasePermissions(databaseId, userId, capabilityMode, groupId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the default permissions on a database asset. Removing the default permissions from the database asset means that any new child table assets that are indexed by Catalog won't have any default permissions set.
@@ -1499,11 +2026,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode <parameter documentation missing>
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultDatabasePermissionsForUser(databaseId, userId, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultDatabasePermissionsForUser(siteId, databaseId, userId, capabilityMode, opts);
+    deleteDefaultDatabasePermissionsForUser(databaseId, userId, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the default permissions on a database asset. Removing the default permissions from the database asset means that any new child table assets that are indexed by Catalog won't have any default permissions set.
@@ -1512,32 +2043,44 @@ export class WrappedApiCalls {
 	 * @param {string} groupId <parameter documentation missing>
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultDatabasePermissionsForGroup(databaseId, capabilityMode, groupId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultDatabasePermissionsForGroup(siteId, databaseId, capabilityMode, groupId, opts);
+    deleteDefaultDatabasePermissionsForGroup(databaseId, capabilityMode, groupId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Get information about a table asset.
 	 * @param {string} tableId The unique ID of the table asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryTable(tableId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryTable(siteId, tableId, opts);
+    queryTable(tableId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Get information about all table assets for a site.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryTables() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryTables(siteId, opts);
+    queryTables() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Update the table description, certify a table, or a assign a user contact to the table asset.
@@ -1545,22 +2088,31 @@ export class WrappedApiCalls {
 	 * @param {TableRequest} table table
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateTable(tableId, table) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateTable(siteId, tableId, table, opts);
+    updateTable(tableId, table) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(table)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Permanently remove the table asset.
 	 * @param {string} tableId The unique ID of the table asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeTable(tableId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeTable(siteId, tableId, opts);
+    removeTable(tableId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Add permissions to a table asset.
@@ -1568,33 +2120,46 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addTablePermissions(tableId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTablePermissions(siteId, tableId, permissions, opts);
+    addTablePermissions(tableId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Get information about the permissions on a table asset.
 	 * @param {string} tableId The unique ID of the table asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryTablePermissions(tableId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryTablePermissions(siteId, tableId, opts);
+    queryTablePermissions(tableId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Permanently remove the permissions applied to a table asset.
 	 * @param {string} tableId The unique ID of the table asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTablePermissions(tableId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTablePermissions(siteId, tableId, opts);
+    deleteTablePermissions(tableId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/table/${tableId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Get information about a column in a table asset.
@@ -1602,22 +2167,30 @@ export class WrappedApiCalls {
 	 * @param {string} columnId The unique ID of the column asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryColumnInATable(tableId, columnId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryColumnInATable(siteId, tableId, columnId, opts);
+    queryColumnInATable(tableId, columnId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Get information about the columns in a table asset.
 	 * @param {string} tableId The unique ID of the table asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryColumnsInATable(tableId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryColumnsInATable(siteId, tableId, opts);
+    queryColumnsInATable(tableId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/columns`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Update the description of the column.
@@ -1626,11 +2199,16 @@ export class WrappedApiCalls {
 	 * @param {ColumnRequest} column column
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateColumn(tableId, columnId, column) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateColumn(siteId, tableId, columnId, column, opts);
+    updateColumn(tableId, columnId, column) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(column)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Permanently remove the column from a table asset.
@@ -1638,11 +2216,15 @@ export class WrappedApiCalls {
 	 * @param {string} columnId The unique ID of the column asset.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeColumn(tableId, columnId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeColumn(siteId, tableId, columnId, opts);
+    removeColumn(tableId, columnId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/columns/${columnId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Create and apply a data quality warning to a database, table, published data source, or flow. Only one data quality warning can be applied to the asset. Adding a data quality warning to the asset that already has one causes an error.
@@ -1651,22 +2233,31 @@ export class WrappedApiCalls {
 	 * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDataQualityWarning(contentType, contentLuid, dataQualityWarning) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDataQualityWarning(siteId, contentType, contentLuid, dataQualityWarning, opts);
+    addDataQualityWarning(contentType, contentLuid, dataQualityWarning) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(dataQualityWarning)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Get information about a specific data quality warning.
 	 * @param {string} dataqualitywarningId The unique ID of the data quality warning attached to the asset (database, table, published data source, or flow).
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDataQualityWarningByID(dataqualitywarningId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataQualityWarningByID(siteId, dataqualitywarningId, opts);
+    queryDataQualityWarningByID(dataqualitywarningId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Get information about the data quality warning for the database, table, published data source, or flow.
@@ -1674,11 +2265,15 @@ export class WrappedApiCalls {
 	 * @param {string} contentLuid The unique ID of the content type (database, table, published data source, or flow). This is the same as the content ID.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	queryDataQualityWarningByContent(contentType, contentLuid) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataQualityWarningByContent(siteId, contentType, contentLuid, opts);
+    queryDataQualityWarningByContent(contentType, contentLuid) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Update the warning type, status, and message of a data quality warning.
@@ -1686,22 +2281,31 @@ export class WrappedApiCalls {
 	 * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	updateDataQualityWarning(dataqualitywarningId, dataQualityWarning) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateDataQualityWarning(siteId, dataqualitywarningId, dataQualityWarning, opts);
+    updateDataQualityWarning(dataqualitywarningId, dataQualityWarning) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(dataQualityWarning)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Permanently remove a data quality warning.
 	 * @param {string} dataqualitywarningId The unique ID of the data quality warning attached to the asset (database, table, published data source, or flow).
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataQualityWarningByID(dataqualitywarningId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataQualityWarningByID(siteId, dataqualitywarningId, opts);
+    deleteDataQualityWarningByID(dataqualitywarningId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${dataqualitywarningId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Permanently remove the data quality warning from the database, table, published data source, or flow.
@@ -1709,11 +2313,15 @@ export class WrappedApiCalls {
 	 * @param {string} contentLuid The unique ID of the content type(database, table, published data source, or flow). This is the same as the content ID.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataQualityWarningByContent(contentType, contentLuid) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataQualityWarningByContent(siteId, contentType, contentLuid, opts);
+    deleteDataQualityWarningByContent(contentType, contentLuid) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/dataQualityWarnings/${contentType}/${contentLuid}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Add one or more tags to a database.
@@ -1721,11 +2329,16 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addTagsToDatabase(databaseId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToDatabase(siteId, databaseId, tags, opts);
+    addTagsToDatabase(databaseId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Add one or more tags to a table.
@@ -1733,11 +2346,16 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addTagsToTable(tableId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToTable(siteId, tableId, tags, opts);
+    addTagsToTable(tableId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Add one or more tags to a column.
@@ -1745,22 +2363,32 @@ export class WrappedApiCalls {
 	 * @param {TagsRequest} tags tags
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addTagsToColumn(columnId, tags) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addTagsToColumn(siteId, columnId, tags, opts);
+    addTagsToColumn(columnId, tags) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/columns/${columnId}/tags`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tags)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Add multiple tags to items that are different content and asset types.
 	 * @param {TagBatchRequest} tagBatch tagBatch
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	batchAddTags(tagBatch) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.batchAddTags(siteId, tagBatch, opts);
+    batchAddTags(tagBatch) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tags:batchCreate`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tagBatch)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Delete a tag from a database.
@@ -1768,11 +2396,15 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The keyword text of the tag.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromDatabase(databaseId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromDatabase(siteId, databaseId, tagName, opts);
+    deleteTagFromDatabase(databaseId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/databases/${databaseId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Delete a tag from a table.
@@ -1780,11 +2412,15 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The keyword text of the tag.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromTable(tableId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromTable(siteId, tableId, tagName, opts);
+    deleteTagFromTable(tableId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tables/${tableId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Delete a tag from a column.
@@ -1792,22 +2428,31 @@ export class WrappedApiCalls {
 	 * @param {string} tagName The keyword text of the tag.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteTagFromColumn(columnId, tagName) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteTagFromColumn(siteId, columnId, tagName, opts);
+    deleteTagFromColumn(columnId, tagName) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/columns/${columnId}/tags/${tagName}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Delete multiple tags from items that are different content and asset types.
 	 * @param {TagBatchRequest} tagBatch tagBatch
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	batchDeleteTags(tagBatch) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.batchDeleteTags(siteId, tagBatch, opts);
+    batchDeleteTags(tagBatch) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `api/${apiVersion}/sites/${siteId}/tags:BatchDelete`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(tagBatch)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes a specific version of a workbook from the specified site.
@@ -1815,11 +2460,15 @@ export class WrappedApiCalls {
 	 * @param {number} revisionNumber The revision number of the workbook to remove. To determine what versions are available, call Get Workbook Revisions.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	removeWorkbookRevision(workbookId, revisionNumber) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.removeWorkbookRevision(siteId, workbookId, revisionNumber, opts);
+    removeWorkbookRevision(workbookId, revisionNumber) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Adds permissions to the specified data source for a Tableau Server user or group. You can specify multiple sets of permissions using one call.
@@ -1827,11 +2476,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDataSourcePermissions(datasourceId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDataSourcePermissions(siteId, datasourceId, permissions, opts);
+    addDataSourcePermissions(datasourceId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified project for a Tableau Server user or group. You can specify multiple sets of permissions using one call.
@@ -1839,11 +2493,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	addProjectPermissions(projectId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addProjectPermissions(siteId, projectId, permissions, opts);
+    addProjectPermissions(projectId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified project that will be applied by default to new flows, workbooks, and data sources as they are added to the project. You make separate requests to set default permissions for flows, workbooks, and data sources. Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
@@ -1851,11 +2510,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDefaultPermissions(projectId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDefaultPermissions(siteId, projectId, permissions, opts);
+    addDefaultPermissions(projectId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified project that will be applied by default to new flows, workbooks, and data sources as they are added to the project. You make separate requests to set default permissions for flows, workbooks, and data sources. Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
@@ -1863,11 +2527,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDefaultPermissionsForWorkbooks(projectId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDefaultPermissionsForWorkbooks(siteId, projectId, permissions, opts);
+    addDefaultPermissionsForWorkbooks(projectId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified project that will be applied by default to new flows, workbooks, and data sources as they are added to the project. You make separate requests to set default permissions for flows, workbooks, and data sources. Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
@@ -1875,11 +2544,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDefaultPermissionsForDatasources(projectId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDefaultPermissionsForDatasources(siteId, projectId, permissions, opts);
+    addDefaultPermissionsForDatasources(projectId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified project that will be applied by default to new flows, workbooks, and data sources as they are added to the project. You make separate requests to set default permissions for flows, workbooks, and data sources. Flows require Tableau Prep Conductor to be enabled on your Tableau Server. For more information, see Enable Tableau Prep Conductor(Link opens in a new window).
@@ -1887,11 +2561,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	addDefaultPermissionsForFlows(projectId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDefaultPermissionsForFlows(siteId, projectId, permissions, opts);
+    addDefaultPermissionsForFlows(projectId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified view (also known as a sheet) for a Tableau Server user or group. You can specify multiple sets of permissions using one call.
@@ -1899,11 +2578,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	addViewPermissions(viewId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addViewPermissions(siteId, viewId, permissions, opts);
+    addViewPermissions(viewId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds permissions to the specified workbook for a Tableau Server user or group. You can specify multiple sets of permissions using one call.
@@ -1911,11 +2595,16 @@ export class WrappedApiCalls {
 	 * @param {PermissionsRequest} permissions permissions
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	addWorkbookPermissions(workbookId, permissions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addWorkbookPermissions(siteId, workbookId, permissions, opts);
+    addWorkbookPermissions(workbookId, permissions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(permissions)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds a task to refresh or accelerate a workbook to an existing schedule. This method is not available for Tableau Online.
@@ -1923,99 +2612,136 @@ export class WrappedApiCalls {
 	 * @param {TaskRequest} task task
 	 * @returns {Promise<TaskResponse>} Promise | undefined
 	 */
-	addWorkbookToSchedule(scheduleId, task) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addWorkbookToSchedule(siteId, scheduleId, task, opts);
+    addWorkbookToSchedule(scheduleId, task) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/schedules/${scheduleId}/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(task)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Returns a list of permissions for a specific data source.
 	 * @param {string} datasourceId The ID of the data source to get permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryDataSourcePermissions(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDataSourcePermissions(siteId, datasourceId, opts);
+    queryDataSourcePermissions(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the set of permissions allowed or denied for groups and users in a project.
 	 * @param {string} projectId The project to get permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryProjectPermissions(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryProjectPermissions(siteId, projectId, opts);
+    queryProjectPermissions(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the default permissions for a project that is, the permissions that will be set by default for flows, workbooks, and data sources that are added to the project. You make separate requests to query the default permissions for flows, workbooks, and data sources.
 	 * @param {string} projectId The project to get default permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryDefaultPermissions(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDefaultPermissions(siteId, projectId, opts);
+    queryDefaultPermissions(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the default permissions for a project that is, the permissions that will be set by default for flows, workbooks, and data sources that are added to the project. You make separate requests to query the default permissions for flows, workbooks, and data sources.
 	 * @param {string} projectId The project to get default permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryDefaultPermissionsForDatasources(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDefaultPermissionsForDatasources(siteId, projectId, opts);
+    queryDefaultPermissionsForDatasources(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the default permissions for a project that is, the permissions that will be set by default for flows, workbooks, and data sources that are added to the project. You make separate requests to query the default permissions for flows, workbooks, and data sources.
 	 * @param {string} projectId The project to get default permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryDefaultPermissionsForWorkbooks(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDefaultPermissionsForWorkbooks(siteId, projectId, opts);
+    queryDefaultPermissionsForWorkbooks(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the default permissions for a project that is, the permissions that will be set by default for flows, workbooks, and data sources that are added to the project. You make separate requests to query the default permissions for flows, workbooks, and data sources.
 	 * @param {string} projectId The project to get default permissions for.
 	 * @returns {Promise<PermissionsResponse>} Promise | undefined
 	 */
-	queryDefaultPermissionsForFlows(projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryDefaultPermissionsForFlows(siteId, projectId, opts);
+    queryDefaultPermissionsForFlows(projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of permissions for the specific view.
 	 * @param {string} viewId The ID of the view to get permissions for.
 	 * @returns {Promise<ParentResponse>} Promise | undefined
 	 */
-	queryViewPermissions(viewId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryViewPermissions(siteId, viewId, opts);
+    queryViewPermissions(viewId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of permissions for the specific workbook.
 	 * @param {string} workbookId The ID of the workbook to get permissions for.
 	 * @returns {Promise<ParentResponse>} Promise | undefined
 	 */
-	queryWorkbookPermissions(workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryWorkbookPermissions(siteId, workbookId, opts);
+    queryWorkbookPermissions(workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Removes the specified data source permission for the specified group or user.
@@ -2026,11 +2752,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataSourcePermission(datasourceId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataSourcePermission(siteId, datasourceId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteDataSourcePermission(datasourceId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes the specified data source permission for the specified group or user.
@@ -2040,11 +2770,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataSourcePermissionForGroup(datasourceId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataSourcePermissionForGroup(siteId, datasourceId, groupId, capabilityName, capabilityMode, opts);
+    deleteDataSourcePermissionForGroup(datasourceId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes the specified data source permission for the specified group or user.
@@ -2054,11 +2788,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataSorucePermissionForUser(datasourceId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataSorucePermissionForUser(siteId, datasourceId, userId, capabilityName, capabilityMode, opts);
+    deleteDataSorucePermissionForUser(datasourceId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes the specified project permission for the specified group or user.
@@ -2069,11 +2807,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteProjectPermission(projectId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteProjectPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteProjectPermission(projectId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes the specified project permission for the specified group or user.
@@ -2083,11 +2825,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteProjectPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteProjectPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, opts);
+    deleteProjectPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes the specified project permission for the specified group or user.
@@ -2097,11 +2843,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteProjectPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteProjectPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, opts);
+    deleteProjectPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2112,11 +2862,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultPermission(projectId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultPermission(siteId, projectId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteDefaultPermission(projectId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2126,11 +2880,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultWorkbookPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultWorkbookPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, opts);
+    deleteDefaultWorkbookPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2140,11 +2898,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultWorkbookPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultWorkbookPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, opts);
+    deleteDefaultWorkbookPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2154,11 +2916,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultDatasourcePermissionsForGroup(projectId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultDatasourcePermissionsForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, opts);
+    deleteDefaultDatasourcePermissionsForGroup(projectId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2168,11 +2934,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultFlowPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultFlowPermissionForGroup(siteId, projectId, groupId, capabilityName, capabilityMode, opts);
+    deleteDefaultFlowPermissionForGroup(projectId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Removes default permissions from a project. After the default permission has been removed, flows, workbooks, or data sources that are added to the project do not get the specified permission by default. You make separate requests to remove default permissions for flows, workbooks, and data sources, and you make separate requests to remove default permissions for a specific group or user.
@@ -2182,11 +2952,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDefaultFlowPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDefaultFlowPermissionForUser(siteId, projectId, userId, capabilityName, capabilityMode, opts);
+    deleteDefaultFlowPermissionForUser(projectId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes permission to the specified view (also known as a sheet) for a Tableau Server user or group.
@@ -2197,11 +2971,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteViewPermission(viewId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteViewPermission(siteId, viewId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteViewPermission(viewId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes permission to the specified view (also known as a sheet) for a Tableau Server user or group.
@@ -2211,11 +2989,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteViewPermissionForGroup(viewId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteViewPermissionForGroup(siteId, viewId, groupId, capabilityName, capabilityMode, opts);
+    deleteViewPermissionForGroup(viewId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes permission to the specified view (also known as a sheet) for a Tableau Server user or group.
@@ -2225,11 +3007,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteViewPermissionForUser(viewId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteViewPermissionForUser(siteId, viewId, userId, capabilityName, capabilityMode, opts);
+    deleteViewPermissionForUser(viewId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified workbook for a group or user.
@@ -2240,11 +3026,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteWorkbookPermission(workbookId, groupId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteWorkbookPermission(siteId, workbookId, groupId, userId, capabilityName, capabilityMode, opts);
+    deleteWorkbookPermission(workbookId, groupId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified workbook for a group or user.
@@ -2254,11 +3044,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteWorkbookPermissionForGroup(workbookId, groupId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteWorkbookPermissionForGroup(siteId, workbookId, groupId, capabilityName, capabilityMode, opts);
+    deleteWorkbookPermissionForGroup(workbookId, groupId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified permission from the specified workbook for a group or user.
@@ -2268,11 +3062,15 @@ export class WrappedApiCalls {
 	 * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove the deny permission. This value is case sensitive.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteWorkbookPermissionForUser(workbookId, userId, capabilityName, capabilityMode) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteWorkbookPermissionForUser(siteId, workbookId, userId, capabilityName, capabilityMode, opts);
+    deleteWorkbookPermissionForUser(workbookId, userId, capabilityName, capabilityMode) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Adds a task to refresh a data source to an existing schedule. This method is not available for Tableau Online.
@@ -2280,74 +3078,105 @@ export class WrappedApiCalls {
 	 * @param {TaskRequest} task task
 	 * @returns {Promise<TaskResponse>} Promise | undefined
 	 */
-	addDataSourceToSchedule(scheduleId, task) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDataSourceToSchedule(siteId, scheduleId, task, opts);
+    addDataSourceToSchedule(scheduleId, task) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/schedules/${scheduleId}/datasources`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(task)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Cancels a job specified by job ID. To get a list of job IDs for jobs that are currently queued or in-progress, use the Query Jobs method.
 	 * @param {string} jobId The ID of the job to cancel.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	cancelJob(jobId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.cancelJob(siteId, jobId, opts);
+    cancelJob(jobId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/jobs/${jobId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Returns status information about an asynchronous process that is tracked using a job. This method can be used to query jobs that are used to do the following:
 	 * @param {string} jobId The ID of the job to get status information for.
 	 * @returns {Promise<JobResponse>} Promise | undefined
 	 */
-	queryJob(jobId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryJob(siteId, jobId, opts);
+    queryJob(jobId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/jobs/${jobId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of active jobs on the specified site. To get details on a specific job, pass a job ID returned by this method to the Query Job method. To cancel an active job, pass a job ID returned by this method to the Cancel Job method.
 	 * @returns {Promise<BackgroundJobsResponse>} Promise | undefined
 	 */
-	queryJobs() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryJobs(siteId, opts);
+    queryJobs() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/jobs`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns information about the specified extract refresh task.
 	 * @param {string} taskId The ID of the extract refresh that you want information about.
 	 * @returns {Promise<TaskResponse>} Promise | undefined
 	 */
-	getExtractRefreshTask(taskId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getExtractRefreshTask(siteId, taskId, opts);
+    getExtractRefreshTask(taskId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of extract refresh tasks for the site.
 	 * @returns {Promise<TasksResponse>} Promise | undefined
 	 */
-	getExtractRefreshTasks() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getExtractRefreshTasks(siteId, opts);
+    getExtractRefreshTasks() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/extractRefreshes`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Creates a new schedule on Tableau Server.
 	 * @param {ScheduleRequest} schedule schedule
 	 * @returns {Promise<ScheduleResponse>} Promise | undefined
 	 */
-	createSchedule(schedule) {
-        const opts = this.execOpts({ });
-        return api.createSchedule(schedule, opts);
+    createSchedule(schedule) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/schedules`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(schedule)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Returns a list of the extract refresh tasks for a specified schedule on the specified site.
@@ -2357,11 +3186,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<ExtractsResponse>} Promise | undefined
 	 */
-	queryExtractRefreshTasks(scheduleId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.queryExtractRefreshTasks(siteId, scheduleId, queryOptions, opts);
+    queryExtractRefreshTasks(scheduleId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/schedules/${scheduleId}/extracts`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of flows, extract and subscription schedules. For each schedule, the API returns the name, frequency, priority, and other information.
@@ -2370,21 +3204,32 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<SchedulesResponse>} Promise | undefined
 	 */
-	querySchedules(queryOptions) {
-        const opts = this.execOpts({ });
-        return api.querySchedules(queryOptions, opts);
+    querySchedules(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/schedules`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Runs the specified extract refresh task.
 	 * @param {string} taskId The ID of the extract refresh task that you want to run.
 	 * @returns {Promise<JobResponse>} Promise | undefined
 	 */
-	runExtractRefreshTask(taskId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.runExtractRefreshTask(siteId, taskId, opts);
+    runExtractRefreshTask(taskId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}/runNow`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters()
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Modifies settings for the specified schedule, including the name, priority, and frequency details.
@@ -2392,63 +3237,91 @@ export class WrappedApiCalls {
 	 * @param {ScheduleRequest} schedule schedule
 	 * @returns {Promise<ScheduleResponse>} Promise | undefined
 	 */
-	updateSchedule(scheduleId, schedule) {
-        const opts = this.execOpts({ });
-        return api.updateSchedule(scheduleId, schedule, opts);
+    updateSchedule(scheduleId, schedule) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/schedules/${scheduleId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(schedule)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes the specified schedule.
 	 * @param {string} scheduleId The ID of the schedule to delete. To determine what schedules are available, call Query Schedules.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSchedule(scheduleId) {
-        const opts = this.execOpts({ });
-        return api.deleteSchedule(scheduleId, opts);
+    deleteSchedule(scheduleId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/schedules/${scheduleId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes a data acceleration task.
 	 * @param {string} dataAccelerationId The ID of the task to remove.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataAccelerationTask(dataAccelerationId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataAccelerationTask(siteId, dataAccelerationId, opts);
+    deleteDataAccelerationTask(dataAccelerationId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/dataAcceleration/${dataAccelerationId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns a list of data acceleration tasks for the site.
 	 * @returns {Promise<TasksResponse>} Promise | undefined
 	 */
-	getDataAccelerationTasks() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getDataAccelerationTasks(siteId, opts);
+    getDataAccelerationTasks() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/dataAcceleration`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Creates a new, unsuspended subscription to a view or workbook for a specific user. When a user is subscribed to the content, Tableau Server sends the content to the user in email on the schedule that's defined in Tableau Server and specified in this call.
 	 * @param {SubscriptionRequest} subscription subscription
 	 * @returns {Promise<SubscriptionResponse>} Promise | undefined
 	 */
-	createSubscription(subscription) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.createSubscription(siteId, subscription, opts);
+    createSubscription(subscription) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/subscriptions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(subscription)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Returns information about the specified subscription.
 	 * @param {string} subscriptionId The ID of the subscription to get information for.
 	 * @returns {Promise<SubscriptionResponse>} Promise | undefined
 	 */
-	querySubscription(subscriptionId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.querySubscription(siteId, subscriptionId, opts);
+    querySubscription(subscriptionId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns a list of all the subscriptions on the specified site.
@@ -2457,11 +3330,16 @@ export class WrappedApiCalls {
 	 * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default is 1. For more information, see Paginating Results.
 	 * @returns {Promise<SubscriptionsResponse>} Promise | undefined
 	 */
-	querySubscriptions(queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.querySubscriptions(siteId, queryOptions, opts);
+    querySubscriptions(queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/subscriptions`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Modifies an existing subscription, allowing you to change the subject, schedule, and suspension state for the subscription.
@@ -2469,22 +3347,31 @@ export class WrappedApiCalls {
 	 * @param {SubscriptionRequest} subscription subscription
 	 * @returns {Promise<SubscriptionResponse>} Promise | undefined
 	 */
-	updateSubscription(subscriptionId, subscription) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.updateSubscription(siteId, subscriptionId, subscription, opts);
+    updateSubscription(subscriptionId, subscription) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(subscription)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes the specified subscription.
 	 * @param {string} subscriptionId The ID of the subscription to delete. To determine what subscriptions are available, call Query Subscriptions.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteSubscription(subscriptionId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteSubscription(siteId, subscriptionId, opts);
+    deleteSubscription(subscriptionId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/subscriptions/${subscriptionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Adds the specified data source to the user's favorites.
@@ -2492,11 +3379,16 @@ export class WrappedApiCalls {
 	 * @param {FavoriteRequest} favorite favorite
 	 * @returns {Promise<FavoritesResponse>} Promise | undefined
 	 */
-	addDataSourceToFavorites(userId, favorite) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addDataSourceToFavorites(siteId, userId, favorite, opts);
+    addDataSourceToFavorites(userId, favorite) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(favorite)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds the specified project to a user's favorites.
@@ -2504,11 +3396,16 @@ export class WrappedApiCalls {
 	 * @param {FavoriteRequest} favorite favorite
 	 * @returns {Promise<FavoritesResponse>} Promise | undefined
 	 */
-	addProjectToFavorites(userId, favorite) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addProjectToFavorites(siteId, userId, favorite, opts);
+    addProjectToFavorites(userId, favorite) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(favorite)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds the specified view to a user's favorites.
@@ -2516,11 +3413,16 @@ export class WrappedApiCalls {
 	 * @param {FavoriteRequest} favorite favorite
 	 * @returns {Promise<FavoritesResponse>} Promise | undefined
 	 */
-	addViewToFavorites(userId, favorite) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addViewToFavorites(siteId, userId, favorite, opts);
+    addViewToFavorites(userId, favorite) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(favorite)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Adds the specified workbook to a user's favorites.
@@ -2528,11 +3430,16 @@ export class WrappedApiCalls {
 	 * @param {FavoriteRequest} favorite favorite
 	 * @returns {Promise<FavoritesResponse>} Promise | undefined
 	 */
-	addWorkbookToFavorites(userId, favorite) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.addWorkbookToFavorites(siteId, userId, favorite, opts);
+    addWorkbookToFavorites(userId, favorite) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(favorite)
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Deletes the specified data source from the user's favorites. If the specified data source is not a favorite, the operation has no effect.
@@ -2540,11 +3447,15 @@ export class WrappedApiCalls {
 	 * @param {string} datasourceId The ID of the data source to remove from the user's favorites.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteDataSourceFromFavorites(userId, datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteDataSourceFromFavorites(siteId, userId, datasourceId, opts);
+    deleteDataSourceFromFavorites(userId, datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}/datasources/${datasourceId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified project from the user's favorites. If the specified project is not a favorite, the operation has no effect.
@@ -2552,11 +3463,15 @@ export class WrappedApiCalls {
 	 * @param {string} projectId The ID of the project to remove from the user's favorites.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteProjectFromFavorites(userId, projectId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteProjectFromFavorites(siteId, userId, projectId, opts);
+    deleteProjectFromFavorites(userId, projectId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}/projects/${projectId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes the specified view from user's favorites. If the specified view is not a favorite, the operation has no effect.
@@ -2564,11 +3479,15 @@ export class WrappedApiCalls {
 	 * @param {string} viewId The ID of the view to remove from the user's favorites.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteViewFromFavorites(userId, viewId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteViewFromFavorites(siteId, userId, viewId, opts);
+    deleteViewFromFavorites(userId, viewId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}/views/${viewId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Deletes a workbook from a user's favorites. If the specified workbook is not a favorite of the specified user, this call has no effect.
@@ -2576,32 +3495,44 @@ export class WrappedApiCalls {
 	 * @param {string} workbookId The ID of the workbook to remove from the user's favorites.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteWorkbookFromFavorites(userId, workbookId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteWorkbookFromFavorites(siteId, userId, workbookId, opts);
+    deleteWorkbookFromFavorites(userId, workbookId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}/workbooks/${workbookId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Returns a list of favorite projects, data sources, views and workbooks for a user.
 	 * @param {string} userId The ID of the user for which you want to get a list favorites.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getFavoritesForUser(userId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.getFavoritesForUser(siteId, userId, opts);
+    getFavoritesForUser(userId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/favorites/${userId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Initiates the upload process for a file. After the upload has been initiated, you call Append to File Upload to send individual blocks of the file to the server. When the complete file has been sent to the server, you call Publish Data Source, Publish Flow, or Publish Workbook to commit the upload.
 	 * @returns {Promise<FileUploadResponse>} Promise | undefined
 	 */
-	initiateFileUpload() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.initiateFileUpload(siteId, opts);
+    initiateFileUpload() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/fileUploads`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Uploads a block of data and appends it to the data that is already uploaded. This method is called after an upload has been initiated using Initiate File Upload.
@@ -2609,29 +3540,46 @@ export class WrappedApiCalls {
 	 * @param {Object} file File Contents
 	 * @returns {Promise<FileUploadResponse>} Promise | undefined
 	 */
-	appendToFileUpload(uploadSessionId, file) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.appendToFileUpload(siteId, uploadSessionId, file, opts);
+    appendToFileUpload(uploadSessionId, file) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/fileUploads/${uploadSessionId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withHeaders({"Content-Type":"multipart/mixed"})
+            .withBodyParameters()
+            .withFileParameters({ name: "tableau_file", file: file })
+            .build()
+            .execute(this.authenticatedHttp.put);
     }
+
 
 	/**
 	 * Returns the version of Tableau Server and the supported version of the REST API.
 	 * @returns {Promise<ServerInfoResponse>} Promise | undefined
 	 */
-	serverInfo() {
-        const opts = this.execOpts({ });
-        return api.serverInfo(opts);
+    serverInfo() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/serverinfo`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Returns details of the current session of Tableau Server.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	getCurrentServerSessionDetails() {
-        const opts = this.execOpts({ });
-        return api.getCurrentServerSessionDetails(opts);
+    getCurrentServerSessionDetails() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sessions/current`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.get);
     }
+
 
 	/**
 	 * Create an extract for a data source in a site. Optionally, encrypt the extract if the site and workbooks using it are configured to allow it.
@@ -2640,22 +3588,31 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.encrypt If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	createAnExtractForADataSource(datasourceId, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.createAnExtractForADataSource(siteId, datasourceId, queryOptions, opts);
+    createAnExtractForADataSource(datasourceId, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/createExtract`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Delete the extract of a data source in a site.
 	 * @param {string} datasourceId The LUID of the datasource whose extract is to be deleted.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteAnExtractFromADataSource(datasourceId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteAnExtractFromADataSource(siteId, datasourceId, opts);
+    deleteAnExtractFromADataSource(datasourceId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/deleteExtract`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Create extracts for all embedded data sources of a workbook. Optionally, encrypt the extracts if the site and workbook using them are configured to allow it.
@@ -2665,11 +3622,17 @@ export class WrappedApiCalls {
 	 * @param {boolean} queryOptions.encrypt If true, then Tableau will attempt to encrypt the created extracts. If false, or no encrypt parameter is appended to the URI, then the extract won't be encrypted, unless encryption is enforced by site or workbook configuration. An error will be returned when encrypt equals true and encryption is disabled in the site or workbook.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	createExtractsForEmbeddedDataSourcesInAWorkbook(workbookId, datasources, queryOptions) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.createExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, queryOptions, opts);
+    createExtractsForEmbeddedDataSourcesInAWorkbook(workbookId, datasources, queryOptions) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/createExtract`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(datasources)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Delete all extracts of embedded data sources in a workbook.
@@ -2677,50 +3640,71 @@ export class WrappedApiCalls {
 	 * @param {DatasourcesRequest} datasources datasources
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteExtractsForEmbeddedDataSourcesInAWorkbook(workbookId, datasources) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteExtractsForEmbeddedDataSourcesInAWorkbook(siteId, workbookId, datasources, opts);
+    deleteExtractsForEmbeddedDataSourcesInAWorkbook(workbookId, datasources) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/workbookss/${workbookId}/deleteExtract`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .withBodyParameters(datasources)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Deletes an extract refresh task.
 	 * @param {string} taskId The ID of the extract refresh task to remove.
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	deleteExtractRefreshTask(taskId) {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.deleteExtractRefreshTask(siteId, taskId, opts);
+    deleteExtractRefreshTask(taskId) {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/tasks/extractRefreshes/${taskId}`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.del);
     }
+
 
 	/**
 	 * Extract encryption at rest is a data security feature that allows you to encrypt .hyper extracts while they are stored on Tableau Server. For more information, see Extract Encryption at Rest(Link opens in a new window).
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	encryptExtractsInASite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.encryptExtractsInASite(siteId, opts);
+    encryptExtractsInASite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/encrypt-extracts`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Extract encryption at rest is a data security feature that allows you to encrypt .hyper extracts while they are stored on Tableau Server. For more information, see Extract Encryption at Rest(Link opens in a new window).
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	decryptExtractsInASite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.decryptExtractsInASite(siteId, opts);
+    decryptExtractsInASite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/decrypt-extracts`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 
 	/**
 	 * Extract encryption at rest is a data security feature that allows you to encrypt .hyper extracts while they are stored on Tableau Server. For more information, see Extract Encryption at Rest(Link opens in a new window).
 	 * @returns {Promise<any>} Promise | undefined
 	 */
-	reencryptExtractsInASite() {
-        const siteId = this.getSite();
-        const opts = this.execOpts({ });
-        return api.reencryptExtractsInASite(siteId, opts);
+    reencryptExtractsInASite() {
+        const {url,apiVersion,siteId} = this.getOptions();
+        const path = `/api/${apiVersion}/sites/${siteId}/reencrypt-extracts`;
+        return TableauRestRequest.builder(url)
+            .withPath(path)
+            .build()
+            .execute(this.authenticatedHttp.post);
     }
+
 }
