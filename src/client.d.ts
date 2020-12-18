@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from "axios";
-import { WrappedApiCalls } from './api-wrapped';
+import { ApiCalls } from './api-unified';
 
 /**
  * A REST Api Client that handles calls to the Tableau Server REST API
  */
-export class TableauRestApiClient extends WrappedApiCalls {
+export class TableauRestApiClient extends ApiCalls {
     /**
      * Builds the Tableau Rest API client
      * @param {ClientConstructorOptions} options An options object containing the baseURL and version number

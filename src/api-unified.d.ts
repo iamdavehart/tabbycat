@@ -1403,7 +1403,7 @@ declare interface SubscriptionListType {
 
 
 
-export declare class WrappedApiCalls {
+export declare class ApiCalls {
     /**
      * Signs you in as a user on the specified site on Tableau Server. This call returns a credentials token that you use in subsequent calls to the server. Typically, a credentials token is valid for 240 minutes. You can change this timeout by using the tsm configuration set(Link opens in a new window) command and setting the wgserver.session.idle_limit option.
      * @param {CredentialsRequest} credentials credentials

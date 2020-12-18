@@ -1,50 +1,32 @@
 
-import { WrappedApiCalls } from "./api-wrapped";
+import { ApiCalls } from "./api-unified";
 import { TableauAuthorisationRestExecutive, TableauAuthorisedRestExecutive } from "./executive";
-import { DEFAULT_API_VERSION } from "./request";
 
 /**
  * A REST Api Client that handles calls to the Tableau Server REST API
  */
-export class TableauRestApiClient extends WrappedApiCalls {
+export class TableauRestApiClient extends ApiCalls {
     /**
      * Builds the Tableau Rest API client
-     * @param {Object} options An options object containing the baseURL and version number
+     * @param {Object=} options An options object containing the baseURL and version number
      * @param {string=} options.baseURL the baseURL for the server requests(defaults to localhost if not set)
      * @param {string=} options.version the default version to use (defaults to latest if not set)
      * @param {Object=} options.axios an options object that is passed to the underlying axios executives
      */
-    constructor(options = { baseURL: "http://localhost", version: DEFAULT_API_VERSION }) {
+    constructor(options) {
         super();
-        this.baseURL = options.baseURL;
-        this.version = options.version;
+        // use passed-in options if applicable
+        if (options?.baseURL) { this.baseURL = options.baseURL; }
+        if (options?.version) { this.version = options.version; }
+        // initialise state for users and site options
         this.currentUser = null;
         this.currentSite = null;
-        // bind
-        this.execOpts = this.execOpts.bind(this);
-        this.getSite = this.getSite.bind(this);
-        this.updateCurrentCredentials = this.updateCurrentCredentials.bind(this);
+        this.currentSiteId = null;
         // set up api executives
         const axiosOptions = options.axios || {};
-        this.authHttp = new TableauAuthorisedRestExecutive(axiosOptions);
-        this.http = new TableauAuthorisationRestExecutive(
-            axiosOptions,
-            this.updateCurrentCredentials
-        );
-    }
-
-    /**
-     * Creates the execute options for the clients api requests
-     * @param {Object} opts an existing options object
-     * @param {boolean=} opts.authentication whether the route retunrs authentication information
-     */
-    execOpts(opts = {}) {
-        return {
-            baseURL: this.baseURL,
-            version: this.version,
-            http: opts && opts.authentication ? this.http : this.authHttp,
-            ...opts,
-        };
+        this.updateCurrentCredentials = this.updateCurrentCredentials.bind(this);
+        this.authenticatedHttp = new TableauAuthorisedRestExecutive(axiosOptions);
+        this.authenticationHttp = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
     }
 
     /**
@@ -62,15 +44,9 @@ export class TableauRestApiClient extends WrappedApiCalls {
         }
         this.currentUser = creds.user;
         this.currentSite = creds.site;
-        this.http.setAccessToken(creds.token);
-        this.authHttp.setAccessToken(creds.token);
+        this.currentSiteId = creds.site?.id;
+        this.authenticatedHttp.setAccessToken(creds.token);
+        this.authenticationHttp.setAccessToken(creds.token);
     }
 
-    /**
-     * Get the id of the current site that the client is logged in to
-     * @returns {string}
-     */
-    getSite() {
-        return this.currentSite ? this.currentSite.id || "" : "";
-    }
 }
