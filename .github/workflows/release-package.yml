@@ -9,12 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: get our tag name
-        run: |
-          GITHUB_REF="${{ github.ref }}"
-          VERSION=${GITHUB_REF#refs/*/}
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-
       - name: check out code
         uses: actions/checkout@v2
 
@@ -35,6 +29,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: get our tag name
+        run: |
+          GITHUB_REF="${{ github.ref }}"
+          VERSION=${GITHUB_REF#refs/*/}
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: check out code
         uses: actions/checkout@v2
       - name: install node.js
