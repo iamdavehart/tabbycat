@@ -1,0 +1,65 @@
+
+name: Create Release From Tag
+on: 
+  push:
+    tags: 
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get our tag name
+        run: |
+          GITHUB_REF="${{ github.ref }}"
+          VERSION=${GITHUB_REF#refs/*/}
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: check out code
+        uses: actions/checkout@v2
+
+      - name: install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: npm install
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          npm run test
+
+
+
+  publish:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v2
+      - name: install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: npm build
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+      - name: publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${NPM_PUBLISH_TOKEN}
+          npm publish --ignore-scripts
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
