@@ -8,7 +8,7 @@ import {
     UserFieldExpressionBuilder,
     ProjectFieldExpressionBuilder,
     MetricsFieldExpressionBuilder,
-} from "../expression-fields";
+} from "./expression-fields";
 
 describe("Field Expression Tests", () => {
     test("Datasource", () => {

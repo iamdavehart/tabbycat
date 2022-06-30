@@ -1,8 +1,5 @@
 import { DEFAULT_URL, DEFAULT_VERSION } from "./defaults";
 import { TableauRestExecutive } from "./executive";
-import { signIn } from "methods/_signIn";
-import { switchSite } from "methods/_switchSite";
-import { signOut } from "methods/_signOut";
 
 /**
  * A REST Api Client built on axios that handles calls to the Tableau Server REST API
@@ -17,7 +14,6 @@ export class TableauRestApiClient {
      * @param {Object=} options.axios an options object that is passed to the underlying axios executives
      */
     constructor({ url = DEFAULT_URL, version = DEFAULT_VERSION, axiosOptions = {} } = {}) {
-        super();
         this.url = url;
         this.apiVersion = version;
         this.executive = new TableauRestExecutive(axiosOptions);

@@ -47,7 +47,7 @@ describe("Tableau Rest Request Builder Tests", () => {
         test("withAuthToken defers to withHeaders and can be chained / returns this", ()=> {
             const rqb = new TableauRestRequestBuilder();
             rqb.withHeaders = jest.fn();
-            const ret = rqb.withAuthToken("someverylongrandomauthtoken");
+            const ret = rqb.withAuthenticationToken("someverylongrandomauthtoken");
             expect(ret).toBe(rqb);
             expect(rqb.withHeaders).toHaveBeenCalled();
             expect(rqb.withHeaders).toHaveBeenCalledWith({ "X-Tableau-Auth": "someverylongrandomauthtoken" });
