@@ -47,7 +47,12 @@ const ensureDir = (dir) => {
     }
 };
 
+const stripAllWhitespace = (s) => {
+    return String(s).replace(/[\s\r\n\t\u00a0]+/g," ");
+}
+
 
 module.exports.ensureDir = ensureDir;
 module.exports.writeToFile = writeToFile;
 module.exports.camel = camel;
+module.exports.stripAllWhitespace = stripAllWhitespace;

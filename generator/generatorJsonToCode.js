@@ -8,7 +8,13 @@ const camel = utils.camel;
 function generateCodeFromJson(config) {
     const extendedMethods = require("./out/rest-api-doc.json");
     const outDirectory = config ? config.outputDirectory || "./generator/out" : "./generator/out";
+    const outMethodDirectory = path.join(outDirectory, "/", "methods");
     utils.ensureDir(outDirectory);
+    utils.ensureDir(outMethodDirectory);
+    
+    const typeDefinitions = require("./out/rest-api-types.json");
+    const requestMap = typeDefinitions?.requestMap ?? {};
+    const responseMap = typeDefinitions?.responseMap ?? {};
 
     try {
         const methodCalls = extendedMethods.map((m) => {
@@ -18,12 +24,13 @@ function generateCodeFromJson(config) {
 
             
             // response and request types
-            const rqstType = m.requestBodyType ? m.requestBodyType.substr(0,1).toUpperCase()    
-            + m.requestBodyType.substr(1) + "Request" : "";
-            const rspType = m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase()    
-            + m.responseBodyType.substr(1) + "Response" : "";
+            // const rqstType = m.requestBodyType ? m.requestBodyType.substr(0,1).toUpperCase()    
+            // + m.requestBodyType.substr(1) + "Request" : "";
+            // const rspType = m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase()    
+            // + m.responseBodyType.substr(1) + "Response" : "";
 
-
+            const rqstType = requestMap[m.requestBodyType] ?? (m.requestBodyType ? m.requestBodyType.substr(0,1).toUpperCase() + m.requestBodyType.substr(1) + "Request" : "");
+            const rspType = responseMap[m.responseBodyType] ?? (m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase() + m.responseBodyType.substr(1) + "Response" : "");
 
             if (m.requestBodyType) {
                 params.push({
@@ -112,7 +119,20 @@ function generateCodeFromJson(config) {
                     .map((k) => signatureParams.path[k].name),
                 ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k].name),
                 ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
+                "client"
             ].join(", ");
+
+            const signatureWrappedTS = [
+                ...Object.keys(signatureParams.path).filter((k) => k !== "siteId").map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
+                ...Object.keys(signatureParams.body).map((k) => `${signatureParams.body[k].name}: ${signatureParams.body[k].paramType}`),
+                ...(Object.keys(signatureParams.query).length ? [`queryOptions?: { ${Object.keys(signatureParams.query).map(q => signatureParams.query[q].qsKey).join(", ")} }`] : []),
+                "client?: ClientLite"
+            ].join(", ");
+
+            const pathParameterValidation = Object.keys(signatureParams.path)
+                .map(k => signatureParams.path[k].name)    
+                .map(k => `\tif(!${k}) return Promise.reject(new MissingPathParameterException("${k}"));`)
+                .join("\n")
 
             const commentsWrapped = [];
             commentsWrapped.push("/**");
@@ -142,6 +162,8 @@ function generateCodeFromJson(config) {
                 ? fileParameterNameMatch[1] || "file"
                 : "";
 
+            const bodyParams = Object.keys(signatureParams.body??{}).map((k) => signatureParams.body[k])
+
 
             return {
                 ...m,
@@ -149,25 +171,33 @@ function generateCodeFromJson(config) {
                 responseTypeJS: rspType,
                 unifiedSignature: `// ${m.name}\n${name}(${signatureWrappedJS})`,
                 unifiedCallJS:
-                    commentsWrapped.join("\n\t")+
+                    commentsWrapped.join("\n")+
 `
-    ${name}(${signatureWrappedJS}) {
-        const {url,apiVersion,siteId} = this.getOptions();
-        const path = \`${m.uri}\`;
-        return TableauRestRequest.builder(url)
-            .withPath(path)
+export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
+    const minVersion = "${m.version}";
+    const { url = DEFAULT_URL, apiVersion = DEFAULT_VERSION, siteId, token, execute } = (client ?? this ?? {});
+    if (!execute) return Promise.reject(new ExecutiveException());
+    if (failsVersionCheck(apiVersion, minVersion)) return Promise.reject(new VersionException(apiVersion, minVersion));
+${pathParameterValidation}  
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.${httpMethod.toUpperCase()})
+            .withPath(\`${m.uri}\`)
 `
 +(m.requestContentType != "application/json" ? `            .withHeaders({"Content-Type":"${m.requestContentType}"})\n` : "")
 +(Object.keys(signatureParams.query).length ? `            .withQueryParameters(queryOptions)\n` : "")
-+(m.requestBody ? `            .withBodyParameters(${m.requestBodyType})\n` : "")
-+(params.some((p) => p.name === "file" && p.type === "body") ? `            .withFileParameters({ name: "${fileParameterName}", file: file })\n` : "") + 
++(bodyParams.length > 0 ? bodyParams.map(bp => `            .withBodyParameters(${bp.name})\n`) : "")
++(params.some((p) => p.name === "file" && p.type === "body") ? `            .withFileParameters({ name: "${fileParameterName}", file: file })\n` : "") 
++(requestType !== "AuthenticationRequest" ? `            .withAuthenticationToken(token)\n` : "") + 
 `            .build()
-            .execute(this.${requestType === "AuthenticationRequest" ? "authenticationHttp" : "authenticatedHttp"}.${httpMethod});
-    }
+        );
+}
+`,
+                functionTS: 
+                    commentsWrapped.join("\n") +
 `
-
-
-
+export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) : Promise<${rspType}>;
+`
             };
         });
 
@@ -180,6 +210,13 @@ function generateCodeFromJson(config) {
             return o;
         }, {});
 
+        // reduce by base method name
+        const baseMethods = methodCalls.reduce((o, m) => {
+            if (!o.hasOwnProperty(m.methodName)) { o[m.methodName] = []; }
+            o[m.methodName].push(m);
+            return o;
+        }, {});
+        
         // response and return types to import
         const typeDefs = _.concat(
                         _.uniq(methodCalls.filter(m => m.requestTypeJS).map(m=>m.requestTypeJS)).map(m=>({ file: "./api-wrapped", type: m })),
@@ -216,26 +253,60 @@ function generateCodeFromJson(config) {
             Object.keys(areas).map(k => `### ${k} Calls\n\n\`\`\`js\n` + areas[k].map((m) => `${m.unifiedSignature}`).join("\n") + "\n```").join("\n\n");
         utils.writeToFile(path.join(outDirectory, "api-listing.md"), readmeOutput);
 
-        // output our re-export
-        // const reexportText =
-        //     headerText +
-        //     Object.keys(areas)
-        //         .map((k) => camel(k.replace(/\,/g, "")))
-        //         .map((k) => `export * from './api-${k}';`)
-        //         .join("\n");
-        // utils.writeToFile(path.join(outDirectory, "api.js"), reexportText);
-
         // output a file per area
         // for (let a in areas) {
         //     const area_name = camel(a.replace(/\,/g, ""));
-        //     const apiAreaText = headerText + API_HEADER + execJSONDoc + areas[a].join("\n\n");
+        //     const apiAreaText = headerText + areas[a].map(m => m.unifiedCallJS).join("\n\n");
         //     utils.writeToFile(path.join(outDirectory, `api-${area_name}.js`), apiAreaText);
         // }
+
+        // output our re-export
+        const reexportText =
+            headerText +
+            Object.keys(baseMethods)
+                .sort((a,b) => String(a).localeCompare(String(b)))
+                .map((m) => `export { ${baseMethods[m].map(n => n.extendedMethodName ?? n.methodName).join(", ")} } from './_${m}';`)
+                .join("\n");
+        utils.writeToFile(path.join(outMethodDirectory, "index.js"), reexportText);
+
+        //output a file per method
+        for (let bm in baseMethods) {
+
+            const methods = baseMethods[bm];
+            const requests = _.uniq(methods.filter(m => !!m.requestTypeJS).map(m => m.requestTypeJS));
+            const responses = _.uniq(methods.filter(m => !!m.responseTypeJS).map(m => m.responseTypeJS));
+            const imports = _.uniq([ ...requests, ...responses ]);
+
+            const methodText = headerText 
+                + FILE_PER_METHOD_HEADER 
+                + (imports.length ? ("/**\n"
+                + imports.map(i => ` * @typedef {import("./rest-api-types.d.ts").${i}} ${i}`).join("\n")
+                + "\n */\n\n") : "")
+                + baseMethods[bm].map(m => m.unifiedCallJS).join("\n\n");
+            utils.writeToFile(path.join(outMethodDirectory, `_${baseMethods[bm][0].methodName}.js`), methodText);
+
+            const typesText = headerText 
+                + "\n"
+                + baseMethods[bm].map(m => m.functionTS).join("\n");
+                + "\n"
+            utils.writeToFile(path.join(outMethodDirectory, `_${baseMethods[bm][0].methodName}.d.ts`), typesText);
+
+        }
+
 
     } catch (ex) {
         throw ex;
     }
 }
+
+const FILE_PER_METHOD_HEADER = `
+import { DEFAULT_URL, DEFAULT_VERSION } from 'tabbycat/defaults';
+import { TableauRestRequest } from 'tabbycat/request';
+import { VersionException, MissingPathParameterException } from 'tabbycat/exceptions';
+import { failsVersionCheck } from 'tabbycat/utils';
+import * as http from 'tabbycat/httpMethods';
+
+`
 
 const UNIFIED_HEADER = `
 import { DEFAULT_URL, DEFAULT_VERSION } from './defaults';

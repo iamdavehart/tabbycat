@@ -1,8 +1,9 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
 const utils = require("./utils");
-const { over } = require("lodash");
+const { over, pick, values, isArray, extend } = require("lodash");
 const camel = utils.camel;
+const stripAllWhitespace = utils.stripAllWhitespace;
 
 function generateReferenceIntermediate(config) {
     try {
@@ -13,70 +14,43 @@ function generateReferenceIntermediate(config) {
 
         // read the file in.
         // we're using a local file but you can pass a url here
-        fs.readFile("./generator/reference/reference_3.9.html", (err, data) => {
-            // check for errors on reading the file
-            if (err) {
-                throw err;
-            }
+        fs.readFile("./generator/reference/reference_3.15.html", (err, data) => {
+            if (err) throw err;
 
             // parse into cheerio
-            const $ = cheerio.load(data.toString(), {
-                xmlMode: true,
-                normalizeWhitespace: true,
-            });
+            const cheerioOpts = { xmlMode:true, normalizeWhitespace:true };
+            const $ = cheerio.load(data.toString(), cheerioOpts);
 
-            // parse the index on the reference page to find all the methods
-            // and get the link that it refers to later in the page
-            let area = "";
-            const allMethods = [];
-            const table = $("table.api-error-table").first();
-            $("tbody tr", $(table)).each((idx, el) => {
-                if (idx === 0) {
-                    return;
-                }
-                const areaNode = $(el).children().get(0);
-                const tableauOnlineNode = $(el).children().get(2);
-                const nameNode = $(el).children().get(1);
-                const name = $(nameNode).text().trim();
-                const link = $(nameNode).find("a").attr("href");
-                const tableauOnline = $(tableauOnlineNode).text().trim().toUpperCase() == "YES";
-                area = $(areaNode).text().replace(/[<>]/g,"").trim() || area;
-                allMethods.push({
-                    index: idx,
-                    area: area,
-                    name: name,
-                    methodName: camel(name),
-                    link: link,
-                    tableauOnline: tableauOnline,
-                });
-            });
-
-            // the index has some duplicates so we will reduce it down.
-            // the duplicates come from methods being in multiple areas
-            const methods = Object.values(
-                allMethods.reduce((a, m) => {
-                    if (a.hasOwnProperty(m.name)) {
-                        a[m.name].areas.push(m.area);
-                    } else {
-                        a[m.name] = { ...m, areas: [m.area] };
-                    }
-                    return a;
-                }, {})
-            );
+            // extract the method index
+            const allMethods = extractMethodIndexFromDocument($);
+            const methods = deduplicateMethodsByArea(allMethods);
 
             // now follow the links within cheerio and pull out the api information
             // from the reference data.
+            const linkReplacementCounts = {};
             const extendedMethods = methods
-                .filter((m) => (linkReplacements[m.link] || m.link) != "skip")
                 .map((m) => {
-                    let linkSelector = linkReplacements[m.link] || m.link;
-                    let link = $(`${linkSelector}`);
-                    let descNode = link.nextUntil("div,h4");
-                    let container = descNode.next("div");
-                    if (container.length === 0) {
-                        container = link.parent();
+                    let linkReplacement = linkReplacements[m.link];
+                    if (isArray(linkReplacement)) {
+                        if (!linkReplacementCounts.hasOwnProperty(m.link)) linkReplacementCounts[m.link] = 0;
+                        linkReplacement = linkReplacement[linkReplacementCounts[m.link]];
+                        linkReplacementCounts[m.link]++
                     }
+                    let linkSelector = linkReplacement ?? m.link;
+                    if (linkReplacement) {
+                        m.methodName = camel(linkSelector.substring(1).replace(/\_/g," "));
+                    }
+
+                    let link = $(`${linkSelector}`);
+                    let descNode = link.nextUntil("div:not(.note),h4,p.api-syntax");
+                    let container = descNode.next("div");
+                    if (container.length === 0) container = link.nextUntil("h2");
                     if (link.length === 0) {
+                        // sometimes the link selector doesn't work but in those
+                        // cases the link selector isn't the "id" of the h2 or similar element
+                        // it's the name attribute of a link inside that element. Usually
+                        // this is because of a case mismatch or similar, and so you can 
+                        // avoid this by adding a link replacement in the config.
                         const linkName = m.link.substr(1);
                         link = $(`a[name="${linkName}"]`);
                         descNode = link.parent().nextUntil("div,h4");
@@ -89,23 +63,41 @@ function generateReferenceIntermediate(config) {
                     // expand the description into an array
                     const desc = [];
                     descNode.each((i, e) => {
-                        desc.push($(e).text().trim());
+                        desc.push(stripAllWhitespace($(e).text().trim()));
                     });
 
                     // find the sections based on their heading level
-                    const sections = $("h4", container).toArray();
+                    let sections = $("h4", container).toArray();
+                    sections.push(...container.filter("h4").toArray());
 
                     // uri
                     const uris = [];
                     const urls = [];
                     const uriNode = sections.find((s) => $(s).first().text() == "URI");
+                    
+
+                    
                     // usually the path node is immediately after the H4 URI
                     // but occasionally there's a containing paragraph that we need to
                     // process instead
                     let pathNode = $(uriNode).next();
+                    // the uri node might not exist if there 
+                    // are no sections so we'll look for it in the container list
+                    if (!uriNode && sections.length === 0) {
+                        pathNode = container.filter("p.api-syntax").first();
+                    }
                     if (!pathNode.hasClass("api-syntax")) {
                         pathNode = pathNode.find(".api-syntax").first();
+                        if (pathNode.length === 0) {
+                            const searchPathNodes = $(uriNode).nextUntil("h4");
+                            pathNode = searchPathNodes.filter(".api-syntax").first();
+                        }
                     }
+
+                    if (pathNode.length === 0) {
+                        console.log(`No path node found for ${m.name}`);
+                    }
+
                     // now we will keep going to find all URI path examples
                     // to make sure that we have go the proper querystring parameters
                     // out of the documentation
@@ -184,14 +176,17 @@ function generateReferenceIntermediate(config) {
                         const url = fullUriSplit[1];
                         const uri =
                             url.indexOf("?") > -1 ? url.substring(0, url.indexOf("?")) : url;
-
+                        const cleanedUri = uri.substring(0,3) === "api" ? "/"+uri : (
+                            uri.substring(0,8) === "{server}" ? uri.substring(8) : uri
+                        )
                         // push every example into the urls
                         urlObj = {
                             method: method,
-                            uri: uri,
-                            url: url,
+                            uri: cleanedUri,
+                            url: cleanedUri,
                             pathContents: pathContents,
                         };
+
                         urls.push(urlObj);
 
                         // if its a new uri add it to uris
@@ -245,7 +240,7 @@ function generateReferenceIntermediate(config) {
 
                             uriParams.push({
                                 name: name,
-                                desc: paramDesc,
+                                desc: stripAllWhitespace(paramDesc),
                                 type: type ? type.type : "unknown",
                                 paramType: paramType,
                                 qsKey: type ? type.qsKey : "",
@@ -276,7 +271,14 @@ function generateReferenceIntermediate(config) {
                     const bodyNode = sections.find(
                         (s) => $(s).first().text().indexOf("Request Body") > -1
                     );
-                    const bodies = $(bodyNode).next().find("code");
+                    const requestBodyNone = stripAllWhitespace($(bodyNode).next().text()).trim().toLowerCase() === "none" || $(bodyNode).length === 0;
+                    let bodies = $(bodyNode).next().find("code");
+                    if (bodyNode && bodies.length === 0) {
+                        bodies = $(bodyNode).next().find("pre");
+                        if (bodies.length === 0) {
+                            bodies = $(bodyNode).next("pre");
+                        }
+                    }
                     let body;
                     bodies.each((i, e) => {
                         if ($(e).text().indexOf("tsRequest") > -1) {
@@ -284,7 +286,7 @@ function generateReferenceIntermediate(config) {
                             return false;
                         }
                     });
-                    const requestBody = body ? body.text().trim() : "";
+                    const requestBody = requestBodyNone ? "" : (body ? body.text().trim() : "");
 
                     // request attributes
                     const attributes = [];
@@ -301,15 +303,22 @@ function generateReferenceIntermediate(config) {
                         const descCell = $(e).children().get(1);
                         attributes.push({
                             name: $(nameCell).text().trim(),
-                            desc: $(descCell).text().trim(),
+                            desc: stripAllWhitespace($(descCell).text()).trim(),
                         });
                     });
 
+                    // response code
+                    const rcodeNode = sections.find(s => $(s).first().text() === "Response Code");
+                    const respCode = stripAllWhitespace($(rcodeNode).next().text()).trim();
+
                     // response body
                     const rbodyNode = sections.find((s) => $(s).first().text() == "Response Body");
-                    const rbody = $(rbodyNode).next().find("code.xml").first();
-                    const responseBody = rbody.text().trim();
+                    const rbodySection = $(rbodyNode).nextUntil("h4,h2");
 
+                    const responseBodyNone = stripAllWhitespace($(rbodyNode).next().text()).trim().toLowerCase().substring(0,4) === "none";
+                    const rbody = $(rbodySection).find("pre code").first();
+                    const responseBody = responseBodyNone ? "" : rbody.text().trim();
+                    
                     // errors
                     const errors = [];
                     const errorNode = sections.find((s) => $(s).first().text() == "Errors");
@@ -329,14 +338,14 @@ function generateReferenceIntermediate(config) {
                             status: $(statusCell).text().trim(),
                             code: $(codeCell).text().trim(),
                             condition: $(conditionCell).text().trim(),
-                            details: $(detailsCell).text().trim(),
+                            details: stripAllWhitespace($(detailsCell).text()).trim(),
                         });
                     });
 
                     // version
                     const verNode = sections.find((s) => $(s).first().text() == "Version");
                     const verStr = $(verNode).next().text().trim();
-                    const ver = verStr.match(/Version (\d.\d)/i);
+                    const ver = verStr.match(/Version (\d+.\d+)/i);
 
                     // for the request and response body types
                     // we just need to know what element comes first underneath the tsResponse or tsRequest
@@ -348,7 +357,7 @@ function generateReferenceIntermediate(config) {
                         responsePaginated = false;
                     try {
                         const requestRE = /\<tsRequest\>\s*\<([^/].+?)[\s\>]/;
-                        const responseRE = /\<tsResponse\>\s*\<([^/].+?)[\s\>]/;
+                        const responseRE = /\<tsResponse.*?\>\s*\<([^/].+?)[\s\>]/;
                         const paginationBlockRE = /\<pagination.+?\/\>/;
                         const boundaryStringRE = /\-\-boundary\-string/;
                         if (requestBody) {
@@ -360,7 +369,7 @@ function generateReferenceIntermediate(config) {
                             requestBodyType =
                                 reqBody && requestRE.test(reqBody)
                                     ? reqBody.match(requestRE)[1]
-                                    : "";
+                                    : (requestBody === "None" ? "None" : "");
                         }
                         if (responseBody) {
                             responsePaginated = paginationBlockRE.test(responseBody);
@@ -370,31 +379,37 @@ function generateReferenceIntermediate(config) {
                             responseBodyType =
                                 rspBody && responseRE.test(rspBody)
                                     ? rspBody.match(responseRE)[1]
-                                    : "";
+                                    : (responseBody === "None" ? "None" : "");
                         }
                     } catch (ex) {}
 
                     const methodOverrides = overrides[m.methodName] || {};
+                    const endpointType = uris?.[0]?.uri?.indexOf("api/-/") > -1 ? "perResourceVersion" : "classic";
                     return {
                         ...m,
                         link: linkSelector,
                         desc: desc,
+                        endpointType,
                         uri: uris.length > 0 ? uris[0].uri : "",
                         uris: uris.length > 1 ? uris.map((u) => u.uri) : [],
                         urls: urls.length > 1 ? urls.map((u) => u.url) : [],
                         method: uris.length > 0 ? uris[0].method : "",
                         uriParams: uriParams,
+                        requestBodyExpected: !requestBodyNone,
                         requestBody: requestBody,
                         requestBodyType: requestBodyType,
                         requestContentType: requestMultipart
                             ? "multipart/mixed"
                             : "application/json",
                         requestAttributes: attributes,
+                        responseBodyExpected: !responseBodyNone,
                         responseBody: responseBody,
                         responseBodyType: responseBodyType,
+                        responseCode: respCode,
                         responsePaginated: responsePaginated,
                         errorCodes: errors,
-                        version: ver && ver.length ? ver[1] : "",
+                        versionNote: verStr,
+                        version: endpointType === "perResourceVersion" ? "2020.2" : (ver && ver.length ? ver[1] : ""),
                         ...methodOverrides,
                     };
                 });
@@ -434,6 +449,7 @@ function generateReferenceIntermediate(config) {
                         return {
                             ...m,
                             name: newName,
+                            extendedMethodName: camel(newName),
                             uri: u,
                             uris: [],
                             uriParams: newUriParams,
@@ -444,42 +460,88 @@ function generateReferenceIntermediate(config) {
                     return a;
                 }, []);
 
+
+            // some of the newer methods are now in open api specs, so we'll 
+            // pull those in from swagger.json
+            let swaggerIndex = 10000;
+            const swaggerMethods = [];
+            const swagger = require('./reference/swagger.json');
+            const paths = Object.keys(swagger.paths);
+            paths.forEach(path => {
+                const pathObj = swagger.paths[path];
+                const pathMethods = Object.keys(pathObj);
+                pathMethods.forEach(pathMethod => {
+                    const methodObj = pathObj[pathMethod];
+                    const methodName = methodObj.operationId.split("_").reverse()[0];
+                    const methodRequestContentType = methodObj.requestBody?.content ? Object.keys(methodObj.requestBody?.content)[0] : "application/json";
+                    const methodRequestType = (methodObj.requestBody?.content?.[methodRequestContentType]?.schema?.["$ref"] ?? "").replace("#/components/schemas/","");       
+                    const methodResponseCode = Object.keys(methodObj.responses).map(k => Number(k)).filter(k => k<400).sort()[0];
+                    const methodResponseObj = methodObj.responses[`${methodResponseCode}`]?.content;
+                    const methodResponseType = (methodResponseObj ? methodResponseObj[Object.keys(methodResponseObj)[0]]?.schema?.["$ref"] ?? "" : "").replace("#/components/schemas/","");
+                                        
+                    swaggerMethods.push({
+                        area: methodObj.tags?.[0],
+                        name: methodObj.summary,
+                        endpointType: "perResourceVersion",
+                        methodName: camel(methodName),
+                        description: methodObj.summary,
+                        desc: methodObj.description.split("\n"),
+                        areas: methodObj.tags,
+                        uri: path,
+                        uriParams: methodObj.parameters.filter(prm => prm.in === "path").map(prm => ({ name: prm.name, desc: "", type: "path", paramType: prm.schema?.type })),
+                        method: pathMethod.toUpperCase(),
+//                        requestBody: null,
+                        requestBodyNamespace: methodRequestType ? methodRequestType.substring(0, String(methodRequestType).lastIndexOf(".")) : "",
+                        requestBodyType: methodRequestType ? methodRequestType.split(".").pop() : "",
+                        requestContentType: methodRequestContentType,
+//                        requestAttributes: [],
+//                        responseBody: null,
+                        responseBodyNamespace: methodResponseType ? methodResponseType.substring(0, String(methodResponseType).lastIndexOf(".")) : "",
+                        responseBodyType: methodResponseType ? methodResponseType.split(".").pop() : "",
+                        responseCode: methodResponseCode,
+//                        responsePaginated: false,
+ //                       errorCodes: [],
+  //                      version: ""                         
+                     })
+                     swaggerIndex++;
+                });
+            })
+
+            swaggerMethods.forEach(s => {
+                const found = extendedMethods.find(m => m.uri === s.uri);
+                if (found) {
+                    Object.assign(found, s)
+                } else {
+                    s.index = swaggerIndex;
+                    swaggerIndex++;
+                    extraMethods.push(s);
+                }
+            })
+
             const outputMethods = extendedMethods
+                .filter(m => !m.uris || m.uris.length === 0)
                 .concat(extraMethods)
                 .sort((a, b) => a.index - b.index);
 
-            // output our json extended help file
-            // const help = extendedMethods
-            //     .filter((m) => m.uris && m.uris.length)
-            //     .reduce((h, e) => {
-            //         const uObj = e.uris.reduce((o, u) => { o[u] = ""; return o; }, {})
-            //         h[e.link]={ ...uObj };
-            //         return h;
-            //     }, {});
-
-            // fs.writeFile(
-            //     "./generator/out/rest-api-doc-extras.json",
-            //     JSON.stringify(help, null, 2),
-            //     {
-            //         encoding: "utf8",
-            //         flag: "w",
-            //     },
-            //     (err) => {
-            //         if (err) console.log(err);
-            //         else {
-            //             console.log("rest-api-doc-extras.json written successfully");
-            //         }
-            //     }
-            // );
+            
+            const outputOpts = { encoding: "utf8", flag: "w" };
+            
+            // output a csv to give us a spreadsheet overview of the work
+            const csvColumns = outputMethods.map(o => values(pick(o, [ "index", "area", "name", "methodName", "description", "method", "uri", "requestBodyExpected", "requestBodyType", "responseBodyExpected", "responseBodyType", "version" ])));
+            const csvOutput = csvColumns.map(c => c.map(q => `"${q}"`).join(",")).join("\r\n");
+            fs.writeFile("./generator/out/rest-api-doc.csv", csvOutput, outputOpts, (err) => {
+                if (err) console.log(err);
+                else {
+                    console.log("rest-api-doc.csv written successfully");
+                }
+            });               
 
             // output our json file
+            const outputText = JSON.stringify(outputMethods, null, 2);
             fs.writeFile(
                 "./generator/out/rest-api-doc.json",
-                JSON.stringify(outputMethods, null, 2),
-                {
-                    encoding: "utf8",
-                    flag: "w",
-                },
+                outputText,
+                outputOpts,
                 (err) => {
                     if (err) console.log(err);
                     else {
@@ -494,3 +556,56 @@ function generateReferenceIntermediate(config) {
 }
 
 module.exports.generateReferenceIntermediate = generateReferenceIntermediate;
+
+
+// parse the index on the reference page to find all the methods
+// and get the link that it refers to later in the page
+function extractMethodIndexFromDocument($) {
+    let methodIndex = 0;
+    const allMethods = [];
+    const areas = $("#all_methods_dropdown_menu_list div[is='accordion-item']");
+    $(areas).each((areaIdx, areaEl) => {
+        const areaNode = $(areaEl).children().get(0);
+        const area = $(areaNode).text().replace(/[<>]/g, "").trim();
+        const tables = $("table.api-error-table", $(areaEl));
+        $(tables).each((idx, table) => {
+            $("tbody tr", $(table)).each((idx, el) => {
+                const nameNode = $(el).children().get(0);
+                const nameLinkNode = $(nameNode).children().get(0);
+                const name = $(nameLinkNode).text().trim();
+                const fullLink = $(nameLinkNode).attr("href");
+                const link = fullLink.split("#").reverse()[0];
+                const descNode = $(el).children().get(1);
+                const desc = $(descNode).text().trim();
+                const methodName = link.replace(/\_/g, " ");
+                const notTableauOnline = $(nameNode).text().toLowerCase().trim().includes("not available for tableau online");
+                allMethods.push({
+                    index: methodIndex,
+                    area: area,
+                    name: name,
+                    methodName: camel(methodName),
+                    description: desc,
+                    fullLink: fullLink,
+                    link: "#" + link,
+                    tableauOnline: !notTableauOnline,
+                });
+                methodIndex++;
+            });
+        });
+    });
+    return allMethods;
+}
+
+function deduplicateMethodsByArea(allMethods) {
+    return Object.values(
+        allMethods.reduce((a, m) => {
+            if (a.hasOwnProperty(m.name)) {
+                a[m.name].areas.push(m.area);
+            } else {
+                a[m.name] = { ...m, areas: [m.area] };
+            }
+            return a;
+        }, {})
+    );
+}
+

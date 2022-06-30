@@ -5,7 +5,6 @@
         " * DO NOT MODIFY THIS FILE BY HAND. instead edit the metadata and/or code generator",
         " * and regenerate any files",
         " */",
-        "",
         ""
     ],
     "code": {
@@ -14,22 +13,54 @@
         "overrides" : {
             "appendToFileUpload" : {
                 "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+                "requestBodyType": "file",
                 "requestContentType": "multipart/mixed"
+            },
+            "createWebhook": { "version": "3.6" },
+            "deleteWebhook": { "version": "3.6", "requestBodyExpected": false },
+            "getWebhook": { "version": "3.6" },
+            "listWebhooksForSite": { "version": "3.6" },
+            "testWebhook": { "version": "3.6", "requestBodyExpected": false },
+            "updateWebhook": { "version": "3.8" },
+            "getCurrentServerSession": { "version": "3.1" },
+            "updateDataInHyperConnection": { 
+                "requestBodyType": "actions",
+                "responseBodyType": "job",
+                "version": "2021.2"
+            },
+            "updateDataInHyperDataSource": { 
+                "requestBodyType": "actions",
+                "responseBodyType": "job",
+                "version": "2021.2"
+            },
+            "updateDataSourceNow": {
+                "requestBodyType": "empty"
+            },
+            "runExtractRefreshTask": {
+                "requestBodyType": "empty"
+            },
+            "deleteServerSession": {
+                "requestBodyExpected": false
+            },"deleteUsersFromSiteWithCsv" : {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+                "requestBodyType": "file",
+                "requestContentType": "multipart/mixed"
+            },"importUsersToSiteFromCsv" : {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+                "requestBodyType": "file",
+                "requestContentType": "multipart/mixed"
+            }, "updateWorkbookNow": {
+                "requestBodyType": "empty"
+            }, "runFlowNow1": {
+                "methodName": "runLinkedTaskNow"
             }
         },
         "linkReplacements": {
-            "#query_database_perms_default": "#query-default-database-permissions",
-            "#delete_tags_database": "#delete-tag-from-database",
-            "#delete_tags_table": "#delete-tag-from-table",
-            "#delete_tags_column": "#delete-tag-from-column",
-            "#delete_tags_batch": "#batch-delete-tags",
-            "#add_tags_batch": "#batch-add-tags",
+            "#Decrypt_Extracts": "#decrypt_extracts",
+            "#Encrypt_Extracts": "#encrypt_extracts",
             "#Reencrypt_Extracts": "#reencrypt_extracts",
-            "#get_workbook_downgrade_info": "skip",
-            "#add_group_database": "skip",
-            "#delete_group_database": "skip",
-            "#analytics-extensions-settings": "skip",
-            "#dashboard--extensions-settings": "skip"
+            "#Query_Flows_For_Site": "#query_flows_for_site",
+            "#run_flow_now": [ "#run_flow_now", "#run_flow_now1" ]
         },
         "pathReplacements": {
             "#publish_workbook": [
@@ -113,21 +144,86 @@
                     ]
                 }
             ],
-            "#add_default_permissions": [
+            "#create_webhook": [
                 {
                     "type": "text",
-                    "value": "PUT /api/api-version/sites/site-id/projects/project-id/default-permissions/flows",
+                    "value": "POST /api/3.6/sites/<site-id>/webhooks",
+                    "replacements": [
+                        { "type": "text", "value": "POST /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/webhooks/" }
+                    ]
+                }
+            ],
+            "#delete_webhook": [
+                {
+                    "type": "text",
+                    "value": "DELETE /api/3.6/sites/<site-id>/webhooks/<webhook-id>",
+                    "replacements": [
+                        { "type": "text", "value": "DELETE /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/webhooks/" },
+                        { "type": "path", "value": "webhook-id" }
+                    ]
+                }
+            ],
+            "#get_webhook": [
+                {
+                    "type": "text",
+                    "value": "GET /api/3.6/sites/<site-id>/webhooks/<webhook-id>",
+                    "replacements": [
+                        { "type": "text", "value": "GET /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/webhooks/" },
+                        { "type": "path", "value": "webhook-id" }
+                    ]
+                }
+            ],
+            "#list_webhooks_for_site": [
+                {
+                    "type": "text",
+                    "value": "GET /api/3.6/sites/<site-id>/webhooks",
+                    "replacements": [
+                        { "type": "text", "value": "GET /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/webhooks" }
+                    ]
+                }
+            ],
+            "#test_webhook": [
+                {
+                    "type": "text",
+                    "value": "GET /api/3.6/sites/<site-id>/webhooks/<webhook-id>/test",
+                    "replacements": [
+                        { "type": "text", "value": "GET /api/" },
+                        { "type": "path", "value": "api-version" },
+                        { "type": "text", "value": "/sites/" },
+                        { "type": "path", "value": "site-id" },
+                        { "type": "text", "value": "/webhooks/" },
+                        { "type": "path", "value": "webhook-id" },
+                        { "type": "text", "value": "/test" }
+                    ]
+                }
+            ],
+            "#update_webhook": [
+                {
+                    "type": "text",
+                    "value": "PUT /api/3.8/sites/<site-id>/webhooks/<webhook-id>",
                     "replacements": [
                         { "type": "text", "value": "PUT /api/" },
                         { "type": "path", "value": "api-version" },
                         { "type": "text", "value": "/sites/" },
                         { "type": "path", "value": "site-id" },
-                        { "type": "text", "value": "/projects/" },
-                        { "type": "path", "value": "project-id" },
-                        {
-                            "type": "text",
-                            "value": "/default-permissions/flows"
-                        }
+                        { "type": "text", "value": "/webhooks/" },
+                        { "type": "path", "value": "webhook-id" }
                     ]
                 }
             ]
@@ -148,26 +244,32 @@
                 "/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Flow Permissions For User"
             },
             "#delete_database_perms": {
-                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group",
-                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For User"
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For User",
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group"
             },
             "#delete_database_perms_default": {
-                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityMode}": "Delete Default Database Permissions For User",
-                "api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityMode}": "Delete Default Database Permissions For Group"
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For User",
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For Group"
             },
             "#add_default_permissions": {
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks": "Add Default Permissions For Workbooks",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources": "Add Default Permissions For Datasources",
-                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Add Default Permissions For Flows"
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Add Default Permissions For Flows",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/lenses": "Add Default Permissions For Lenses",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/dataroles": "Add Default Permissions For Data Roles",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Add Default Permissions For Metrics"
             },
             "#query_default_permissions": {
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources": "Query Default Permissions For Datasources",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks": "Query Default Permissions For Workbooks",
-                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Query Default Permissions For Flows"
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Query Default Permissions For Flows",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/lenses": "Query Default Permissions For Lenses",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/dataroles": "Query Default Permissions For Data Roles",
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Query Default Permissions For Metrics"
             },
             "#delete_data_source_permission": {
                 "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Data Source Permission For Group",
-                "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Data Soruce Permission For User"
+                "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Data Source Permission For User"
             },
             "#delete_project_permission": {
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Project Permission For Group",
