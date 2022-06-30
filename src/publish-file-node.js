@@ -6,7 +6,7 @@ import { TableauRestRequest } from "./request";
  * Extracts the body parameters from the request to be used in the axios options
  * @param {TableauRestRequest} request the TableauRestRequest that is being called
  */
-export function getMultipartDataFromRequest(method, request) {
+export function getMultipartDataFromRequest(request) {
     const data = new FormData({});
 
     const request_payload = JSON.stringify(request.bodyParameters);
@@ -32,7 +32,7 @@ export function getMultipartDataFromRequest(method, request) {
 
     return {
         url: request.getURI(),
-        method: method,
+        method: request.method,
         headers: headers,
         params: request.queryParameters,
         data: data,

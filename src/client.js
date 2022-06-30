@@ -1,11 +1,14 @@
-
-import { ApiCalls } from "./api-unified";
-import { TableauAuthorisationRestExecutive, TableauAuthorisedRestExecutive } from "./executive";
+import { DEFAULT_URL, DEFAULT_VERSION } from "./defaults";
+import { TableauRestExecutive } from "./executive";
+import { signIn } from "methods/_signIn";
+import { switchSite } from "methods/_switchSite";
+import { signOut } from "methods/_signOut";
 
 /**
- * A REST Api Client that handles calls to the Tableau Server REST API
+ * A REST Api Client built on axios that handles calls to the Tableau Server REST API
  */
-export class TableauRestApiClient extends ApiCalls {
+export class TableauRestApiClient {
+
     /**
      * Builds the Tableau Rest API client
      * @param {Object=} options An options object containing the baseURL and version number
@@ -13,20 +16,15 @@ export class TableauRestApiClient extends ApiCalls {
      * @param {string=} options.version the default version to use (defaults to latest if not set)
      * @param {Object=} options.axios an options object that is passed to the underlying axios executives
      */
-    constructor(options) {
+    constructor({ url = DEFAULT_URL, version = DEFAULT_VERSION, axiosOptions = {} } = {}) {
         super();
-        // use passed-in options if applicable
-        if (options?.baseURL) { this.baseURL = options.baseURL; }
-        if (options?.version) { this.version = options.version; }
-        // initialise state for users and site options
-        this.currentUser = null;
-        this.currentSite = null;
-        this.currentSiteId = null;
-        // set up api executives
-        const axiosOptions = options?.axios || {};
-        this.updateCurrentCredentials = this.updateCurrentCredentials.bind(this);
-        this.authenticatedHttp = new TableauAuthorisedRestExecutive(axiosOptions);
-        this.authenticationHttp = new TableauAuthorisationRestExecutive(axiosOptions, this.updateCurrentCredentials);
+        this.url = url;
+        this.apiVersion = version;
+        this.executive = new TableauRestExecutive(axiosOptions);
+        this.execute = this.executive.execute;
+        this.siteId = null;
+        this.userId = null;
+        this.token = null;
     }
 
     /**
@@ -39,14 +37,11 @@ export class TableauRestApiClient extends ApiCalls {
      * @param {string} creds.token the token returned by Tableau Server
      */
     updateCurrentCredentials(creds) {
-        if (!creds) {
-            return;
-        }
-        this.currentUser = creds.user;
-        this.currentSite = creds.site;
-        this.currentSiteId = creds.site?.id;
-        this.authenticatedHttp.setAccessToken(creds.token);
-        this.authenticationHttp.setAccessToken(creds.token);
+        if (!creds) return;
+        this.userId = creds?.user?.id;
+        this.siteId = creds?.site?.id;
+        this.token = creds?.token;
+        this.executive.setAccessToken(creds.token);
     }
 
 }

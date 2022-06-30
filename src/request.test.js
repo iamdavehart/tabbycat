@@ -1,4 +1,4 @@
-import { TableauRestRequestBuilder, TableauRestRequest } from "../request";
+import { TableauRestRequestBuilder, TableauRestRequest } from "./request";
 
 describe("Tableau Rest Request Builder Tests", () => {
     describe.each([

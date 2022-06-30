@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import qs from 'qs';
 import { TableauRestRequest } from './request';
-import * as methods from "./execute";
+import { execute } from "./execute";
 
 /**
  * A TableauRestExecutive class wraps a specific instance to axios and defaults the
@@ -12,13 +12,9 @@ export class TableauRestExecutive {
      * Creates an executive object that wraps an axios instance to access authorised routes
      * @param {AxiosRequestConfig} options an options object that is passed to the underlying axios instance
      */
-    constructor(options) {
+    constructor(options = {}) {
         this.axiosInstance = axios.create({ paramsSerializer: this.serializeQueryOptions, ...options });
         this.setAccessToken = this.setAccessToken.bind(this);
-        this.get = this.get.bind(this);
-        this.put = this.put.bind(this);
-        this.post = this.post.bind(this);
-        this.del = this.del.bind(this);
     }
 
     /**
@@ -39,36 +35,13 @@ export class TableauRestExecutive {
     }
 
     /**
-     * Executes a GET request
+     * Executes a request
      * @param {TableauRestRequest} request the request
      */
-    get(request) {
-        return methods.get(request, this.axiosInstance);
+    execute(request) {
+        return execute(request, this.axiosInstance);
     }
 
-    /**
-     * Executes a PUT request
-     * @param {TableauRestRequest} request the request
-     */
-    put(request) {
-        return methods.put(request, this.axiosInstance);
-    }
-
-    /**
-     * Executes a POST request
-     * @param {TableauRestRequest} request the request
-     */
-    post(request) {
-        return methods.post(request, this.axiosInstance);
-    }
-
-    /**
-     * Executes a DELETE request
-     * @param {TableauRestRequest} request the request
-     */
-    del(request) {
-        return methods.del(request, this.axiosInstance);
-    }
 }
 
 /**
@@ -105,3 +78,5 @@ export class TableauAuthorisationRestExecutive extends TableauRestExecutive {
         });
     }
 }
+
+

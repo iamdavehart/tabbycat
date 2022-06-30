@@ -1,4 +1,5 @@
 
+
 /**
  * Creates a request to execute against the Tableau Rest API
  */
@@ -11,6 +12,7 @@ export class TableauRestRequest {
         if (!builder) {
             throw new Error("requests must be constructed with a builder object");
         }
+        this.method = builder.method;
         this.host = builder.host;
         this.port = builder.port;
         this.scheme = builder.scheme;
@@ -26,7 +28,7 @@ export class TableauRestRequest {
      * Returns a builder to construct your authenticated request
      * @param {string} baseUrl The baseUrl for the request to use
      */
-    static builder(baseUrl) {
+    static forServer(baseUrl) {
         return new TableauRestRequestBuilder(baseUrl);
     }   
 
@@ -57,6 +59,9 @@ export class TableauRestRequest {
     /** the path of the request */
     path;
 
+    /** the http method used to make this request */
+    method;
+
     /**
      * Returns the full URI of the request, from the scheme, port, host and path properties
      */
@@ -77,30 +82,25 @@ export class TableauRestRequest {
      */
     getURL() {
         const uri = this.getURI();
-        return this.queryParameters ? uri + this.formatQueryString(this.queryParameters) : uri;
+        return this.queryParameters ? uri + formatQueryString(this.queryParameters) : uri;
     }
 
-    /**
-     * Formats the query string object into a properly encoded query string
-     * @param {object} qs An object that represents the query string key/value pairs
-     */
-    formatQueryString(qs) {
-        return (
-            "?" +
-            Object.keys(qs)
-                .filter((k) => qs[k] !== undefined)
-                .map((k) => `${k}=${encodeURIComponent(qs[k])}`)
-                .join("&")
-        );
-    }
 
-    /**
-     * Executes the method and retuns a promise.
-     * @param {function} method The Http method handler that is used to execute the request
-     */
-    execute(method) {
-        return method(this);
-    }
+
+}
+
+/**
+ * Formats the query string object into a properly encoded query string
+ * @param {object} qs An object that represents the query string key/value pairs
+ */
+function formatQueryString(qs) {
+    return (
+        "?" +
+        Object.keys(qs)
+            .filter((k) => qs[k] !== undefined)
+            .map((k) => `${k}=${encodeURIComponent(qs[k])}`)
+            .join("&")
+    );
 }
 
 /**
@@ -122,6 +122,8 @@ export class TableauRestRequestBuilder {
         this.path = "";
         /** @property {string} version api or resource version for the request */
         this.version = "";
+        /** @property {string} method http method for the request */
+        this.method = "";
         /** @property {Object} headers An object containing headers as key value pairs to be added to the request */
         this.headers = {};
         /** @property {Object} queryParameters An object containing all the keys to be supplied as query paramteters */
@@ -194,8 +196,17 @@ export class TableauRestRequestBuilder {
      * adds a version number to the api request
      * @param {string} version The api or resource version for the request
      */
-    withVersion(version) {
+     withVersion(version) {
         this.version = version;
+        return this;
+    }
+
+    /**
+     * adds an http method to the api request
+     * @param {string} method The http method for the request
+     */
+     withMethod(method) {
+        this.method = method;
         return this;
     }
 
@@ -212,7 +223,7 @@ export class TableauRestRequestBuilder {
      * adds a security token into the headers of the request
      * @param {string} token The security token required for authorising the request
      */
-    withAuthToken(token) {
+    withAuthenticationToken(token) {
         if (token) {
             this.withHeaders({ "X-Tableau-Auth": token });
         }
