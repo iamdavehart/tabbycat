@@ -4,7 +4,7 @@ const fs = require("fs");
 
 function generateJsonSchemaFromXsd() {
     try {
-        fs.readFile("./generator/schema/ts-api_3_15.xsd", (err, data) => {
+        fs.readFile("./generator/reference/ts-api_3_15.xsd", (err, data) => {
             if (err) {
                 console.error(err);
                 return;

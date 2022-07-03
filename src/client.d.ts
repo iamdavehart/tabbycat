@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-export interface ClientLite {
+export declare interface ClientLite {
     url: string;
     version: string;
     siteId: string;
@@ -11,13 +11,23 @@ export interface ClientLite {
 /**
  * A REST Api Client that handles calls to the Tableau Server REST API
  */
-export class TableauRestApiClient implements ClientLite {
+export declare class TableauRestApiClientLite implements ClientLite {
     /**
      * Builds the Tableau Rest API client
      * @param {ClientConstructorOptions} options An options object containing the baseURL and version number
      */
     constructor(options?: ClientConstructorOptions);
 
+    url: string;
+
+    version: string;
+
+    siteId: string;
+
+    token: string;
+
+    execute: Function;
+    
 }
 
 /**
@@ -35,5 +45,5 @@ declare interface ClientConstructorOptions {
     /**
      * An object that is passed directly to the internal axios executive
      */
-    axios?: AxiosRequestConfig;
+    axiosOptions?: AxiosRequestConfig;
 }

@@ -1,18 +1,55 @@
 const decomment = require("decomment");
 const fs = require("fs");
+const _ = require("lodash");
 
 const jsonSchemaToTypescript = require("json-schema-to-typescript");
 
 function generateTsDefsFromJson() {
     try {
-        process.env.VERBOSE = true;
+        // process.env.VERBOSE = true;
         const jsonSchema = require("./out/rest-api-schema.json");
+        
+        // add in swagger components
+        const swagger = require('./reference/swagger.json');
+        const swaggerDefs = { ...swagger.components.schemas };
+        const updateRefs = (o) => {
+            if (_.isObject(o) && Object.keys(o).indexOf("properties") > -1) {
+                o["additionalProperties"] = false;
+            }
+            if (_.isObject(o) && Object.keys(o).indexOf("$ref") > -1) {
+                o["$ref"] = o["$ref"].replace("#/components/schemas","#/definitions");
+            }
+            if (_.isObject(o) || _.isArray(o)) {
+                for (k in o) {
+                    if (_.isObject(o[k]) || _.isArray(o[k])) updateRefs(o[k])
+                }
+            }
+        }
+        updateRefs(swaggerDefs);
+
+        const namespaces = Object.keys(swaggerDefs).map(k => ({ key: k, 
+            namespace: _.dropRight(k.split(".")).join("."), 
+            class: k.split(".").map(k => _.startCase(k).replace(/\s+/g,"")).join(""),
+            newClass: _.takeRight(k.split(".")).join("") 
+        }));
+
+        Object.assign(jsonSchema.definitions, swaggerDefs);
+
+
+        // add any missing schema components from our config
+        const generatorConfig = require('./generator.config.json');
+        const extraDefinitions = generatorConfig.reference.definitions;
+        Object.assign(jsonSchema.definitions, extraDefinitions);
+
+
+
         const compile = jsonSchemaToTypescript.compile;
         compile(jsonSchema, "tableau schema", {
             bannerComment: false,
             strictIndexSignatures: false,
             ignoreMinAndMaxItems: true,
-            format: true
+            format: true,
+            unreachableDefinitions: true
         }).then((ts) => {
 
             const extractMap = (o) => {
@@ -29,6 +66,25 @@ function generateTsDefsFromJson() {
                 }, {})
             }
 
+            const findNamespaces = (o) => {
+                const regex = /^export (type|interface) (.+?)([\n\s\{\=])/;
+                o.forEach(t => {
+                    const found = namespaces.find(n => n.class === t.name);
+                    if (found) {
+                        t.namespace = found.namespace;
+                        t.name = found.newClass ?? t.name;
+                        if (regex.test(t.text)) {
+                            t.text = t.text.replace(regex, `export $1 ${t.name}$3`);                           
+                        }
+                    }
+                    namespaces.forEach(n => {
+                        while (t.text.indexOf(n.class) > -1) {
+                            t.text = t.text.replace(n.class, n.newClass);
+                        }
+                    })
+                })
+            }
+
             const formatOutput = (o) => {
                 const regexTypeFormat = /\|\s\{\n\s+(.+?)\:\s*(.+?)\;\n\s+\}/g;
                 o.forEach(t => {
@@ -42,28 +98,48 @@ function generateTsDefsFromJson() {
             const processedOutput = typescriptOutput.filter(o => o.name !== "TableauSchema");
             const requestMap = extractMap(typescriptOutput.find(o => o.name === "TsRequest"));
             const responseMap = extractMap(typescriptOutput.find(o => o.name === "TsResponse"));
+            const paginatedResponseMap = extractMap(typescriptOutput.find(o => o.name === "PaginatedResponseGroup"));
+            Object.assign(responseMap, paginatedResponseMap);
+            Object.assign(responseMap, generatorConfig.reference.responseMap);
+            Object.assign(requestMap, generatorConfig.reference.requestMap);
+            findNamespaces(processedOutput);
             formatOutput(processedOutput);
+
+            processedOutput.sort((a,b) => ((a.namespace ?? "_")+(a.type==="type"?"_":"")+a.name).localeCompare((b.namespace ?? "_")+(b.type==="type"?"_":"")+b.name));
+
             const jsonOutput = {
                 requestMap,
                 responseMap,
                 typedefs: processedOutput
             };
 
-            const typescriptOutputText = processedOutput.map(o => `// type: ${o.type}\n// name: ${o.name}\n${o.text}\n\n`).join("\n");
-            fs.writeFile(
-                "./generator/out/rest-api-types.d.ts",
+            const filesByNamespace = _.uniq(processedOutput.map(o => o.namespace ?? ""));
+            filesByNamespace.forEach(fn => {
+
+                const filename = `${fn?fn.replace(/\./g,"_"):'tableau_restapi_v0'}.d.ts`;
+                const typescriptOutputText = processedOutput.filter(o => (o.namespace??"") === fn).map(o => `// type: ${o.type}\n// name: ${o.name}\n`
+                + (o.namespace ? `// namespace: ${o.namespace}\n` : "")
+                + `${o.text}\n`
+                + `\n`).join("\n");
+
+                fs.writeFile(
+                `./generator/out/types/${filename}`,
                 typescriptOutputText,
                 {
-                    encoding: "utf8",
-                    flag: "w",
+                encoding: "utf8",
+                flag: "w",
                 },
                 (err) => {
-                    if (err) console.log(err);
-                    else {
-                        console.log("rest-api-types.d.ts written successfully");
-                    }
+                if (err) console.log(err);
+                else {
+                console.log(`${filename} written successfully`);
                 }
-            );
+                }
+                );
+
+            })
+
+
             fs.writeFile(
                 "./generator/out/rest-api-types.json",
                 JSON.stringify(jsonOutput, null, 2),
@@ -116,7 +192,7 @@ function processTypescript(ts) {
     }
     if (typeOrInterfaceName && buffer.length > 0) processBuffer();
 
-    output.sort((a,b) => ((a.type==="type"?"_":"")+a.name).localeCompare((b.type==="type"?"_":"")+b.name));
+    
 
     return output;
 

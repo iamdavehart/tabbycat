@@ -4,7 +4,7 @@ import { TableauRestExecutive } from "./executive";
 /**
  * A REST Api Client built on axios that handles calls to the Tableau Server REST API
  */
-export class TableauRestApiClient {
+export class TableauRestApiClientLite {
 
     /**
      * Builds the Tableau Rest API client
@@ -41,3 +41,4 @@ export class TableauRestApiClient {
     }
 
 }
+

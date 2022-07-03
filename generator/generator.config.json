@@ -7,13 +7,12 @@
         " */",
         ""
     ],
-    "code": {
-    },
+    "code": {},
     "reference": {
-        "overrides" : {
-            "appendToFileUpload" : {
-                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
-                "requestBodyType": "file",
+        "overrides": {
+            "appendToFileUpload": {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--",
+                "requestBodyType": "",
                 "requestContentType": "multipart/mixed"
             },
             "createWebhook": { "version": "3.6" },
@@ -23,12 +22,12 @@
             "testWebhook": { "version": "3.6", "requestBodyExpected": false },
             "updateWebhook": { "version": "3.8" },
             "getCurrentServerSession": { "version": "3.1" },
-            "updateDataInHyperConnection": { 
+            "updateDataInHyperConnection": {
                 "requestBodyType": "actions",
                 "responseBodyType": "job",
                 "version": "2021.2"
             },
-            "updateDataInHyperDataSource": { 
+            "updateDataInHyperDataSource": {
                 "requestBodyType": "actions",
                 "responseBodyType": "job",
                 "version": "2021.2"
@@ -41,26 +40,61 @@
             },
             "deleteServerSession": {
                 "requestBodyExpected": false
-            },"deleteUsersFromSiteWithCsv" : {
-                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+            },
+            "deleteUsersFromSiteWithCsv": {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--",
                 "requestBodyType": "file",
                 "requestContentType": "multipart/mixed"
-            },"importUsersToSiteFromCsv" : {
-                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--", 
+            },
+            "importUsersToSiteFromCsv": {
+                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--",
                 "requestBodyType": "file",
                 "requestContentType": "multipart/mixed"
-            }, "updateWorkbookNow": {
-                "requestBodyType": "empty"
-            }, "runFlowNow1": {
-                "methodName": "runLinkedTaskNow"
-            }
+            },
+            "updateWorkbookNow": { "requestBodyType": "empty" },
+            "runFlowNow1": { "methodName": "runLinkedTaskNow" },
+            "addDatabasePerms": { "methodName": "addDatabasePermissions" },
+            "addTablePerms": { "methodName": "addTablePermissions" },
+            "queryTablePerms": { "methodName": "queryTablePermissions" },
+            "addDqw": { "methodName": "addDataQualityWarning" },
+            "addDqwTrigger": { "methodName": "addDataQualityWarningTrigger" },
+            "addDqwCertification": { "methodName": "addDataQualityWarningCertification" },
+            "batchAddDqws": { "methodName": "batchAddDataQualityWarnings" },
+            "batchDeleteDqws": { "methodName": "batchDeleteDataQualityWarnings" },
+            "deleteDqw": { "methodName": "deleteDataQualityWarning" },
+            "deleteDqws": { "methodName": "deleteDataQualityWarnings" },
+            "deleteDqwCertification": { "methodName": "deleteDataQualityWarningCertification" },
+            "deleteDqwCertifications": { "methodName": "deleteDataQualityWarningCertifications" },
+            "deleteDqwTrigger": { "methodName": "deleteDataQualityWarningTrigger" },
+            "deleteDqwTriggers": { "methodName": "deleteDataQualityWarningTriggers" },
+            "queryDqw": { "methodName": "queryDataQualityWarning" },
+            "queryDqws": { "methodName": "queryDataQualityWarnings" },
+            "queryDqwCertification": { "methodName": "queryDataQualityWarningCertification" },
+            "queryDqwCertifications": { "methodName": "queryDataQualityWarningCertifications" },
+            "queryDqwTrigger": { "methodName": "queryDataQualityWarningTrigger" },
+            "queryDqwTriggers": { "methodName": "queryDataQualityWarningTriggers" },
+            "updateDqw": { "methodName": "updateDataQualityWarning" },
+            "updateDqwTrigger": { "methodName": "updateDataQualityWarningTrigger" },
+            "refDeleteFlowFromFavorites": { "methodName": "deleteFlowFromFavorites" },
+            "getXmlDatabasestables": { "methodName": "getDatabasesAndTablesFromConnection" },
+            "createConnectedapp": { "methodName": "createConnectedApplication" },
+            "createConnectedappSecret": { "methodName": "createConnectedApplicationSecret" },
+            "deleteConnectedapp": { "methodName": "deleteConnectedApplication" },
+            "deleteConnectedappSecret": { "methodName": "deleteConnectedApplicationSecret" },
+            "getConnectedapp": { "methodName": "getConnectedApplication" },
+            "getConnectedapps": { "methodName": "getConnectedApplications" },
+            "getConnectedappSecret": { "methodName": "getConnectedApplicationSecret" },
+            "updateConnectedapp": { "methodName": "updateConnectedApplicationSecret" },
+            "removeUserToGroup": { "methodName": "removeUserFromGroup" },
+            "queryWorkbookPermissions": { "responseBodyType": "permissions" },
+            "queryViewPermissions": { "responseBodyType": "permissions" }
         },
         "linkReplacements": {
             "#Decrypt_Extracts": "#decrypt_extracts",
             "#Encrypt_Extracts": "#encrypt_extracts",
             "#Reencrypt_Extracts": "#reencrypt_extracts",
             "#Query_Flows_For_Site": "#query_flows_for_site",
-            "#run_flow_now": [ "#run_flow_now", "#run_flow_now1" ]
+            "#run_flow_now": ["#run_flow_now", "#run_flow_now1"]
         },
         "pathReplacements": {
             "#publish_workbook": [
@@ -226,6 +260,13 @@
                         { "type": "path", "value": "webhook-id" }
                     ]
                 }
+            ],
+            "#update_user_notification_preferences": [
+                {
+                    "type": "path",
+                    "value": "api_version",
+                    "replacements": [{ "type": "path", "value": "api-version" }]
+                }
             ]
         },
         "urlToMethodMapping": {
@@ -289,6 +330,164 @@
             "#delete_workbook_permission": {
                 "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For Group",
                 "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For User"
+            }
+        },
+        "requestMap": {
+            "domain": "DomainType",
+            "recommendationDismissal": "RecommendationDismissalType",
+            "actions": "ActionListType",
+            "datasources": "DataSourceListType"
+        },
+        "responseMap": {
+            "session": "SessionType",
+            "domainList": "DomainListType",
+            "domain": "DomainType",
+            "dataAccelerationReport": "DataAccelerationReportType",
+            "recents": "RecentlyViewedListType",
+            "recommendations": "RecommendedViewListType",
+            "downgradeInfo": "DowngradeInfoListType",
+            "notificationUpdateResult": "NotificationUpdateResultType"
+        },
+        "definitions": {
+            "domainType": {
+                "additionalProperties": false,
+                "properties": {
+                    "id": { "type": "integer" },
+                    "name": { "type": "string" },
+                    "shortName": { "type": "string" }
+                }
+            },
+            "domainListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "domainList": { "type": "array", "items": { "$ref": "#/definitions/domainType" } }
+                }
+            },
+            "recommendationDismissalType": {
+                "additionalProperties": false,
+                "properties": {
+                    "view": { "$ref": "#/definitions/viewType" }
+                }
+            },
+            "actionType": {
+                "additionalProperties": false,
+                "properties": {
+                    "action": { "type": "string" },
+                    "source-schema": { "type": "string" },
+                    "source-table": { "type": "string" },
+                    "target-schema": { "type": "string" },
+                    "target-table": { "type": "string" },
+                    "condition": { "type": "string" }
+                }
+            },
+            "actionListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "actions": { "type": "array", "items": { "$ref": "#/definitions/actionType" } }
+                }
+            },
+            "dataSourcesListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "includeAll": { "type": "boolean" },
+                    "datasources": { "type": "array", "items": { "$ref": "#/definitions/dataSourceType" } }
+                }
+            },
+            "sessionType": {
+                "additionalProperties": false,
+                "properties": {
+                    "session": {
+                        "type": "object",
+                        "properties": {
+                            "site": { "$ref": "#/definitions/siteType" },
+                            "user": { "$ref": "#/definitions/userType" }
+                        }
+                    }
+                }
+            },
+            "dataAccelerationReportType": {
+                "additionalProperties": false,
+                "properties": {
+                    "dataAccelerationReport": {
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/comparisonRecordType" }
+                    }
+                }
+            },
+            "comparisonRecordType": {
+                "additionalProperties": false,
+                "properties": {
+                    "site": { "type": "string" },
+                    "sheetURI": { "type": "string" },
+                    "unacceleratedSessionCount": { "type": "number" },
+                    "averageUnAcceleratedPLT": { "type": "number" },
+                    "acceleratedSessionCount": { "type": "number" },
+                    "averageAcceleratedPLT": { "type": "number" }
+                }
+            },
+            "recentlyViewedListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "recents": {
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/recentlyViewedType" }
+                    }
+                }
+            },
+            "recentlyViewedType": {
+                "additionalProperties": false,
+                "properties": {
+                    "view": { "$ref": "#/definitions/viewType" },
+                    "workbook": { "$ref": "#/definitions/workbookType" }
+                }
+            },
+            "recommendationListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "recommendations": {
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/recommendationType" }
+                    }
+                }
+            },
+            "recommendationType": {
+                "additionalProperties": false,
+                "properties": {
+                    "score": { "type": "number" },
+                    "view": { "$ref": "#/definitions/viewType" },
+                    "similarUsersExplanation": { "$ref": "#/definitions/similarUsersExplanationType" },
+                    "popularExplanation": { "type": "object" }
+                }
+            },
+            "similarUsersExplanationType": {
+                "additionalProperties": false,
+                "properties": {
+                    "users": { 
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/userType" }
+                    }
+                }
+            },
+            "downgradeInfoListType": {
+                "additionalProperties": false,
+                "properties": {
+                    "downgradeInfo": {
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/downgradedFeatureType" }
+                    }
+                }
+            },
+            "downgradedFeatureType": { 
+                "additionalProperties": false,
+                "properties": {
+                    "name": { "type": "string" },
+                    "severity": { "type": "string" }
+                }
+            },
+            "notificationUpdateResultType": {
+                "additionalProperties": true,
+                "properties": {
+                }
             }
         }
     }

@@ -29,8 +29,13 @@ function generateCodeFromJson(config) {
             // const rspType = m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase()    
             // + m.responseBodyType.substr(1) + "Response" : "";
 
-            const rqstType = requestMap[m.requestBodyType] ?? (m.requestBodyType ? m.requestBodyType.substr(0,1).toUpperCase() + m.requestBodyType.substr(1) + "Request" : "");
-            const rspType = responseMap[m.responseBodyType] ?? (m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase() + m.responseBodyType.substr(1) + "Response" : "");
+            const rqstType = requestMap[m.requestBodyType] ?? (m.requestBodyType ? m.requestBodyType : "");
+            const rspType = (responseMap[m.responseBodyType] ?? (m.responseBodyType ? m.responseBodyType : ""));
+
+            if ((m.responseBodyType && !responseMap[m.responseBodyType]))
+                console.log("response", m.methodName, m.responseBodyType)
+            if ((m.requestBodyType && !requestMap[m.requestBodyType]))
+                console.log("request", m.methodName, m.requestBodyType)
 
             if (m.requestBodyType) {
                 params.push({
@@ -99,7 +104,7 @@ function generateCodeFromJson(config) {
                 ...Object.keys(signatureParams.path)
                     .filter((k) => k !== "siteId")
                     .map((k) => signatureParams.path[k]),
-                ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k]),
+                ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k]),
                 ...(Object.keys(signatureParams.query).length
                     ? [
                           {
@@ -117,36 +122,39 @@ function generateCodeFromJson(config) {
                 ...Object.keys(signatureParams.path)
                     .filter((k) => k !== "siteId")
                     .map((k) => signatureParams.path[k].name),
-                ...Object.keys(signatureParams.body).map((k) => signatureParams.body[k].name),
+                ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k].name),
                 ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
                 "client"
             ].join(", ");
 
             const signatureWrappedTS = [
                 ...Object.keys(signatureParams.path).filter((k) => k !== "siteId").map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
-                ...Object.keys(signatureParams.body).map((k) => `${signatureParams.body[k].name}: ${signatureParams.body[k].paramType}`),
-                ...(Object.keys(signatureParams.query).length ? [`queryOptions?: { ${Object.keys(signatureParams.query).map(q => signatureParams.query[q].qsKey).join(", ")} }`] : []),
+                ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => `${signatureParams.body[k].name}: ${signatureParams.body[k].paramType}`),
+                ...(Object.keys(signatureParams.query).length ? [`queryOptions?: { ${Object.keys(signatureParams.query).map(q => signatureParams.query[q].qsKey + ": "+signatureParams.query[q].paramType ?? "any").join(", ")} }`] : []),
                 "client?: ClientLite"
             ].join(", ");
 
             const pathParameterValidation = Object.keys(signatureParams.path)
                 .map(k => signatureParams.path[k].name)    
-                .map(k => `\tif(!${k}) return Promise.reject(new MissingPathParameterException("${k}"));`)
+                .map(k => `\tif (!${k}) return Promise.reject(new MissingPathParameterException("${k}"));`)
                 .join("\n")
 
             const commentsWrapped = [];
+            const commentString = utils.addLinebreaksToText(m.desc[0], 90).replace(/\n/g, "\n * ")
             commentsWrapped.push("/**");
-            commentsWrapped.push(` * ${m.desc[0]}`);
+            commentsWrapped.push(` * ${commentString}`);
             commentsWrapped.push(
                 ...signatureWrappedParamsArray
                 .map((p) => ({ ...p, paramType: p.optional ? p.paramType+"=" : p.paramType, name: p.optional ? `${camel(p.name)}` : camel(p.name) }))
                 .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
+                .map((p) => utils.addLinebreaksToText(p, 90).replace(/\n/g, "\n * \t\t"))
             );
-            commentsWrapped.push(` * @returns {Promise<${rspType || "any"}>} Promise | undefined`);
+            commentsWrapped.push(` * @returns {Promise<${(m.responsePaginated ? `Paginated<${rspType}>` : rspType) || "any"}>} Promise | undefined`);
             commentsWrapped.push(" */");
 
+            
 
-            const httpMethod = m.method.toLowerCase() === "delete" ? "del" : m.method.toLowerCase();
+            const httpMethod = m.method.toLowerCase();
             const requestType =
                 (m.name === "Sign In" || m.name === "Switch Site") ? "AuthenticationRequest" : "AuthenticatedRequest";
 
@@ -156,7 +164,7 @@ function generateCodeFromJson(config) {
             // that can be tableau_file for multi upload, tableau_workbook, tableau_datasource, tableau_flow
             // or site_logo for an updated site logo
             const fileParameterNameMatch = m.requestBody.match(
-                /name="(tableau\_file|tableau_workbook|tableau\_datasource|tableau\_flow|site\_logo)"/
+                /name="(tableau\_file|tableau_workbook|tableau\_datasource|tableau\_flow|site\_logo|tableau\_user\_delete|tableau_user_import)"/
             );
             const fileParameterName = fileParameterNameMatch
                 ? fileParameterNameMatch[1] || "file"
@@ -171,32 +179,31 @@ function generateCodeFromJson(config) {
                 responseTypeJS: rspType,
                 unifiedSignature: `// ${m.name}\n${name}(${signatureWrappedJS})`,
                 unifiedCallJS:
-                    commentsWrapped.join("\n")+
+                    commentsWrapped.filter(c => !c.startsWith(" * @")).join("\n")+
 `
 export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
     const minVersion = "${m.version}";
-    const { url = DEFAULT_URL, apiVersion = DEFAULT_VERSION, siteId, token, execute } = (client ?? this ?? {});
-    if (!execute) return Promise.reject(new ExecutiveException());
-    if (failsVersionCheck(apiVersion, minVersion)) return Promise.reject(new VersionException(apiVersion, minVersion));
-${pathParameterValidation}  
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());${pathParameterValidation ? "\n"+pathParameterValidation : ""}  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.${httpMethod.toUpperCase()})
-            .withPath(\`${m.uri}\`)
+            .withPath(\`${m.uri.replace("{apiVersion}","{version}")}\`)
 `
 +(m.requestContentType != "application/json" ? `            .withHeaders({"Content-Type":"${m.requestContentType}"})\n` : "")
 +(Object.keys(signatureParams.query).length ? `            .withQueryParameters(queryOptions)\n` : "")
-+(bodyParams.length > 0 ? bodyParams.map(bp => `            .withBodyParameters(${bp.name})\n`) : "")
++(bodyParams.length > 0 ? bodyParams.map(bp => `            .withBodyParameters(${bp.name === "empty" ? "{}" : bp.name})\n`).join("") : "")
 +(params.some((p) => p.name === "file" && p.type === "body") ? `            .withFileParameters({ name: "${fileParameterName}", file: file })\n` : "") 
 +(requestType !== "AuthenticationRequest" ? `            .withAuthenticationToken(token)\n` : "") + 
 `            .build()
-        );
+    );
 }
 `,
                 functionTS: 
                     commentsWrapped.join("\n") +
 `
-export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) : Promise<${rspType}>;
+export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) : Promise<${(m.responsePaginated ? `Paginated<${rspType}>` : rspType)||"any"}>;
 `
             };
         });
@@ -242,7 +249,7 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
        const unifiedCallsText =
        headerText +
        UNIFIED_HEADER +
-       '/**\n'+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+'\n    */\n' +
+       "/**\n"+typeDefs.map(t=> `    * @typedef {import("${t.file}").${t.type}} ${t.type}`).join("\n")+"\n    */\n" +
        methodCalls.map((m) => m.unifiedCallJS).join("\n\n\t") +
        UNIFIED_FOOTER;
 
@@ -254,20 +261,45 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
         utils.writeToFile(path.join(outDirectory, "api-listing.md"), readmeOutput);
 
         // output a file per area
-        // for (let a in areas) {
-        //     const area_name = camel(a.replace(/\,/g, ""));
-        //     const apiAreaText = headerText + areas[a].map(m => m.unifiedCallJS).join("\n\n");
-        //     utils.writeToFile(path.join(outDirectory, `api-${area_name}.js`), apiAreaText);
-        // }
+        for (let a in areas) {
+
+            const methods = areas[a];
+            methods.sort((a,b) => String(a.extendedMethodName ?? a.methodName).localeCompare(String(b.extendedMethodName ?? b.methodName)))
+            const requests = _.uniq(methods.filter(m => !!m.requestTypeJS).map(m => m.requestTypeJS));
+            const responses = _.uniq(methods.filter(m => !!m.responseTypeJS).map(m => m.responseTypeJS));
+            const imports = _.uniq([ ...requests, ...responses ]).filter(a => a.toLowerCase() !== "empty");
+
+            const area_name = camel(a.replace(/\,/g, ""));
+            const apiAreaText = headerText + FILE_PER_METHOD_HEADER + methods.map(m => m.unifiedCallJS).join("\n");
+            utils.writeToFile(path.join(outMethodDirectory, `__${area_name}.js`), apiAreaText);
+
+            const typesText = headerText 
+            + `\nimport { ClientLite } from "tabbycat/client";\n`
+            + (methods.some(m => m.responsePaginated) ? `import { Paginated } from "tabbycat/types";\n`:``)
+            + imports.map(i => `import { ${i} } from "tabbycat/types";`).join("\n")
+            + "\n\n"
+            + methods.map(m => m.functionTS).join("\n");
+            + "\n"
+            utils.writeToFile(path.join(outMethodDirectory, `__${area_name}.d.ts`), typesText);
+
+        }
 
         // output our re-export
-        const reexportText =
+        const reexportAreasText =
             headerText +
-            Object.keys(baseMethods)
+            Object.keys(areas)
                 .sort((a,b) => String(a).localeCompare(String(b)))
-                .map((m) => `export { ${baseMethods[m].map(n => n.extendedMethodName ?? n.methodName).join(", ")} } from './_${m}';`)
+                //.map((m) => `export { ${areas[m].map(n => n.extendedMethodName ?? n.methodName).join(", ")} } from "./__${camel(m.replace(/\,/g, ""))}";`)
+                .map((m) => `export * from "./__${camel(m.replace(/\,/g, ""))}";`)
                 .join("\n");
-        utils.writeToFile(path.join(outMethodDirectory, "index.js"), reexportText);
+        const reexportText =
+        headerText +
+        Object.keys(baseMethods)
+            .sort((a,b) => String(a).localeCompare(String(b)))
+            .map((m) => `export { ${baseMethods[m].map(n => n.extendedMethodName ?? n.methodName).join(", ")} } from "./_${m}";`)
+            .join("\n");
+            utils.writeToFile(path.join(outMethodDirectory, "index.js"), reexportAreasText);
+            utils.writeToFile(path.join(outMethodDirectory, "indexMethods.js"), reexportText);
 
         //output a file per method
         for (let bm in baseMethods) {
@@ -275,18 +307,18 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
             const methods = baseMethods[bm];
             const requests = _.uniq(methods.filter(m => !!m.requestTypeJS).map(m => m.requestTypeJS));
             const responses = _.uniq(methods.filter(m => !!m.responseTypeJS).map(m => m.responseTypeJS));
-            const imports = _.uniq([ ...requests, ...responses ]);
+            const imports = _.uniq([ ...requests, ...responses ]).filter(a => a.toLowerCase() !== "empty");
 
             const methodText = headerText 
                 + FILE_PER_METHOD_HEADER 
-                + (imports.length ? ("/**\n"
-                + imports.map(i => ` * @typedef {import("./rest-api-types.d.ts").${i}} ${i}`).join("\n")
-                + "\n */\n\n") : "")
                 + baseMethods[bm].map(m => m.unifiedCallJS).join("\n\n");
             utils.writeToFile(path.join(outMethodDirectory, `_${baseMethods[bm][0].methodName}.js`), methodText);
 
             const typesText = headerText 
-                + "\n"
+                + `\nimport { ClientLite } from "tabbycat/client";\n`
+                + (methods.some(m => m.responsePaginated) ? `import { Paginated } from "tabbycat/types";\n`:``)
+                + imports.map(i => `import { ${i} } from "tabbycat/types";`).join("\n")
+                + "\n\n"
                 + baseMethods[bm].map(m => m.functionTS).join("\n");
                 + "\n"
             utils.writeToFile(path.join(outMethodDirectory, `_${baseMethods[bm][0].methodName}.d.ts`), typesText);
@@ -300,18 +332,17 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
 }
 
 const FILE_PER_METHOD_HEADER = `
-import { DEFAULT_URL, DEFAULT_VERSION } from 'tabbycat/defaults';
-import { TableauRestRequest } from 'tabbycat/request';
-import { VersionException, MissingPathParameterException } from 'tabbycat/exceptions';
-import { failsVersionCheck } from 'tabbycat/utils';
-import * as http from 'tabbycat/httpMethods';
+import { TableauRestRequest } from "tabbycat/request";
+import { VersionException, MissingExecutiveException, MissingPathParameterException } from "tabbycat/exceptions";
+import { failsVersionCheck } from "tabbycat/utils";
+import * as http from "tabbycat/httpMethods";
 
 `
 
 const UNIFIED_HEADER = `
-import { DEFAULT_URL, DEFAULT_VERSION } from './defaults';
-import { TableauRestRequest } from './request';
-import { get, post, put, del } from './execute';
+import { DEFAULT_URL, DEFAULT_VERSION } from "./defaults";
+import { TableauRestRequest } from "./request";
+import { get, post, put, del } from "./execute";
 
 export class ApiCalls {
     constructor() { 

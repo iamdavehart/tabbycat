@@ -52,7 +52,28 @@ const stripAllWhitespace = (s) => {
 }
 
 
+const addLinebreaksToText = (text, lineLength) => {
+    const words = text.split(" ");
+    let charCount = 0;
+    let wordBuffer = [];
+    let lines = [];
+    for (let w=0; w<words.length; w++) {
+        const word = words[w];
+        charCount += (word.length+1);
+        if (charCount > lineLength) {
+            lines.push(wordBuffer.join(" "));
+            wordBuffer.length = 0;
+            charCount = word.length;
+        }
+        wordBuffer.push(word);
+    }
+    if (wordBuffer.length) lines.push(wordBuffer.join(" "));
+    return lines.join("\n");
+}
+
+
 module.exports.ensureDir = ensureDir;
 module.exports.writeToFile = writeToFile;
 module.exports.camel = camel;
 module.exports.stripAllWhitespace = stripAllWhitespace;
+module.exports.addLinebreaksToText = addLinebreaksToText;

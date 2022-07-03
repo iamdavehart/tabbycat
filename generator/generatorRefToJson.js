@@ -316,9 +316,13 @@ function generateReferenceIntermediate(config) {
                     const rbodySection = $(rbodyNode).nextUntil("h4,h2");
 
                     const responseBodyNone = stripAllWhitespace($(rbodyNode).next().text()).trim().toLowerCase().substring(0,4) === "none";
-                    const rbody = $(rbodySection).find("pre code").first();
+                    let rbody = $(rbodySection).find("pre code").first();
+                    if (!rbody.length) rbody = $(rbodySection).find("pre").first();
+                    if (!rbody.length) rbody = $(rbodySection).filter("pre").first();
                     const responseBody = responseBodyNone ? "" : rbody.text().trim();
-                    
+
+
+
                     // errors
                     const errors = [];
                     const errorNode = sections.find((s) => $(s).first().text() == "Errors");
@@ -357,8 +361,8 @@ function generateReferenceIntermediate(config) {
                         responsePaginated = false;
                     try {
                         const requestRE = /\<tsRequest\>\s*\<([^/].+?)[\s\>]/;
-                        const responseRE = /\<tsResponse.*?\>\s*\<([^/].+?)[\s\>]/;
-                        const paginationBlockRE = /\<pagination.+?\/\>/;
+                        const responseRE = /\<(?:tsResponse|tsRequest).*?\>[\s\n]*\<([^/].+?)[\s\n\>]/m;
+                        const paginationBlockRE = /\<pagination.+?\/\>/s;
                         const boundaryStringRE = /\-\-boundary\-string/;
                         if (requestBody) {
                             requestMultipart = boundaryStringRE.test(requestBody);
@@ -477,7 +481,8 @@ function generateReferenceIntermediate(config) {
                     const methodRequestType = (methodObj.requestBody?.content?.[methodRequestContentType]?.schema?.["$ref"] ?? "").replace("#/components/schemas/","");       
                     const methodResponseCode = Object.keys(methodObj.responses).map(k => Number(k)).filter(k => k<400).sort()[0];
                     const methodResponseObj = methodObj.responses[`${methodResponseCode}`]?.content;
-                    const methodResponseType = (methodResponseObj ? methodResponseObj[Object.keys(methodResponseObj)[0]]?.schema?.["$ref"] ?? "" : "").replace("#/components/schemas/","");
+                    const methodResponseContentType = methodResponseObj ? Object.keys(methodResponseObj)[0] : "application/json";
+                    const methodResponseType = (methodResponseObj ? methodResponseObj[methodResponseContentType]?.schema?.["$ref"] ?? "" : "").replace("#/components/schemas/","");
                                         
                     swaggerMethods.push({
                         area: methodObj.tags?.[0],
@@ -490,25 +495,28 @@ function generateReferenceIntermediate(config) {
                         uri: path,
                         uriParams: methodObj.parameters.filter(prm => prm.in === "path").map(prm => ({ name: prm.name, desc: "", type: "path", paramType: prm.schema?.type })),
                         method: pathMethod.toUpperCase(),
-//                        requestBody: null,
+                        requestBodyExpected: !!methodRequestType,
+                        requestBody: "",
                         requestBodyNamespace: methodRequestType ? methodRequestType.substring(0, String(methodRequestType).lastIndexOf(".")) : "",
                         requestBodyType: methodRequestType ? methodRequestType.split(".").pop() : "",
                         requestContentType: methodRequestContentType,
 //                        requestAttributes: [],
-//                        responseBody: null,
+                        responseBodyExpected: !!methodResponseType,
+                        responseBody: "",
                         responseBodyNamespace: methodResponseType ? methodResponseType.substring(0, String(methodResponseType).lastIndexOf(".")) : "",
                         responseBodyType: methodResponseType ? methodResponseType.split(".").pop() : "",
+                        responseContentType: methodResponseContentType,
                         responseCode: methodResponseCode,
 //                        responsePaginated: false,
  //                       errorCodes: [],
-  //                      version: ""                         
+                        version: "2020.2"                         
                      })
                      swaggerIndex++;
                 });
             })
 
             swaggerMethods.forEach(s => {
-                const found = extendedMethods.find(m => m.uri === s.uri);
+                const found = extendedMethods.find(m => m.uri === s.uri && m.method === s.method);
                 if (found) {
                     Object.assign(found, s)
                 } else {
