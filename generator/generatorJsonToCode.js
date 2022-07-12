@@ -15,12 +15,13 @@ function generateCodeFromJson(config) {
     const typeDefinitions = require("./out/rest-api-types.json");
     const requestMap = typeDefinitions?.requestMap ?? {};
     const responseMap = typeDefinitions?.responseMap ?? {};
+    Object.assign(responseMap, typeDefinitions?.paginatedResponseMap);
 
     try {
         const methodCalls = extendedMethods.map((m) => {
             const name = camel(m.name);
             const params = m.uriParams.slice(0).map((p) => ({ paramType: "string", ...p  }));
-            const siteSpecific = m.uriParams.some((p) => p.name === "site-id");
+            const siteSpecific = m.uriParams.some((p) => p.name === "site-id" || p.name === "site-luid");
 
             
             // response and request types
@@ -29,13 +30,14 @@ function generateCodeFromJson(config) {
             // const rspType = m.responseBodyType ? m.responseBodyType.substr(0,1).toUpperCase()    
             // + m.responseBodyType.substr(1) + "Response" : "";
 
-            const rqstType = requestMap[m.requestBodyType] ?? (m.requestBodyType ? m.requestBodyType : "");
-            const rspType = (responseMap[m.responseBodyType] ?? (m.responseBodyType ? m.responseBodyType : ""));
-
-            if ((m.responseBodyType && !responseMap[m.responseBodyType]))
-                console.log("response", m.methodName, m.responseBodyType)
-            if ((m.requestBodyType && !requestMap[m.requestBodyType]))
-                console.log("request", m.methodName, m.requestBodyType)
+            const firstLetterUp = (t) => t.substring(0,1).toUpperCase()+t.substring(1);
+            let rqstType = requestMap[m.requestBodyType] ? (m.requestBodyType ? firstLetterUp(m.requestBodyType) + "Request" : "") : m.requestBodyType;
+            let rspType = responseMap[m.responseBodyType] ? (m.responseBodyType ? firstLetterUp(m.responseBodyType) + "Response" : "") : m.responseBodyType;
+            
+            // if ((m.responseBodyType && !responseMap[m.responseBodyType]))
+            //     console.log("response", m.methodName, m.responseBodyType)
+            // if ((m.requestBodyType && !requestMap[m.requestBodyType]))
+            //     console.log("request", m.methodName, m.requestBodyType)
 
             if (m.requestBodyType) {
                 params.push({
@@ -102,7 +104,7 @@ function generateCodeFromJson(config) {
 
             const signatureWrappedParamsArray = [
                 ...Object.keys(signatureParams.path)
-                    .filter((k) => k !== "siteId")
+                    .filter((k) => k !== "siteId" && k !== "siteLuid")
                     .map((k) => signatureParams.path[k]),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k]),
                 ...(Object.keys(signatureParams.query).length
@@ -120,7 +122,7 @@ function generateCodeFromJson(config) {
 
             const signatureWrappedJS = [
                 ...Object.keys(signatureParams.path)
-                    .filter((k) => k !== "siteId")
+                    .filter((k) => k !== "siteId" && k !== "siteLuid")
                     .map((k) => signatureParams.path[k].name),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k].name),
                 ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
@@ -128,7 +130,7 @@ function generateCodeFromJson(config) {
             ].join(", ");
 
             const signatureWrappedTS = [
-                ...Object.keys(signatureParams.path).filter((k) => k !== "siteId").map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
+                ...Object.keys(signatureParams.path).filter((k) => k !== "siteId" && k !== "siteLuid").map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => `${signatureParams.body[k].name}: ${signatureParams.body[k].paramType}`),
                 ...(Object.keys(signatureParams.query).length ? [`queryOptions?: { ${Object.keys(signatureParams.query).map(q => signatureParams.query[q].qsKey + ": "+signatureParams.query[q].paramType ?? "any").join(", ")} }`] : []),
                 "client?: ClientLite"
@@ -149,7 +151,7 @@ function generateCodeFromJson(config) {
                 .map((p) => ` * @param {${p.paramType}} ${p.name} ${p.desc}`)
                 .map((p) => utils.addLinebreaksToText(p, 90).replace(/\n/g, "\n * \t\t"))
             );
-            commentsWrapped.push(` * @returns {Promise<${(m.responsePaginated ? `Paginated<${rspType}>` : rspType) || "any"}>} Promise | undefined`);
+            commentsWrapped.push(` * @returns {Promise<${rspType ?? "any"}>} Promise | undefined`);
             commentsWrapped.push(" */");
 
             
@@ -189,7 +191,7 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.${httpMethod.toUpperCase()})
-            .withPath(\`${m.uri.replace("{apiVersion}","{version}")}\`)
+            .withPath(\`${m.uri.replace("{apiVersion}","{version}").replace("{siteLuid}","{siteId}")}\`)
 `
 +(m.requestContentType != "application/json" ? `            .withHeaders({"Content-Type":"${m.requestContentType}"})\n` : "")
 +(Object.keys(signatureParams.query).length ? `            .withQueryParameters(queryOptions)\n` : "")
@@ -203,7 +205,7 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
                 functionTS: 
                     commentsWrapped.join("\n") +
 `
-export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) : Promise<${(m.responsePaginated ? `Paginated<${rspType}>` : rspType)||"any"}>;
+export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) : Promise<${rspType||"any"}>;
 `
             };
         });
@@ -263,7 +265,7 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
         // output a file per area
         for (let a in areas) {
 
-            const methods = areas[a];
+            const methods = areas[a].filter(m => m.areas[0] === a);
             methods.sort((a,b) => String(a.extendedMethodName ?? a.methodName).localeCompare(String(b.extendedMethodName ?? b.methodName)))
             const requests = _.uniq(methods.filter(m => !!m.requestTypeJS).map(m => m.requestTypeJS));
             const responses = _.uniq(methods.filter(m => !!m.responseTypeJS).map(m => m.responseTypeJS));
@@ -275,7 +277,6 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
 
             const typesText = headerText 
             + `\nimport { ClientLite } from "tabbycat/client";\n`
-            + (methods.some(m => m.responsePaginated) ? `import { Paginated } from "tabbycat/types";\n`:``)
             + imports.map(i => `import { ${i} } from "tabbycat/types";`).join("\n")
             + "\n\n"
             + methods.map(m => m.functionTS).join("\n");
@@ -298,8 +299,10 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
             .sort((a,b) => String(a).localeCompare(String(b)))
             .map((m) => `export { ${baseMethods[m].map(n => n.extendedMethodName ?? n.methodName).join(", ")} } from "./_${m}";`)
             .join("\n");
-            utils.writeToFile(path.join(outMethodDirectory, "index.js"), reexportAreasText);
-            utils.writeToFile(path.join(outMethodDirectory, "indexMethods.js"), reexportText);
+        const fullClientDef = methodCalls.map(m => `${m.extendedMethodName ?? m.methodName}`).sort().map(n => `${n}: ApiCalls["${n}"];`).join("\n");
+        utils.writeToFile(path.join(outMethodDirectory, "index.js"), reexportAreasText);
+        utils.writeToFile(path.join(outMethodDirectory, "clientDef.js"), fullClientDef);
+        utils.writeToFile(path.join(outMethodDirectory, "indexMethods.js"), reexportText);
 
         //output a file per method
         for (let bm in baseMethods) {
@@ -316,7 +319,6 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
 
             const typesText = headerText 
                 + `\nimport { ClientLite } from "tabbycat/client";\n`
-                + (methods.some(m => m.responsePaginated) ? `import { Paginated } from "tabbycat/types";\n`:``)
                 + imports.map(i => `import { ${i} } from "tabbycat/types";`).join("\n")
                 + "\n\n"
                 + baseMethods[bm].map(m => m.functionTS).join("\n");

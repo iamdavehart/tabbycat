@@ -4,20 +4,23 @@ const fs = require("fs");
 
 function generateJsonSchemaFromXsd() {
     try {
-        fs.readFile("./generator/reference/ts-api_3_15.xsd", (err, data) => {
+        fs.readFile("./generator/reference/ts-api_3_16.xsd", (err, data) => {
             if (err) {
                 console.error(err);
                 return;
             }
+
+            // have a problem with the positiveInteger type converter so 
+            // have to replace that with nonNegativeInteger to stop the conversion crashing
 
             const xml_schema = data;
             const Xsd2JsonSchema = require("xsd2jsonschema").Xsd2JsonSchema;
             const xs2js = new Xsd2JsonSchema({ generateTitle: false });
 
             const convertedSchemas = xs2js.processAllSchemas({
-                schemas: { "ts-api_3_15.xsd": xml_schema.toString() },
+                schemas: { "ts-api_3_16.xsd": xml_schema.toString().replace(/xs\:positiveInteger/g,"xs:nonNegativeInteger") },
             });
-            const jsonSchema = convertedSchemas["ts-api_3_15.xsd"].getJsonSchema();
+            const jsonSchema = convertedSchemas["ts-api_3_16.xsd"].getJsonSchema();
 
             const addInAdditionalPropertiesCheck = (o) => {
                 if (_.isObject(o) && Object.keys(o).indexOf("properties") > -1) {

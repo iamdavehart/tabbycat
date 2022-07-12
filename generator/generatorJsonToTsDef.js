@@ -78,8 +78,10 @@ function generateTsDefsFromJson() {
                         }
                     }
                     namespaces.forEach(n => {
+                        if (n.class !== n.newClass) {
                         while (t.text.indexOf(n.class) > -1) {
-                            t.text = t.text.replace(n.class, n.newClass);
+                                t.text = t.text.replace(n.class, n.newClass);
+                            }
                         }
                     })
                 })
@@ -99,17 +101,26 @@ function generateTsDefsFromJson() {
             const requestMap = extractMap(typescriptOutput.find(o => o.name === "TsRequest"));
             const responseMap = extractMap(typescriptOutput.find(o => o.name === "TsResponse"));
             const paginatedResponseMap = extractMap(typescriptOutput.find(o => o.name === "PaginatedResponseGroup"));
-            Object.assign(responseMap, paginatedResponseMap);
+            // Object.assign(responseMap, paginatedResponseMap);
             Object.assign(responseMap, generatorConfig.reference.responseMap);
+            Object.assign(paginatedResponseMap, generatorConfig.reference.paginatedResponseMap);
             Object.assign(requestMap, generatorConfig.reference.requestMap);
             findNamespaces(processedOutput);
             formatOutput(processedOutput);
 
+
+            const firstLetterUp = (t) => t.substring(0,1).toUpperCase()+t.substring(1);
             processedOutput.sort((a,b) => ((a.namespace ?? "_")+(a.type==="type"?"_":"")+a.name).localeCompare((b.namespace ?? "_")+(b.type==="type"?"_":"")+b.name));
+            processedOutput.push(
+                ...Object.keys(requestMap).map(k => ({ type: "type", name: `${firstLetterUp(k)}Request`, text: `export type ${firstLetterUp(k)}Request = { ${k} : ${requestMap[k]} };`})),
+                ...Object.keys(responseMap).map(k => ({ type: "type", name: `${firstLetterUp(k)}Response`, text: `export type ${firstLetterUp(k)}Response = { ${k} : ${responseMap[k]} };`})),
+                ...Object.keys(paginatedResponseMap).map(k => ({ type: "type", name: `${firstLetterUp(k)}Response`, text: `export type ${firstLetterUp(k)}Response = { pagination: PaginationType, ${k} : ${paginatedResponseMap[k]} };`}))
+            );
 
             const jsonOutput = {
                 requestMap,
                 responseMap,
+                paginatedResponseMap,
                 typedefs: processedOutput
             };
 

@@ -73,6 +73,7 @@
             "queryDqwCertifications": { "methodName": "queryDataQualityWarningCertifications" },
             "queryDqwTrigger": { "methodName": "queryDataQualityWarningTrigger" },
             "queryDqwTriggers": { "methodName": "queryDataQualityWarningTriggers" },
+            "queryDqwTriggers1": { "methodName": "queryQualityWarningTrigger" },
             "updateDqw": { "methodName": "updateDataQualityWarning" },
             "updateDqwTrigger": { "methodName": "updateDataQualityWarningTrigger" },
             "refDeleteFlowFromFavorites": { "methodName": "deleteFlowFromFavorites" },
@@ -87,16 +88,36 @@
             "updateConnectedapp": { "methodName": "updateConnectedApplicationSecret" },
             "removeUserToGroup": { "methodName": "removeUserFromGroup" },
             "queryWorkbookPermissions": { "responseBodyType": "permissions" },
-            "queryViewPermissions": { "responseBodyType": "permissions" }
+            "queryViewPermissions": { "responseBodyType": "permissions" },
+            "deleteTagsDatabase": { "methodName": "deleteTagsFromDatabase" },
+            "deleteTagsDatabase1": { "methodName": "deleteTagsFromTable" },
+            "deleteTagsDatabase2": { "methodName": "deleteTagsFromColumn"},
+            "getFlowRunTask1": { "methodName": "getLinkedTask" },
+            "getFlowRunTasks1": { "methodName": "getLinkedTasks"},
+            "embeddingSettingsForSite": { "methodName": "getEmbeddingSettingsForSite", "responseBodyType": "site" },
+            "updateSite": { "methodName": "updateEmbeddingSettingsForSite" },
+            "updateSite1": { "methodName": "updateSite" }
         },
         "linkReplacements": {
             "#Decrypt_Extracts": "#decrypt_extracts",
             "#Encrypt_Extracts": "#encrypt_extracts",
             "#Reencrypt_Extracts": "#reencrypt_extracts",
             "#Query_Flows_For_Site": "#query_flows_for_site",
-            "#run_flow_now": ["#run_flow_now", "#run_flow_now1"]
+            "#run_flow_now": ["#run_flow_now", "#run_flow_now1"],
+            "#update_site": [ "#update_site", "#update_site1" ],
+            "#delete_tags_database": [ "#delete_tags_database", "#delete_tags_database1", "#delete_tags_database2" ],
+            "#get_flow_run_task": [ "#get_flow_run_task", "#get_flow_run_task1" ],
+            "#get_flow_run_tasks": [ "#get_flow_run_tasks", "#get_flow_run_tasks1" ],
+            "#query_dqw_triggers": [ "#query_dqw_triggers", "#query_dqw_triggers1" ]
         },
         "pathReplacements": {
+            "#LensService_createLens": [{
+                "type": "text",
+                "value": "POST {server}/api/-/askdata/lenses/import",
+                "replacements": [
+                    { "type": "text", "value": "POST /api/-/askdata/lenses" }
+                ]
+            }],
             "#publish_workbook": [
                 {
                     "type": "query",
@@ -267,6 +288,60 @@
                     "value": "api_version",
                     "replacements": [{ "type": "path", "value": "api-version" }]
                 }
+            ],
+            "#add_dqw_trigger": [
+                {
+                    "type": "query",
+                    "value": "content-luid",
+                    "replacements": [
+                        { "type": "query", "value": "filter-expression", "qsKey": "filter" }
+                    ]
+                }
+            ],
+            "#delete_dqw_triggers": [
+                {
+                    "type": "query",
+                    "value": "content-luid",
+                    "replacements": [
+                        { "type": "query", "value": "filter-expression", "qsKey": "filter" }
+                    ]
+                }
+            ],
+            "#get_view_by_path": [
+                {
+                    "type": "query",
+                    "value": "view-name",
+                    "replacements": [
+                        { "type": "query", "value": "filter-expression", "qsKey": "filter" }
+                    ]
+                }
+            ],
+            "#query_view_data": [
+                { 
+                    "type": "query",
+                    "value": "filter-value",
+                    "replacements": [
+                        { "type": "query", "value": "view-filter-expression", "qsKey": "vf" }
+                    ]
+                }
+            ],
+            "#query_view_image": [
+                { 
+                    "type": "query",
+                    "value": "filter-value",
+                    "replacements": [
+                        { "type": "query", "value": "view-filter-expression", "qsKey": "vf" }
+                    ]
+                }
+            ],
+            "#query_view_pdf": [
+                { 
+                    "type": "query",
+                    "value": "filter-value",
+                    "replacements": [
+                        { "type": "query", "value": "view-filter-expression", "qsKey": "vf" }
+                    ]
+                }
             ]
         },
         "urlToMethodMapping": {
@@ -286,11 +361,21 @@
             },
             "#delete_database_perms": {
                 "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For User",
-                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group"
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/databases/${databaseLuid}/permissions/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For User",
+                "/api/${apiVersion}/sites/${siteLuid}/databases/${databaseLuid}/permissions/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Database Permissions For Group"
+            },
+            "#delete_table_perms": {
+                "/api/${apiVersion}/sites/${siteId}/tables/${tableId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Table Permissions For User",
+                "/api/${apiVersion}/sites/${siteId}/tables/${tableId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Table Permissions For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/tables/${tableLuid}/permissions/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Table Permissions For User",
+                "/api/${apiVersion}/sites/${siteLuid}/tables/${tableLuid}/permissions/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Table Permissions For Group"
             },
             "#delete_database_perms_default": {
                 "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For User",
-                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For Group"
+                "/api/${apiVersion}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/databases/${databaseLuid}/default-permissions/tables/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For User",
+                "/api/${apiVersion}/sites/${siteLuid}/databases/${databaseLuid}/default-permissions/tables/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Default Database Permissions For Group"
             },
             "#add_default_permissions": {
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks": "Add Default Permissions For Workbooks",
@@ -298,7 +383,16 @@
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Add Default Permissions For Flows",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/lenses": "Add Default Permissions For Lenses",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/dataroles": "Add Default Permissions For Data Roles",
-                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Add Default Permissions For Metrics"
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Add Default Permissions For Metrics",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/workbooks": "Add Default Permissions For Workbooks",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/datasources": "Add Default Permissions For Datasources",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/flows": "Add Default Permissions For Flows",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/lenses": "Add Default Permissions For Lenses",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/dataroles": "Add Default Permissions For Data Roles",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/metrics": "Add Default Permissions For Metrics",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/databases": "Add Default Permissions For Databases",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/tables": "Add Default Permissions For Tables"
+
             },
             "#query_default_permissions": {
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources": "Query Default Permissions For Datasources",
@@ -306,7 +400,16 @@
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows": "Query Default Permissions For Flows",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/lenses": "Query Default Permissions For Lenses",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/dataroles": "Query Default Permissions For Data Roles",
-                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Query Default Permissions For Metrics"
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/metrics": "Query Default Permissions For Metrics",
+
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/datasources": "Query Default Permissions For Datasources",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/workbooks": "Query Default Permissions For Workbooks",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/flows": "Query Default Permissions For Flows",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/lenses": "Query Default Permissions For Lenses",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/dataroles": "Query Default Permissions For Data Roles",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/metrics": "Query Default Permissions For Metrics",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/databases": "Query Default Permissions For Databases",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/tables": "Query Default Permissions For Tables"
             },
             "#delete_data_source_permission": {
                 "/api/${apiVersion}/sites/${siteId}/datasources/${datasourceId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Data Source Permission For Group",
@@ -321,7 +424,12 @@
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/workbooks/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Workbook Permission For User",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/datasources/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Datasource Permissions For Group",
                 "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For Group",
-                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For User"
+                "/api/${apiVersion}/sites/${siteId}/projects/${projectId}/default-permissions/flows/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For User",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/workbooks/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Default Workbook Permission For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/workbooks/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Default Workbook Permission For User",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/datasources/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Default Datasource Permissions For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/flows/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/projects/${projectLuid}/default-permissions/flows/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Default Flow Permission For User"
             },
             "#delete_view_permission": {
                 "/api/${apiVersion}/sites/${siteId}/views/${viewId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete View Permission For Group",
@@ -330,6 +438,10 @@
             "#delete_workbook_permission": {
                 "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For Group",
                 "/api/${apiVersion}/sites/${siteId}/workbooks/${workbookId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}": "Delete Workbook Permission For User"
+            },
+            "#delete_ask_data_lens_permission": {
+                "/api/${apiVersion}/sites/${siteLuid}/lenses/${lensLuid}/permissions/groups/${groupLuid}/${capabilityName}/${capabilityMode}": "Delete Ask Data Lens Permission For Group",
+                "/api/${apiVersion}/sites/${siteLuid}/lenses/${lensLuid}/permissions/users/${userLuid}/${capabilityName}/${capabilityMode}": "Delete Ask Data Lens Permission For User"
             }
         },
         "requestMap": {
@@ -488,7 +600,16 @@
                 "additionalProperties": true,
                 "properties": {
                 }
+            },
+            "siteEmbeddingSettingsType": {
+                "additionalProperties": false,
+                "properties": {
+                    "unrestrictedEmbedding": { "type": "boolean" },
+                    "allowList": { "type": "string" }
+                }
             }
-        }
+        },
+        "expressions": [
+        ]
     }
 }

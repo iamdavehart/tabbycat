@@ -14,7 +14,7 @@ function generateReferenceIntermediate(config) {
 
         // read the file in.
         // we're using a local file but you can pass a url here
-        fs.readFile("./generator/reference/reference_3.15.html", (err, data) => {
+        fs.readFile("./generator/reference/reference_3.16.html", (err, data) => {
             if (err) throw err;
 
             // parse into cheerio
@@ -183,14 +183,14 @@ function generateReferenceIntermediate(config) {
                         urlObj = {
                             method: method,
                             uri: cleanedUri,
-                            url: cleanedUri,
+                            url: url,
                             pathContents: pathContents,
                         };
 
                         urls.push(urlObj);
 
                         // if its a new uri add it to uris
-                        if (!uris.find((u) => u.uri === uri)) {
+                        if (!uris.find((u) => u.uri === cleanedUri)) {
                             uris.push(urlObj);
                         }
 
@@ -321,6 +321,10 @@ function generateReferenceIntermediate(config) {
                     if (!rbody.length) rbody = $(rbodySection).filter("pre").first();
                     const responseBody = responseBodyNone ? "" : rbody.text().trim();
 
+                    // jwt scopes - tableau online / connected app stuff
+                    const jwtNode = sections.find(s => $(s).first().text().indexOf("JWT authorization") > -1);
+                    const jwtSection = $(jwtNode).nextUntil("h4,h2");
+                    const jwtScope = $(jwtSection).find("pre code").first().text().trim();
 
 
                     // errors
@@ -414,6 +418,7 @@ function generateReferenceIntermediate(config) {
                         errorCodes: errors,
                         versionNote: verStr,
                         version: endpointType === "perResourceVersion" ? "2020.2" : (ver && ver.length ? ver[1] : ""),
+                        jwtScope,
                         ...methodOverrides,
                     };
                 });
@@ -492,8 +497,9 @@ function generateReferenceIntermediate(config) {
                         description: methodObj.summary,
                         desc: methodObj.description.split("\n"),
                         areas: methodObj.tags,
-                        uri: path,
-                        uriParams: methodObj.parameters.filter(prm => prm.in === "path").map(prm => ({ name: prm.name, desc: "", type: "path", paramType: prm.schema?.type })),
+                        originalUri: path,
+                        uri: path.replace(/\{/g,"${"),
+                        uriParams: methodObj.parameters.filter(prm => prm.in === "path" || prm.in === "query").map(prm => ({ name: prm.name, desc: prm.description, type: prm.in, paramType: prm.schema?.type, qsKey: prm.in === "query" ? prm.name : "" })),
                         method: pathMethod.toUpperCase(),
                         requestBodyExpected: !!methodRequestType,
                         requestBody: "",
@@ -516,8 +522,9 @@ function generateReferenceIntermediate(config) {
             })
 
             swaggerMethods.forEach(s => {
-                const found = extendedMethods.find(m => m.uri === s.uri && m.method === s.method);
+                const found = extendedMethods.find(m => m.uri === s.originalUri && m.method === s.method);
                 if (found) {
+                    delete s["originalUri"];
                     Object.assign(found, s)
                 } else {
                     s.index = swaggerIndex;
