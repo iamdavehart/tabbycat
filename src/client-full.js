@@ -7,7 +7,7 @@ import * as api from "./methods";
 export class TableauRestApiClient extends TableauRestApiClientLite {
     constructor(opts) {
         super(opts);
-        for (apiCall in api) this[apiCall] = api[apiCall].bind(this);
+        for (const apiCall in api) this[apiCall] = api[apiCall].bind(this);
     }
 }
 

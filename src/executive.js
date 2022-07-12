@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import qs from 'qs';
-import { TableauRestRequest } from './request';
+import qs from "qs";
+import { TableauRestRequest } from "./request";
 import { execute } from "./execute";
 
 /**
@@ -12,9 +12,17 @@ export class TableauRestExecutive {
      * Creates an executive object that wraps an axios instance to access authorised routes
      * @param {AxiosRequestConfig} options an options object that is passed to the underlying axios instance
      */
-    constructor(options = {}) {
+    constructor(options = {}, authCallback = () => {}) {
         this.axiosInstance = axios.create({ paramsSerializer: this.serializeQueryOptions, ...options });
+        this.execute = this.execute.bind(this);
         this.setAccessToken = this.setAccessToken.bind(this);
+        this.axiosInstance.interceptors.response.use((r) => {
+            if (this.isAuthResponse(r)) {
+                this.setAccessToken(r?.data?.credentials?.token);
+                if (authCallback) authCallback(r.data?.credentials);
+            }
+            return r.data;
+        });
     }
 
     /**
@@ -24,6 +32,16 @@ export class TableauRestExecutive {
      */
     serializeQueryOptions(params) {
         return qs.stringify(params, { format: "RFC3986" });
+    }
+
+    isAuthResponse(response) {
+        const requestUrl = String(response?.request?.url).toLowerCase();
+        return requestUrl && (
+            requestUrl.endsWith("auth/signin") ||
+            requestUrl.endsWith("auth/switchsite") ||
+            requestUrl.endsWith("auth/signout") ||
+            requestUrl.endsWith("auth/serverAdminAccessTokens")
+        );
     }
 
     /**
@@ -41,42 +59,4 @@ export class TableauRestExecutive {
     execute(request) {
         return execute(request, this.axiosInstance);
     }
-
 }
-
-/**
- * An Executive to manage secured Tableau REST API routes
- */
-export class TableauAuthorisedRestExecutive extends TableauRestExecutive {
-    /**
-     * Creates an executive object that wraps an axios instance to access authorised routes
-     * @param {AxiosRequestConfig} options an options object that is passed to the underlying axios instance
-     */
-    constructor(options) {
-        super(options);
-        this.axiosInstance.interceptors.response.use((response) => response.data);
-    }
-}
-
-/**
- * An Executive to manage authorisation Tableau REST API routes such as Sign In and Switch Site
- */
-export class TableauAuthorisationRestExecutive extends TableauRestExecutive {
-    /**
-     * Creates an executive object that wraps an axios instance to access authorisations routes
-     * and handle their credentials response with a callback
-     * @param {AxiosRequestConfig} options an options object that is passed to the underlying axios instance
-     * @param {Function} updateCredsCallback a callback that can set the credentials when they are returned
-     */
-    constructor(options, updateCredsCallback) {
-        super(options);
-        this.axiosInstance.interceptors.response.use((response) => {
-            if (response.data && response.data.credentials) {
-                updateCredsCallback(response.data.credentials);
-            }
-            return response.data;
-        });
-    }
-}
-
-

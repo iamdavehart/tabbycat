@@ -1,5 +1,6 @@
 export { DEFAULT_URL, DEFAULT_VERSION } from './defaults';
+export { TableauRestApiClientLite } from './client';
 export { TableauRestApiClient } from './client-full';
-export { FilterExpression } from "./expression-filter";
-export { SortExpression } from "./expression-sort";
-export { FieldExpression } from "./expression-fields";
+export { FilterExpression } from "./expressions";
+export { SortExpression } from "./expressions";
+export { FieldExpression } from "./expressions";

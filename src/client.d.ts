@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-export declare interface ClientLite {
+export declare type ClientLite = {
     url: string;
     version: string;
     siteId: string;
@@ -33,7 +33,7 @@ export declare class TableauRestApiClientLite implements ClientLite {
 /**
  * Options Object used to configure the client
  */
-declare interface ClientConstructorOptions {
+declare type ClientConstructorOptions = {
     /**
      * The base URI for the server (e.g. https://tableauserver.com)
      */
