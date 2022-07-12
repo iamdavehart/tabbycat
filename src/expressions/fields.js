@@ -1,168 +1,200 @@
-
-
 export class FieldExpression {
-    static forDatasources() { return new DatasourceFieldExpressionBuilder(); }
-    static forUsers() { return new UserFieldExpressionBuilder(); }
-    static forViews() { return new ViewFieldExpressionBuilder(); }
-    static forWorkbooks() { return new WorkbookFieldExpressionBuilder(); }
-    static forFavorites() { return new FavoritesFieldExpressionBuilder(); }
-    static forMetrics() { return new MetricsFieldExpressionBuilder(); }
-    static forJobs() { return new JobFieldExpressionBuilder(); }
-    static forGroups() { return new GroupFieldExpressionBuilder(); }
-    static forProjects() { return new ProjectFieldExpressionBuilder(); }
+    static forDatasources = () => new DatasourceFieldExpressionBuilder();
+    static forUsers = () => new UserFieldExpressionBuilder();
+    static forViews = () => new ViewFieldExpressionBuilder();
+    static forWorkbooks = () => new WorkbookFieldExpressionBuilder();
+    static forFavorites = () => new FavoritesFieldExpressionBuilder();
+    static forMetrics = () => new MetricsFieldExpressionBuilder();
+    static forJobs = () => new JobFieldExpressionBuilder();
+    static forGroups = () => new GroupFieldExpressionBuilder();
+    static forProjects = () => new ProjectFieldExpressionBuilder();
 }
 
 export class FieldExpressionBuilder {
-    constructor(prefix, parent) { 
-        this.prefix = prefix; 
-        this.parent = parent; 
+    constructor(prefix, parent) {
+        this.prefix = prefix;
+        this.parent = parent;
         this.keyword = "";
-        this.terms = []; 
+        this.terms = [];
     }
-    addKeyword(keyword) { this.keyword = keyword; }
-    addTerm(term) { this.terms.push(term); }
-    withAllFields() { this.addKeyword("_all_"); return this; }
-    withDefaultFields() { this.addKeyword("_default_"); return this; }
-    and() { if(!this.parent) { throw "no parent set"; } return this.parent; }
-    build() { 
-        if (this.parent) { this.terms.forEach(t => this.parent.addTerm(`${this.prefix}.${t}`)) }
-        return this.parent 
-            ? this.parent.build() 
-            : this.keyword + (this.keyword && this.terms.length ? "," : "" ) + this.terms.join(",");  
+    addKeyword(keyword) {
+        this.keyword = keyword;
+        return this;
+    }
+    addTerm(term) {
+        this.terms.push(term);
+        return this;
+    }
+    withAllFields() {
+        return this.addKeyword("_all_");
+    }
+    withDefaultFields() {
+        return this.addKeyword("_default_");
+    }
+    and() {
+        if (!this.parent) {
+            throw "no parent set";
+        }
+        return this.parent;
+    }
+    build() {
+        if (this.parent) {
+            this.terms.forEach((t) => this.parent.addTerm(`${this.prefix}.${t}`));
+        }
+        return this.parent
+            ? this.parent.build()
+            : this.keyword + (this.keyword && this.terms.length ? "," : "") + this.terms.join(",");
     }
 }
 
 export class DatasourceFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("datasource", parent); }
-    addContentUrl() { this.addTerm("contentUrl"); return this; }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addType() { this.addTerm("type"); return this; }
-    addDescription() { this.addTerm("description"); return this; }
-    addCreatedAt() { this.addTerm("createdAt"); return this; }
-    addUpdatedAt() { this.addTerm("updatedAt"); return this; }
-    addEncryptExtracts() { this.addTerm("encryptExtracts"); return this; }
-    addIsCertified() { this.addTerm("isCertified"); return this; }
-    addUseRemoteQueryAgent() { this.addTerm("useRemoteQueryAgent"); return this; }
-    addWebPageUrl() { this.addTerm("webPageUrl"); return this; }
-    addSize() { this.addTerm("size"); return this; }
-    addTag() { this.addTerm("tag"); return this; }
-    addFavoritesTotal() { this.addTerm("favoritesTotal"); return this; }
-    addDatabaseName() { this.addTerm("databaseName"); return this; }
-    addConnectedWorkbooksCount() { this.addTerm("connectedWorkbooksCount"); return this; }
-    addHasAlert() { this.addTerm("hasAlert"); return this; }
-    addHasExtracts() { this.addTerm("hasExtracts"); return this; }
-    addIsPublished() { this.addTerm("isPublished"); return this; }
-    addServerName() { this.addTerm("serverName"); return this; }
-    withProjectResource() { return new ProjectFieldExpressionBuilder(this); }
-    withOwnerResource() { return new OwnerFieldExpressionBuilder(this); }
+    constructor(parent) {
+        super("datasource", parent);
+        this.addContentUrl = () => this.addTerm("contentUrl");
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addType = () => this.addTerm("type");
+        this.addDescription = () => this.addTerm("description");
+        this.addCreatedAt = () => this.addTerm("createdAt");
+        this.addUpdatedAt = () => this.addTerm("updatedAt");
+        this.addEncryptExtracts = () => this.addTerm("encryptExtracts");
+        this.addIsCertified = () => this.addTerm("isCertified");
+        this.addUseRemoteQueryAgent = () => this.addTerm("useRemoteQueryAgent");
+        this.addWebPageUrl = () => this.addTerm("webPageUrl");
+        this.addSize = () => this.addTerm("size");
+        this.addTag = () => this.addTerm("tag");
+        this.addFavoritesTotal = () => this.addTerm("favoritesTotal");
+        this.addDatabaseName = () => this.addTerm("databaseName");
+        this.addConnectedWorkbooksCount = () => this.addTerm("connectedWorkbooksCount");
+        this.addHasAlert = () => this.addTerm("hasAlert");
+        this.addHasExtracts = () => this.addTerm("hasExtracts");
+        this.addIsPublished = () => this.addTerm("isPublished");
+        this.addServerName = () => this.addTerm("serverName");
+        this.withProjectResource = () => new ProjectFieldExpressionBuilder(this);
+        this.withOwnerResource = () => new OwnerFieldExpressionBuilder(this);
+    }
 }
 
 export class UserFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("user", parent); }
-    addExternalAuthUserId() { this.addTerm("externalAuthUserId"); return this; }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addSiteRole() { this.addTerm("siteRole"); return this; }
-    addLastLogin() { this.addTerm("lastLogin"); return this; }
-    addFullName() { this.addTerm("fullName"); return this; }
-    addEmail() { this.addTerm("email"); return this; }
-    addAuthSetting() { this.addTerm("authSetting"); return this; }
+    constructor(parent) {
+        super("user", parent);
+        this.addExternalAuthUserId = () => this.addTerm("externalAuthUserId");
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addSiteRole = () => this.addTerm("siteRole");
+        this.addLastLogin = () => this.addTerm("lastLogin");
+        this.addFullName = () => this.addTerm("fullName");
+        this.addEmail = () => this.addTerm("email");
+        this.addAuthSetting = () => this.addTerm("authSetting");
+    }
 }
 
 export class ViewFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("view", parent); }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addContentUrl() { this.addTerm("contentUrl"); return this; }
-    addCreatedAt() { this.addTerm("createdAt"); return this; }
-    addUpdatedAt() { this.addTerm("updatedAt"); return this; }
-    addTags() { this.addTerm("tags"); return this; }
-    addSheetType() { this.addTerm("sheetType"); return this; }
-    addUsage() { this.addTerm("usage"); return this; }
-    withWorkbookResource() { return new WorkbookFieldExpressionBuilder(this); }
-    withProjectResource() { return new ProjectFieldExpressionBuilder(this); }
-    withOwnerResource() { return new OwnerFieldExpressionBuilder(this); }
+    constructor(parent) {
+        super("view", parent);
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addContentUrl = () => this.addTerm("contentUrl");
+        this.addCreatedAt = () => this.addTerm("createdAt");
+        this.addUpdatedAt = () => this.addTerm("updatedAt");
+        this.addTags = () => this.addTerm("tags");
+        this.addSheetType = () => this.addTerm("sheetType");
+        this.addUsage = () => this.addTerm("usage");
+        this.withWorkbookResource = () => new WorkbookFieldExpressionBuilder(this);
+        this.withProjectResource = () => new ProjectFieldExpressionBuilder(this);
+        this.withOwnerResource = () => new OwnerFieldExpressionBuilder(this);
+    }
 }
 
 export class WorkbookFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("workbook", parent); }
-    addDescription() { this.addTerm("description"); return this; }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addContentUrl() { this.addTerm("contentUrl"); return this; }
-    addShowTabs() { this.addTerm("showTabs"); return this; }
-    addWebpageUrl() { this.addTerm("webpageUrl"); return this; }
-    addSize() { this.addTerm("size"); return this; }
-    addCreatedAt() { this.addTerm("createdAt"); return this; }
-    addUpdatedAt() { this.addTerm("updatedAt"); return this; }
-    addEncryptExtracts() { this.addTerm("encryptExtracts"); return this; }
-    addDefaultViewId() { this.addTerm("defaultViewId"); return this; }
-    addTag() { this.addTerm("tag"); return this; }
-    addSheetCount() { this.addTerm("sheetCount"); return this; }
-    addHasExtracts() { this.addTerm("hasExtracts"); return this; }
-    withProjectResource() { return new ProjectFieldExpressionBuilder(this); }
-    withOwnerResource() { return new OwnerFieldExpressionBuilder(this); }
+    constructor(parent) {
+        super("workbook", parent);
+        this.addDescription = () => this.addTerm("description");
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addContentUrl = () => this.addTerm("contentUrl");
+        this.addShowTabs = () => this.addTerm("showTabs");
+        this.addWebpageUrl = () => this.addTerm("webpageUrl");
+        this.addSize = () => this.addTerm("size");
+        this.addCreatedAt = () => this.addTerm("createdAt");
+        this.addUpdatedAt = () => this.addTerm("updatedAt");
+        this.addEncryptExtracts = () => this.addTerm("encryptExtracts");
+        this.addDefaultViewId = () => this.addTerm("defaultViewId");
+        this.addTag = () => this.addTerm("tag");
+        this.addSheetCount = () => this.addTerm("sheetCount");
+        this.addHasExtracts = () => this.addTerm("hasExtracts");
+        this.withProjectResource = () => new ProjectFieldExpressionBuilder(this);
+        this.withOwnerResource = () => new OwnerFieldExpressionBuilder(this);
+    }
 }
 
 export class JobFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("job", parent); }
-    addId() { this.addTerm("id"); return this; }
-    addStatus() { this.addTerm("status"); return this; }
-    addCreatedAt() { this.addTerm("createdAt"); return this; }
-    addStartedAt() { this.addTerm("startedAt"); return this; }
-    addEndedAt() { this.addTerm("endedAt"); return this; }
-    addPriority() { this.addTerm("priority"); return this; }
-    addJobType() { this.addTerm("jobType"); return this; }
-    addTitle() { this.addTerm("title"); return this; }
-    addSubtitle() { this.addTerm("subtitle"); return this; }
+    constructor(parent) {
+        super("job", parent);
+        this.addId = () => this.addTerm("id");
+        this.addStatus = () => this.addTerm("status");
+        this.addCreatedAt = () => this.addTerm("createdAt");
+        this.addStartedAt = () => this.addTerm("startedAt");
+        this.addEndedAt = () => this.addTerm("endedAt");
+        this.addPriority = () => this.addTerm("priority");
+        this.addJobType = () => this.addTerm("jobType");
+        this.addTitle = () => this.addTerm("title");
+        this.addSubtitle = () => this.addTerm("subtitle");
+    }
 }
 
 export class GroupFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("group", parent); }   
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addDomainName() { this.addTerm("domainName"); return this; }
-    addUserCount() { this.addTerm("userCount"); return this; }
-    addMinimumSiteRole() { this.addTerm("minimumSiteRole"); return this; }
+    constructor(parent) {
+        super("group", parent);
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addDomainName = () => this.addTerm("domainName");
+        this.addUserCount = () => this.addTerm("userCount");
+        this.addMinimumSiteRole = () => this.addTerm("minimumSiteRole");
+    }
 }
 
 export class FavoritesFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("favorite", parent); }   
-    addLabel() { this.addTerm("label"); return this; }
-    addParentProjectName   () { this.addTerm("parentProjectName   "); return this; }
-    addTargetOwnerName() { this.addTerm("targetOwnerName"); return this; }
-    withDatasourceResource() { return new DatasourceFieldExpressionBuilder(this); }
-    withProjectResource() { return new ProjectFieldExpressionBuilder(this); }
-    withUserResource() { return new UserFieldExpressionBuilder(this); }
-    withWorkbookResource() { return new WorkbookFieldExpressionBuilder(this); }
-    withViewResource() { return new ViewFieldExpressionBuilder(this); }
+    constructor(parent) {
+        super("favorite", parent);
+        this.addLabel = () => this.addTerm("label");
+        this.addParentProjectName = () => this.addTerm("parentProjectName");
+        this.addTargetOwnerName = () => this.addTerm("targetOwnerName");
+        this.withDatasourceResource = () => new DatasourceFieldExpressionBuilder(this);
+        this.withProjectResource = () => new ProjectFieldExpressionBuilder(this);
+        this.withUserResource = () => new UserFieldExpressionBuilder(this);
+        this.withWorkbookResource = () => new WorkbookFieldExpressionBuilder(this);
+        this.withViewResource = () => new ViewFieldExpressionBuilder(this);
+    }
 }
 
 export class MetricsFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("favorite", parent); } 
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    withProjectResource() { return new ProjectFieldExpressionBuilder(this); }
-    withOwnerResource() { return new OwnerFieldExpressionBuilder(this); }
+    constructor(parent) {
+        super("favorite", parent);
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.withProjectResource = () => new ProjectFieldExpressionBuilder(this);
+        this.withOwnerResource = () => new OwnerFieldExpressionBuilder(this);
+    }
 }
 
 export class ProjectFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("project", parent); }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addDescription() { this.addTerm("description"); return this; }
+    constructor(parent) {
+        super("project", parent);
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addDescription = () => this.addTerm("description");
+    }
 }
 
 export class OwnerFieldExpressionBuilder extends FieldExpressionBuilder {
-    constructor(parent) { super("owner", parent); }
-    addId() { this.addTerm("id"); return this; }
-    addName() { this.addTerm("name"); return this; }
-    addFullName() { this.addTerm("fullName"); return this; }
-    addSiteRole() { this.addTerm("siteRole"); return this; }
-    addLastLogin() { this.addTerm("lastLogin"); return this; }
-    addEmail() { this.addTerm("email"); return this; }
+    constructor(parent) {
+        super("owner", parent);
+        this.addId = () => this.addTerm("id");
+        this.addName = () => this.addTerm("name");
+        this.addFullName = () => this.addTerm("fullName");
+        this.addSiteRole = () => this.addTerm("siteRole");
+        this.addLastLogin = () => this.addTerm("lastLogin");
+        this.addEmail = () => this.addTerm("email");
+    }
 }
-
-
-
