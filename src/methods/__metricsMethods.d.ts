@@ -5,23 +5,31 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { Paginated } from "tabbycat/types";
-import { MetricType } from "tabbycat/types";
-import { MetricListType } from "tabbycat/types";
+import { MetricRequest } from "tabbycat/types";
+import { MetricResponse } from "tabbycat/types";
+import { MetricsResponse } from "tabbycat/types";
 
 /**
  * Deletes a specified metric from a site.
  * @param {string} metricLuid The unique ID of the metric to remove.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteMetric(metricLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Returns the details of the specified metric.
  * @param {string} metricLuid The unique ID of the metric.
- * @returns {Promise<MetricType>} Promise | undefined
+ * @returns {Promise<MetricResponse>} Promise | undefined
  */
-export function getMetric(metricLuid: string, client?: ClientLite) : Promise<MetricType>;
+export function getMetric(metricLuid: string, client?: ClientLite) : Promise<MetricResponse>;
+
+/**
+ * Returns the data for the specified metric as comma separated (CSV) format. The maximum
+ * number of rows returned is 10,000.
+ * @param {string} metricLuid The LUID of the metric whose data should be returned.
+ * @returns {Promise<>} Promise | undefined
+ */
+export function getMetricData(metricLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Returns the metrics configured for a site.
@@ -44,14 +52,14 @@ export function getMetric(metricLuid: string, client?: ClientLite) : Promise<Met
  * 		keywords such as _all_ or _default_, and you can specify individual fields for the metrics
  * 		or other supported resources. You can include multiple field expressions in a request. For
  * 		more information, see Using Fields in the REST API.
- * @returns {Promise<Paginated<MetricListType>>} Promise | undefined
+ * @returns {Promise<MetricsResponse>} Promise | undefined
  */
-export function listMetricsForSite(queryOptions?: { filter: string, sort: string, pageSize: number, pageNumber: number, fields: string }, client?: ClientLite) : Promise<Paginated<MetricListType>>;
+export function listMetricsForSite(queryOptions?: { filter: string, sort: string, pageSize: number, pageNumber: number, fields: string }, client?: ClientLite) : Promise<MetricsResponse>;
 
 /**
  * Updates the owner, project, suspended status, or name of the specified metric.
  * @param {string} metricLuid The unique ID of the data source to update.
- * @param {MetricType} metric metric
- * @returns {Promise<MetricType>} Promise | undefined
+ * @param {MetricRequest} metric metric
+ * @returns {Promise<MetricResponse>} Promise | undefined
  */
-export function updateMetric(metricLuid: string, metric: MetricType, client?: ClientLite) : Promise<MetricType>;
+export function updateMetric(metricLuid: string, metric: MetricRequest, client?: ClientLite) : Promise<MetricResponse>;

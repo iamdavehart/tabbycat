@@ -5,32 +5,32 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { Paginated } from "tabbycat/types";
-import { SiteType } from "tabbycat/types";
-import { DataAccelerationReportType } from "tabbycat/types";
-import { RecentlyViewedListType } from "tabbycat/types";
-import { SiteListType } from "tabbycat/types";
-import { ViewListType } from "tabbycat/types";
+import { SiteRequest } from "tabbycat/types";
+import { SiteResponse } from "tabbycat/types";
+import { DataAccelerationReportResponse } from "tabbycat/types";
+import { RecentsResponse } from "tabbycat/types";
+import { SitesResponse } from "tabbycat/types";
+import { ViewsResponse } from "tabbycat/types";
 
 /**
  * Creates a site on Tableau Server. To make changes to an existing site, call Update Site.
  * This method is not available for Tableau Online.
- * @param {SiteType} site site
- * @returns {Promise<SiteType>} Promise | undefined
+ * @param {SiteRequest} site site
+ * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function createSite(site: SiteType, client?: ClientLite) : Promise<SiteType>;
+export function createSite(site: SiteRequest, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Deletes the specified site.
  * @param {string} contentUrl The URL of the site to delete. If you specify a content
  * 		URL, you must also include the parameter key=contentUrl.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteSiteByContentUrl(contentUrl: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Deletes the specified site.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteSiteByID(client?: ClientLite) : Promise<any>;
 
@@ -38,25 +38,35 @@ export function deleteSiteByID(client?: ClientLite) : Promise<any>;
  * Deletes the specified site.
  * @param {string} siteName The name of the site to delete. If you specify a site name,
  * 		you must also include the parameter key=name.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteSiteByName(siteName: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Returns a report about data acceleration for the site. It lets you compare page load
  * times for before and after data acceleration is enabled.
- * @returns {Promise<DataAccelerationReportType>} Promise | undefined
+ * @returns {Promise<DataAccelerationReportResponse>} Promise | undefined
  */
-export function getDataAccelerationReport(client?: ClientLite) : Promise<DataAccelerationReportType>;
+export function getDataAccelerationReport(client?: ClientLite) : Promise<DataAccelerationReportResponse>;
+
+/**
+ * Returns the current embedding settings for a specific site. Embedding settings can be
+ * used to restrict embedding Tableau views to only certain domains. This setting impacts all
+ * embedding scenarios that are not set up to use connected apps for authentication,
+ * including, Tableau Javascript API v2, Embedding API v3, and the embed code from the share
+ * dialog. For more information, see Tableau Site Settings for Embedding.
+ * @returns {Promise<SiteResponse>} Promise | undefined
+ */
+export function getEmbeddingSettingsForSite(client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Gets the details of the views and workbooks on a site that have been most recently
  * created, updated, or accessed by the signed in user. The 24 most recently viewed items are
  * returned, though it may take some minutes after being viewed for an item to appear in the
  * results.
- * @returns {Promise<RecentlyViewedListType>} Promise | undefined
+ * @returns {Promise<RecentsResponse>} Promise | undefined
  */
-export function getRecentlyViewed(client?: ClientLite) : Promise<RecentlyViewedListType>;
+export function getRecentlyViewed(client?: ClientLite) : Promise<RecentsResponse>;
 
 /**
  * Returns information about the specified site, with the option to return information about
@@ -69,9 +79,9 @@ export function getRecentlyViewed(client?: ClientLite) : Promise<RecentlyViewedL
  * 		a usage node with the attributes numUsers (number of users) and storage (storage in
  * 		megabytes). To set the flag to include usage in the response, append includeUsage=true as
  * 		a querystring element any valid query site URI.
- * @returns {Promise<SiteType>} Promise | undefined
+ * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function querySiteByContentUrl(contentUrl: string, queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteType>;
+export function querySiteByContentUrl(contentUrl: string, queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Returns information about the specified site, with the option to return information about
@@ -82,9 +92,9 @@ export function querySiteByContentUrl(contentUrl: string, queryOptions?: { inclu
  * 		a usage node with the attributes numUsers (number of users) and storage (storage in
  * 		megabytes). To set the flag to include usage in the response, append includeUsage=true as
  * 		a querystring element any valid query site URI.
- * @returns {Promise<SiteType>} Promise | undefined
+ * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function querySiteByID(queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteType>;
+export function querySiteByID(queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Returns information about the specified site, with the option to return information about
@@ -97,9 +107,9 @@ export function querySiteByID(queryOptions?: { includeUsage: boolean }, client?:
  * 		a usage node with the attributes numUsers (number of users) and storage (storage in
  * 		megabytes). To set the flag to include usage in the response, append includeUsage=true as
  * 		a querystring element any valid query site URI.
- * @returns {Promise<SiteType>} Promise | undefined
+ * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function querySiteByName(siteName: string, queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteType>;
+export function querySiteByName(siteName: string, queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Returns a list of the sites on the server that the caller of this method has access to.
@@ -110,9 +120,9 @@ export function querySiteByName(siteName: string, queryOptions?: { includeUsage:
  * 		see Paginating Results.
  * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default
  * 		is 1. For more information, see Paginating Results.
- * @returns {Promise<Paginated<SiteListType>>} Promise | undefined
+ * @returns {Promise<SitesResponse>} Promise | undefined
  */
-export function querySites(queryOptions?: { pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<Paginated<SiteListType>>;
+export function querySites(queryOptions?: { pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<SitesResponse>;
 
 /**
  * Returns all the views for the specified site, optionally including usage statistics.
@@ -131,16 +141,27 @@ export function querySites(queryOptions?: { pageSize: number, pageNumber: number
  * 		request. For more information, see Using Fields in the REST API.
  * @param {string} queryOptions.filter <parameter documentation missing>
  * @param {string} queryOptions.sort <parameter documentation missing>
- * @returns {Promise<ViewListType>} Promise | undefined
+ * @returns {Promise<ViewsResponse>} Promise | undefined
  */
-export function queryViewsForSite(queryOptions?: { includeUsageStatistics: boolean, pageSize: number, pageNumber: number, fields: string, filter: string, sort: string }, client?: ClientLite) : Promise<ViewListType>;
+export function queryViewsForSite(queryOptions?: { includeUsageStatistics: boolean, pageSize: number, pageNumber: number, fields: string, filter: string, sort: string }, client?: ClientLite) : Promise<ViewsResponse>;
+
+/**
+ * Updates the embedding settings for a site. Embedding settings can be used to restrict
+ * embedding Tableau views to only certain domains. This setting impacts all embedding
+ * scenarios that are not set up to use connected apps for authentication, including, Tableau
+ * Javascript API v2, Embedding API v3, and the embed code from the share dialog. For more
+ * information, see Tableau Site Settings for Embedding.
+ * @param {SiteRequest} site site
+ * @returns {Promise<SiteResponse>} Promise | undefined
+ */
+export function updateEmbeddingSettingsForSite(site: SiteRequest, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Modifies settings for the specified site, including the content URL, administration mode,
  * user quota, state (active or suspended), storage quota, whether flows are enabled, whether
  * subscriptions are enabled, and whether revisions are enabled. If you're working with
  * Tableau Online, this method can also be used to upload a new logo image for the site.
- * @param {SiteType} site site
- * @returns {Promise<SiteType>} Promise | undefined
+ * @param {SiteRequest} site site
+ * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function updateSite(site: SiteType, client?: ClientLite) : Promise<SiteType>;
+export function updateSite(site: SiteRequest, client?: ClientLite) : Promise<SiteResponse>;

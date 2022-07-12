@@ -5,43 +5,47 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { Paginated } from "tabbycat/types";
-import { PermissionsType } from "tabbycat/types";
-import { TaskType } from "tabbycat/types";
-import { FlowRunSpecType } from "tabbycat/types";
-import { FlowType } from "tabbycat/types";
-import { ConnectionType } from "tabbycat/types";
-import { FlowRunType } from "tabbycat/types";
-import { FlowRunListType } from "tabbycat/types";
-import { TaskListType } from "tabbycat/types";
-import { FlowOutputStepListType } from "tabbycat/types";
-import { ConnectionListType } from "tabbycat/types";
-import { FlowListType } from "tabbycat/types";
-import { JobType } from "tabbycat/types";
-import { LinkedTaskJobType } from "tabbycat/types";
+import { PermissionsRequest } from "tabbycat/types";
+import { TaskRequest } from "tabbycat/types";
+import { FlowRunSpecRequest } from "tabbycat/types";
+import { FlowRequest } from "tabbycat/types";
+import { ConnectionRequest } from "tabbycat/types";
+import { PermissionsResponse } from "tabbycat/types";
+import { FlowRunResponse } from "tabbycat/types";
+import { FlowRunsResponse } from "tabbycat/types";
+import { TaskResponse } from "tabbycat/types";
+import { TasksResponse } from "tabbycat/types";
+import { LinkedTasksResponse } from "tabbycat/types";
+import { FlowResponse } from "tabbycat/types";
+import { FlowOutputStepsResponse } from "tabbycat/types";
+import { ConnectionsResponse } from "tabbycat/types";
+import { FlowsResponse } from "tabbycat/types";
+import { JobResponse } from "tabbycat/types";
+import { LinkedTaskJobResponse } from "tabbycat/types";
+import { ConnectionResponse } from "tabbycat/types";
 
 /**
  * Adds permissions to the specified flow for a Tableau Server user or group. You can
  * specify multiple sets of permissions using one call.
  * @param {string} flowId <parameter documentation missing>
- * @param {PermissionsType} permissions permissions
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @param {PermissionsRequest} permissions permissions
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function addFlowPermissions(flowId: string, permissions: PermissionsType, client?: ClientLite) : Promise<PermissionsType>;
+export function addFlowPermissions(flowId: string, permissions: PermissionsRequest, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Adds a task to run a flow to an existing schedule.
  * @param {string} scheduleId The ID of the schedule that you are associating with the
  * 		flow. The schedule that you are adding to must have Flow as the schedule type.
- * @param {TaskType} task task
- * @returns {Promise<any>} Promise | undefined
+ * @param {TaskRequest} task task
+ * @returns {Promise<>} Promise | undefined
  */
-export function addFlowTaskToSchedule(scheduleId: string, task: TaskType, client?: ClientLite) : Promise<any>;
+export function addFlowTaskToSchedule(scheduleId: string, task: TaskRequest, client?: ClientLite) : Promise<any>;
 
 /**
  * Cancels a flow run that is in progress.
  * @param {string} flowRunId The ID of the flow run.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function cancelFlowRun(flowRunId: string, client?: ClientLite) : Promise<any>;
 
@@ -49,7 +53,7 @@ export function cancelFlowRun(flowRunId: string, client?: ClientLite) : Promise<
  * Deletes a flow. When a flow is deleted, its associated connections, the output and input
  * steps, any associated scheduled tasks, and run history are also deleted.
  * @param {string} flowId The ID of the flow to delete.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteFlow(flowId: string, client?: ClientLite) : Promise<any>;
 
@@ -62,7 +66,7 @@ export function deleteFlow(flowId: string, client?: ClientLite) : Promise<any>;
  * 		(Download), Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
  * 		the deny permission. This value is case sensitive.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteFlowPermissionsForGroup(flowId: string, groupId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
 
@@ -75,95 +79,95 @@ export function deleteFlowPermissionsForGroup(flowId: string, groupId: string, c
  * 		(Download), Read (view), and Write. For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
  * 		the deny permission. This value is case sensitive.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteFlowPermissionsForUser(flowId: string, userId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Downloads a flow in .tfl or .tflx format.
  * @param {string} flowId The ID of the flow to download.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function downloadFlow(flowId: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Gets a flow run.
  * @param {string} flowRunId The ID of the flow run.
- * @returns {Promise<FlowRunType>} Promise | undefined
+ * @returns {Promise<FlowRunResponse>} Promise | undefined
  */
-export function getFlowRun(flowRunId: string, client?: ClientLite) : Promise<FlowRunType>;
+export function getFlowRun(flowRunId: string, client?: ClientLite) : Promise<FlowRunResponse>;
 
 /**
  * Get flow runs.
- * @returns {Promise<FlowRunListType>} Promise | undefined
+ * @returns {Promise<FlowRunsResponse>} Promise | undefined
  */
-export function getFlowRuns(client?: ClientLite) : Promise<FlowRunListType>;
+export function getFlowRuns(client?: ClientLite) : Promise<FlowRunsResponse>;
 
 /**
  * Returns information about the specified flow run task. This method shows you information
  * about the scheduled task for the flow.
  * @param {string} taskId The ID of the scheduled flow run task that you want information
  * 		about.
- * @returns {Promise<TaskType>} Promise | undefined
+ * @returns {Promise<TaskResponse>} Promise | undefined
  */
-export function getFlowRunTask(taskId: string, client?: ClientLite) : Promise<TaskType>;
-
-/**
- * Returns information about the specified flow run task. This method shows you information
- * about the scheduled task for the flow.
- * @param {string} taskId The ID of the scheduled flow run task that you want information
- * 		about.
- * @returns {Promise<TaskType>} Promise | undefined
- */
-export function getFlowRunTask(taskId: string, client?: ClientLite) : Promise<TaskType>;
+export function getFlowRunTask(taskId: string, client?: ClientLite) : Promise<TaskResponse>;
 
 /**
  * Returns a list of scheduled flow tasks for the site.
- * @returns {Promise<TaskListType>} Promise | undefined
+ * @returns {Promise<TasksResponse>} Promise | undefined
  */
-export function getFlowRunTasks(client?: ClientLite) : Promise<TaskListType>;
+export function getFlowRunTasks(client?: ClientLite) : Promise<TasksResponse>;
 
 /**
- * Returns a list of scheduled flow tasks for the site.
- * @returns {Promise<TaskListType>} Promise | undefined
+ * Returns information about a specific linked task. This method shows you information about
+ * the scheduled linked task
+ * @param {string} linkedTaskId The ID of the scheduled linked task that you want
+ * 		information about.
+ * @returns {Promise<LinkedTasksResponse>} Promise | undefined
  */
-export function getFlowRunTasks(client?: ClientLite) : Promise<TaskListType>;
+export function getLinkedTask(linkedTaskId: string, client?: ClientLite) : Promise<LinkedTasksResponse>;
+
+/**
+ * Returns a list of scheduled linked tasks for a site.
+ * @returns {Promise<LinkedTasksResponse>} Promise | undefined
+ */
+export function getLinkedTasks(client?: ClientLite) : Promise<LinkedTasksResponse>;
 
 /**
  * Publishes a flow on the specified site. To make other changes to a published flow, call
  * Update Flow or Update Flow Connection.
- * @returns {Promise<FlowType>} Promise | undefined
+ * @returns {Promise<FlowResponse>} Promise | undefined
  */
-export function publishFlow(client?: ClientLite) : Promise<FlowType>;
+export function publishFlow(client?: ClientLite) : Promise<FlowResponse>;
 
 /**
  * Returns information about the specified flow, including information about the project,
  * owner, and output steps.
  * @param {string} flowId The ID of the flow to return information about.
- * @returns {Promise<FlowOutputStepListType>} Promise | undefined
+ * @returns {Promise<FlowOutputStepsResponse>} Promise | undefined
  */
-export function queryFlow(flowId: string, client?: ClientLite) : Promise<FlowOutputStepListType>;
+export function queryFlow(flowId: string, client?: ClientLite) : Promise<FlowOutputStepsResponse>;
 
 /**
  * Returns a list of data connections for the specific flow.
  * @param {string} flowId The ID of the flow to return connection information about.
- * @returns {Promise<ConnectionListType>} Promise | undefined
+ * @returns {Promise<ConnectionsResponse>} Promise | undefined
  */
-export function queryFlowConnections(flowId: string, client?: ClientLite) : Promise<ConnectionListType>;
+export function queryFlowConnections(flowId: string, client?: ClientLite) : Promise<ConnectionsResponse>;
 
 /**
  * Returns a list of permissions for the specific flow.
  * @param {string} flowId The ID of the flow to get permissions for.
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function queryFlowPermissions(flowId: string, client?: ClientLite) : Promise<PermissionsType>;
+export function queryFlowPermissions(flowId: string, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Returns the flows on a site. If the user is not an administrator, the method returns just
  * the flows that the user has permissions to view.
- * @returns {Promise<Paginated<FlowListType>>} Promise | undefined
+ * @returns {Promise<FlowsResponse>} Promise | undefined
  */
-export function queryFlowsForSite(client?: ClientLite) : Promise<Paginated<FlowListType>>;
+export function queryFlowsForSite(client?: ClientLite) : Promise<FlowsResponse>;
 
 /**
  * Returns the flows that the specified user owns in addition to those that the user has
@@ -178,39 +182,39 @@ export function queryFlowsForSite(client?: ClientLite) : Promise<Paginated<FlowL
  * 		see Paginating Results.
  * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default
  * 		is 1. For more information, see Paginating Results.
- * @returns {Promise<Paginated<FlowListType>>} Promise | undefined
+ * @returns {Promise<FlowsResponse>} Promise | undefined
  */
-export function queryFlowsForUser(userId: string, queryOptions?: { isOwner: boolean, pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<Paginated<FlowListType>>;
+export function queryFlowsForUser(userId: string, queryOptions?: { isOwner: boolean, pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<FlowsResponse>;
 
 /**
  * Runs the specified flow.
  * @param {string} flowId The ID of the flow to update.
- * @param {FlowRunSpecType} flowRunSpec flowRunSpec
- * @returns {Promise<JobType>} Promise | undefined
+ * @param {FlowRunSpecRequest} flowRunSpec flowRunSpec
+ * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function runFlowNow(flowId: string, flowRunSpec: FlowRunSpecType, client?: ClientLite) : Promise<JobType>;
+export function runFlowNow(flowId: string, flowRunSpec: FlowRunSpecRequest, client?: ClientLite) : Promise<JobResponse>;
 
 /**
  * Runs the specified flow run task.
  * @param {string} taskId The ID of the flow run task that you want to run.
- * @returns {Promise<JobType>} Promise | undefined
+ * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function runFlowTask(taskId: string, client?: ClientLite) : Promise<JobType>;
+export function runFlowTask(taskId: string, client?: ClientLite) : Promise<JobResponse>;
 
 /**
  * Runs the specified linked task.
  * @param {string} linkedTaskId The ID of the linked task to run.
- * @returns {Promise<LinkedTaskJobType>} Promise | undefined
+ * @returns {Promise<LinkedTaskJobResponse>} Promise | undefined
  */
-export function runLinkedTaskNow(linkedTaskId: string, client?: ClientLite) : Promise<LinkedTaskJobType>;
+export function runLinkedTaskNow(linkedTaskId: string, client?: ClientLite) : Promise<LinkedTaskJobResponse>;
 
 /**
  * Updates the owner, project, of the specified flow.
  * @param {string} flowId <parameter documentation missing>
- * @param {FlowType} flow flow
- * @returns {Promise<FlowType>} Promise | undefined
+ * @param {FlowRequest} flow flow
+ * @returns {Promise<FlowResponse>} Promise | undefined
  */
-export function updateFlow(flowId: string, flow: FlowType, client?: ClientLite) : Promise<FlowType>;
+export function updateFlow(flowId: string, flow: FlowRequest, client?: ClientLite) : Promise<FlowResponse>;
 
 /**
  * Updates the server address, port, username, or password for the specified flow
@@ -218,7 +222,7 @@ export function updateFlow(flowId: string, flow: FlowType, client?: ClientLite) 
  * @param {string} flowId The ID of the flow to update.
  * @param {string} connectionId The ID of the connection to update. To determine what
  * 		connections are available for a flow, call Query Flow Connections.
- * @param {ConnectionType} connection connection
- * @returns {Promise<ConnectionType>} Promise | undefined
+ * @param {ConnectionRequest} connection connection
+ * @returns {Promise<ConnectionResponse>} Promise | undefined
  */
-export function updateFlowConnection(flowId: string, connectionId: string, connection: ConnectionType, client?: ClientLite) : Promise<ConnectionType>;
+export function updateFlowConnection(flowId: string, connectionId: string, connection: ConnectionRequest, client?: ClientLite) : Promise<ConnectionResponse>;

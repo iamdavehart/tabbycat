@@ -199,27 +199,6 @@ export function downloadWorkbookPowerpoint(workbookId, queryOptions, client) {
 }
 
 /**
- * Downloads a specific version of a workbook in .twb or .twbx format.
- */
-export function downloadWorkbookRevision(workbookId, revisionNumber, queryOptions, client) {
-    const minVersion = "2.3";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!workbookId) return Promise.reject(new MissingPathParameterException("workbookId"));
-	if (!revisionNumber) return Promise.reject(new MissingPathParameterException("revisionNumber"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/workbooks/${workbookId}/revisions/${revisionNumber}/content`)
-            .withQueryParameters(queryOptions)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
  * Gets the details of a specific view.
  */
 export function getView(viewId, client) {
@@ -301,26 +280,6 @@ export function getWorkbookDowngradeInfo(workbookId, queryOptions, client) {
 }
 
 /**
- * Returns a list of revision information (history) for the specified workbook.
- */
-export function getWorkbookRevisions(workbookId, queryOptions, client) {
-    const minVersion = "2.3";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!workbookId) return Promise.reject(new MissingPathParameterException("workbookId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/workbooks/${workbookId}/revisions`)
-            .withQueryParameters(queryOptions)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
  * Hides a view from being recommended by the server by adding it to a list of views that
  * are dismissed for a user. If hidden, a view will not be displayed on the server Home or
  * Recommendation pages.
@@ -336,30 +295,6 @@ export function hideViewRecommendation(recommendationDismissal, client) {
             .withMethod(http.PUT)
             .withPath(`/api/${version}/sites/${siteId}/recommendations/dismissals`)
             .withBodyParameters(recommendationDismissal)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
- * Publishes a workbook on the specified site. To make changes to a published workbook, call
- * Update Workbook or Update Workbook Connection.
- */
-export function publishWorkbook(workbook, file, queryOptions, client) {
-    const minVersion = "2.0";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.POST)
-            .withPath(`/api/${version}/sites/${siteId}/workbooks`)
-            .withHeaders({"Content-Type":"multipart/mixed"})
-            .withQueryParameters(queryOptions)
-            .withBodyParameters(workbook)
-            .withBodyParameters(file)
-            .withFileParameters({ name: "tableau_workbook", file: file })
             .withAuthenticationToken(token)
             .build()
     );
@@ -419,25 +354,6 @@ export function queryViewPdf(viewId, queryOptions, client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/views/${viewId}/pdf`)
-            .withQueryParameters(queryOptions)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
- * Returns all the views for the specified site, optionally including usage statistics.
- */
-export function queryViewsForSite(queryOptions, client) {
-    const minVersion = "2.2";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/views`)
             .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()

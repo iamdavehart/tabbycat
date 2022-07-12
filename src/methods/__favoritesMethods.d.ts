@@ -5,49 +5,49 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { FavoriteType } from "tabbycat/types";
-import { FavoriteOrderingListType } from "tabbycat/types";
-import { FavoriteListType } from "tabbycat/types";
+import { FavoriteRequest } from "tabbycat/types";
+import { FavoriteOrderingsRequest } from "tabbycat/types";
+import { FavoritesResponse } from "tabbycat/types";
 
 /**
  * Adds the specified data source to the user's favorites.
  * @param {string} userId The ID of the user to add the favorite for.
- * @param {FavoriteType} favorite favorite
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @param {FavoriteRequest} favorite favorite
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function addDataSourceToFavorites(userId: string, favorite: FavoriteType, client?: ClientLite) : Promise<FavoriteListType>;
+export function addDataSourceToFavorites(userId: string, favorite: FavoriteRequest, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Adds the specified flow to the user's favorites.
  * @param {string} userId The ID of the user to add the favorite for.
- * @param {FavoriteType} favorite favorite
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @param {FavoriteRequest} favorite favorite
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function addFlowToFavorites(userId: string, favorite: FavoriteType, client?: ClientLite) : Promise<FavoriteListType>;
+export function addFlowToFavorites(userId: string, favorite: FavoriteRequest, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Adds the specified project to a user's favorites.
  * @param {string} userId The ID of the user to add the favorite for.
- * @param {FavoriteType} favorite favorite
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @param {FavoriteRequest} favorite favorite
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function addProjectToFavorites(userId: string, favorite: FavoriteType, client?: ClientLite) : Promise<FavoriteListType>;
+export function addProjectToFavorites(userId: string, favorite: FavoriteRequest, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Adds the specified view to a user's favorites.
  * @param {string} userId The ID of the user to add the favorite for.
- * @param {FavoriteType} favorite favorite
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @param {FavoriteRequest} favorite favorite
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function addViewToFavorites(userId: string, favorite: FavoriteType, client?: ClientLite) : Promise<FavoriteListType>;
+export function addViewToFavorites(userId: string, favorite: FavoriteRequest, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Adds the specified workbook to a user's favorites.
  * @param {string} userId The ID of the user to add the favorite for.
- * @param {FavoriteType} favorite favorite
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @param {FavoriteRequest} favorite favorite
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function addWorkbookToFavorites(userId: string, favorite: FavoriteType, client?: ClientLite) : Promise<FavoriteListType>;
+export function addWorkbookToFavorites(userId: string, favorite: FavoriteRequest, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Deletes the specified data source from the user's favorites. If the specified data source
@@ -55,7 +55,7 @@ export function addWorkbookToFavorites(userId: string, favorite: FavoriteType, c
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} datasourceId The ID of the data source to remove from the user's
  * 		favorites.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataSourceFromFavorites(userId: string, datasourceId: string, client?: ClientLite) : Promise<any>;
 
@@ -65,7 +65,7 @@ export function deleteDataSourceFromFavorites(userId: string, datasourceId: stri
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} datasourceId The ID of the data source to remove from the user's
  * 		favorites.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteFlowFromFavorites(userId: string, datasourceId: string, client?: ClientLite) : Promise<any>;
 
@@ -74,7 +74,7 @@ export function deleteFlowFromFavorites(userId: string, datasourceId: string, cl
  * a favorite, the operation has no effect.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} projectId The ID of the project to remove from the user's favorites.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteProjectFromFavorites(userId: string, projectId: string, client?: ClientLite) : Promise<any>;
 
@@ -83,7 +83,7 @@ export function deleteProjectFromFavorites(userId: string, projectId: string, cl
  * favorite, the operation has no effect.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} viewId The ID of the view to remove from the user's favorites.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteViewFromFavorites(userId: string, viewId: string, client?: ClientLite) : Promise<any>;
 
@@ -92,7 +92,7 @@ export function deleteViewFromFavorites(userId: string, viewId: string, client?:
  * of the specified user, this call has no effect.
  * @param {string} userId The ID of the user to remove the favorite from.
  * @param {string} workbookId The ID of the workbook to remove from the user's favorites.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteWorkbookFromFavorites(userId: string, workbookId: string, client?: ClientLite) : Promise<any>;
 
@@ -100,14 +100,14 @@ export function deleteWorkbookFromFavorites(userId: string, workbookId: string, 
  * Returns a list of favorite projects, data sources, views, workbooks, and flows for a
  * user.
  * @param {string} userId The ID of the user for which you want to get a list favorites.
- * @returns {Promise<FavoriteListType>} Promise | undefined
+ * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function getFavoritesForUser(userId: string, client?: ClientLite) : Promise<FavoriteListType>;
+export function getFavoritesForUser(userId: string, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Move an item to organize a user's favorites.
  * @param {string} userId The ID of the user for which you want to get a list favorites.
- * @param {FavoriteOrderingListType} favoriteOrderings favoriteOrderings
- * @returns {Promise<any>} Promise | undefined
+ * @param {FavoriteOrderingsRequest} favoriteOrderings favoriteOrderings
+ * @returns {Promise<>} Promise | undefined
  */
-export function updateFavorites(userId: string, favoriteOrderings: FavoriteOrderingListType, client?: ClientLite) : Promise<any>;
+export function updateFavorites(userId: string, favoriteOrderings: FavoriteOrderingsRequest, client?: ClientLite) : Promise<any>;

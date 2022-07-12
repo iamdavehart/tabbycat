@@ -13,17 +13,17 @@ import * as http from "tabbycat/httpMethods";
  * Add permissions to a database asset. To add permissions, the database asset must be
  * associated with a published data source.
  */
-export function addDatabasePermissions(databaseId, permissions, client) {
+export function addDatabasePermissions(databaseLuid, permissions, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/permissions`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/permissions`)
             .withBodyParameters(permissions)
             .withAuthenticationToken(token)
             .build()
@@ -31,21 +31,21 @@ export function addDatabasePermissions(databaseId, permissions, client) {
 }
 
 /**
- * Applying default permissions to a database functions as a permissions template for the
- * database's children table assets. How default permissions are enforced depends on whether
- * the database is locked or unlocked.
+ * Adds default permission capabilities to a user or group for table resources in that
+ * database. These default permissions function as a permissions template for the database's
+ * table assets.
  */
-export function addDatabasePermsDefault(databaseId, permissions, client) {
+export function addDatabasePermsDefault(databaseLuid, permissions, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/default-permissions/tables`)
             .withBodyParameters(permissions)
             .withAuthenticationToken(token)
             .build()
@@ -120,17 +120,17 @@ export function addDataQualityWarningTrigger(contentType, dataQualityTrigger, qu
 /**
  * Add permissions to a table asset.
  */
-export function addTablePermissions(tableId, permissions, client) {
+export function addTablePermissions(tableLuid, permissions, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!tableId) return Promise.reject(new MissingPathParameterException("tableId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!tableLuid) return Promise.reject(new MissingPathParameterException("tableLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/${version}/sites/${siteId}/tables/${tableId}/permissions`)
+            .withPath(`/api/${version}/sites/${siteId}/tables/${tableLuid}/permissions`)
             .withBodyParameters(permissions)
             .withAuthenticationToken(token)
             .build()
@@ -278,20 +278,20 @@ export function batchDeleteTags(tagBatch, client) {
 /**
  * Permanently remove the permissions applied to a database asset.
  */
-export function deleteDatabasePermissionsForGroup(databaseId, groupId, capabilityName, capabilityMode, client) {
+export function deleteDatabasePermissionsForGroup(databaseLuid, groupLuid, capabilityName, capabilityMode, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));
-	if (!groupId) return Promise.reject(new MissingPathParameterException("groupId"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));
 	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
 	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/permissions/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -300,20 +300,20 @@ export function deleteDatabasePermissionsForGroup(databaseId, groupId, capabilit
 /**
  * Permanently remove the permissions applied to a database asset.
  */
-export function deleteDatabasePermissionsForUser(databaseId, userId, capabilityName, capabilityMode, client) {
+export function deleteDatabasePermissionsForUser(databaseLuid, userLuid, capabilityName, capabilityMode, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));
-	if (!userId) return Promise.reject(new MissingPathParameterException("userId"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));
 	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
 	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/permissions/users/${userId}/${capabilityName}/${capabilityMode}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/permissions/users/${userLuid}/${capabilityName}/${capabilityMode}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -440,20 +440,20 @@ export function deleteDataQualityWarningTriggers(contentType, queryOptions, clie
 /**
  * Permanently remove the default permissions on a database asset.
  */
-export function deleteDefaultDatabasePermissionsForGroup(databaseId, groupId, capabilityName, capabilityMode, client) {
+export function deleteDefaultDatabasePermissionsForGroup(databaseLuid, capabilityName, capabilityMode, groupLuid, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));
-	if (!groupId) return Promise.reject(new MissingPathParameterException("groupId"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));
 	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
-	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/groups/${groupId}/${capabilityName}/${capabilityMode}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/default-permissions/tables/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -462,20 +462,59 @@ export function deleteDefaultDatabasePermissionsForGroup(databaseId, groupId, ca
 /**
  * Permanently remove the default permissions on a database asset.
  */
-export function deleteDefaultDatabasePermissionsForUser(databaseId, userId, capabilityName, capabilityMode, client) {
+export function deleteDefaultDatabasePermissionsForUser(databaseLuid, userLuid, capabilityName, capabilityMode, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));
-	if (!userId) return Promise.reject(new MissingPathParameterException("userId"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));
 	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
 	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/default-permissions/tables/users/${userId}/${capabilityName}/${capabilityMode}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/default-permissions/tables/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Deletes a data label by its LUID.
+ */
+export function deleteLabel(labelLuid, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!labelLuid) return Promise.reject(new MissingPathParameterException("labelLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/labels/${labelLuid}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Deletes the data labels on one or more assets.
+ */
+export function deleteLabelsOnAssets(contentList, queryOptions, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/labels`)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(contentList)
             .withAuthenticationToken(token)
             .build()
     );
@@ -484,17 +523,62 @@ export function deleteDefaultDatabasePermissionsForUser(databaseId, userId, capa
 /**
  * Permanently remove the permissions applied to a table asset.
  */
-export function deleteTablePerms(tableId, client) {
+export function deleteTablePermissionsForGroup(tableLuid, groupLuid, capabilityName, capabilityMode, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!tableId) return Promise.reject(new MissingPathParameterException("tableId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!tableLuid) return Promise.reject(new MissingPathParameterException("tableLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/table/${tableId}/permissions`)
+            .withPath(`/api/${version}/sites/${siteId}/tables/${tableLuid}/permissions/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Permanently remove the permissions applied to a table asset.
+ */
+export function deleteTablePermissionsForUser(tableLuid, userLuid, capabilityName, capabilityMode, client) {
+    const minVersion = "3.5";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!tableLuid) return Promise.reject(new MissingPathParameterException("tableLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/tables/${tableLuid}/permissions/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Delete a tag from a table.
+ */
+export function deleteTagsFromColumn(tableId, tagName, client) {
+    const minVersion = "3.9";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
+	if (!tableId) return Promise.reject(new MissingPathParameterException("tableId"));
+	if (!tagName) return Promise.reject(new MissingPathParameterException("tagName"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/tables/${tableId}/tags/${tagName}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -503,7 +587,7 @@ export function deleteTablePerms(tableId, client) {
 /**
  * Delete a tag from a column.
  */
-export function deleteTagsDatabase(columnId, tagName, client) {
+export function deleteTagsFromDatabase(columnId, tagName, client) {
     const minVersion = "3.9";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -521,40 +605,20 @@ export function deleteTagsDatabase(columnId, tagName, client) {
 }
 
 /**
- * Delete a tag from a column.
+ * Delete a tag from a database.
  */
-export function deleteTagsDatabase(columnId, tagName, client) {
+export function deleteTagsFromTable(databaseId, tagName, client) {
     const minVersion = "3.9";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!columnId) return Promise.reject(new MissingPathParameterException("columnId"));
+	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));
 	if (!tagName) return Promise.reject(new MissingPathParameterException("tagName"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/columns/${columnId}/tags/${tagName}`)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
- * Delete a tag from a column.
- */
-export function deleteTagsDatabase(columnId, tagName, client) {
-    const minVersion = "3.9";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!columnId) return Promise.reject(new MissingPathParameterException("columnId"));
-	if (!tagName) return Promise.reject(new MissingPathParameterException("tagName"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/columns/${columnId}/tags/${tagName}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/tags/${tagName}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -575,6 +639,85 @@ export function getDatabasesAndTablesFromConnection(databaseAnchor, client) {
             .withMethod(http.POST)
             .withPath(`/api/${version}/sites/${siteId}/databaseAndTables/lookup`)
             .withBodyParameters(databaseAnchor)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Gets a data label by its LUID.
+ */
+export function getLabel(labelLuid, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!labelLuid) return Promise.reject(new MissingPathParameterException("labelLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.GET)
+            .withPath(`/api/${version}/sites/${siteId}/labels/${labelLuid}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Displays information about the data labels on one or more assets.
+ */
+export function getLabelsOnAssets(contentList, queryOptions, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.POST)
+            .withPath(`/api/${version}/sites/${siteId}/labels`)
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(contentList)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Move one or more databases to a project. You can move the database and its tables, or
+ * move only the database. To move a table independently of its database, use the Move Table
+ * method.
+ */
+export function moveDatabase(contentLocationRequest, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.POST)
+            .withPath(`/api/${version}/sites/${siteId}/databases`)
+            .withBodyParameters(contentLocationRequest)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Moves one or more tables to a project.
+ */
+export function moveTable(contentLocationRequest, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.POST)
+            .withPath(`/api/${version}/sites/${siteId}/tables`)
+            .withBodyParameters(contentLocationRequest)
             .withAuthenticationToken(token)
             .build()
     );
@@ -622,17 +765,17 @@ export function queryColumns(tableId, client) {
 /**
  * Get information about a database asset.
  */
-export function queryDatabase(databaseId, client) {
+export function queryDatabase(databaseLuid, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -641,17 +784,17 @@ export function queryDatabase(databaseId, client) {
 /**
  * Get information about the permissions on a database asset.
  */
-export function queryDatabasePerms(databaseId, client) {
+export function queryDatabasePerms(databaseLuid, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/permissions`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/permissions`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -660,17 +803,17 @@ export function queryDatabasePerms(databaseId, client) {
 /**
  * Get the default permissions applied to the database asset and its children tables.
  */
-export function queryDatabasePermsDefault(databaseId, client) {
+export function queryDatabasePermsDefault(databaseLuid, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}/default-permissions/tables`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}/default-permissions/tables`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -683,7 +826,7 @@ export function queryDatabases(client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
@@ -794,20 +937,19 @@ export function queryDataQualityWarningTriggers(contentType, contentLuid, client
 }
 
 /**
- * Get information about all quality warning triggers for a content item.
+ * Get information about a quality warning trigger.
  */
-export function queryDataQualityWarningTriggers(contentType, contentLuid, client) {
+export function queryQualityWarningTrigger(triggerId, client) {
     const minVersion = "3.11";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!contentType) return Promise.reject(new MissingPathParameterException("contentType"));
-	if (!contentLuid) return Promise.reject(new MissingPathParameterException("contentLuid"));  
+	if (!triggerId) return Promise.reject(new MissingPathParameterException("triggerId"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/dataQualityTriggers/${contentType}/${contentLuid}`)
+            .withPath(`/api/${version}/sites/${siteId}/dataQualityTriggers/${triggerId}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -949,20 +1091,20 @@ export function updateColumn(tableId, columnId, column, client) {
 }
 
 /**
- * Update the database description, certify a database, or assign a contact (must be a
- * Tableau Server or Tableau Online user) to the database asset.
+ * Update the database description, certify a database, set content permissions, or assign a
+ * contact (must be a Tableau Server or Tableau Online user) to the database asset.
  */
-export function updateDatabase(databaseId, database, client) {
+export function updateDatabase(databaseLuid, database, client) {
     const minVersion = "3.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!databaseId) return Promise.reject(new MissingPathParameterException("databaseId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!databaseLuid) return Promise.reject(new MissingPathParameterException("databaseLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseId}`)
+            .withPath(`/api/${version}/sites/${siteId}/databases/${databaseLuid}`)
             .withBodyParameters(database)
             .withAuthenticationToken(token)
             .build()
@@ -1004,6 +1146,50 @@ export function updateDataQualityWarningTrigger(triggerId, dataQualityTrigger, c
             .withMethod(http.PUT)
             .withPath(`/api/${version}/sites/${siteId}/dataQualityTriggers/${triggerId}`)
             .withBodyParameters(dataQualityTrigger)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Updates a label by its LUID. This method can update the label value, message, active
+ * flag, and elevated flag.
+ */
+export function updateLabel(labelLuid, label, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!labelLuid) return Promise.reject(new MissingPathParameterException("labelLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.PUT)
+            .withPath(`/api/${version}/sites/${siteId}/labels/${labelLuid}`)
+            .withBodyParameters(label)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Creates or updates labels on one or more assets. (An asset can be Tableau content or an
+ * external asset.) Each asset listed in the request body is updated to have a label with the
+ * specified value, message, active flag, and elevated flag. Assets without an existing label
+ * of the corresponding category will have a new label created. Assets that already have a
+ * label of the same category will have the label updated.
+ */
+export function updatesLabelsOnAssets(contentList, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.PUT)
+            .withPath(`/api/${version}/sites/${siteId}/labels`)
+            .withBodyParameters(contentList)
             .withAuthenticationToken(token)
             .build()
     );

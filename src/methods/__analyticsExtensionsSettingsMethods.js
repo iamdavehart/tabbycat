@@ -10,7 +10,7 @@ import { failsVersionCheck } from "tabbycat/utils";
 import * as http from "tabbycat/httpMethods";
 
 /**
- * Adds an analytics extensions connection for an external service to a site. 
+ * Adds an analytics extensions connection for an external service to a site.
  */
 export function addAnalyticsExtensionsConnection(connectionItem, client) {
     const minVersion = "2020.2";
@@ -29,7 +29,7 @@ export function addAnalyticsExtensionsConnection(connectionItem, client) {
 }
 
 /**
- * Deletes a specific analytics extension connection for an external service from a site. 
+ * Deletes a specific analytics extension connection for an external service from a site.
  */
 export function deleteAnalyticsExtensionsConnection(connection_luid, client) {
     const minVersion = "2020.2";
@@ -40,7 +40,7 @@ export function deleteAnalyticsExtensionsConnection(connection_luid, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/-/settings/site/extensions/analytics/connections/{connection_luid}`)
+            .withPath(`/api/-/settings/site/extensions/analytics/connections/${connection_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -49,7 +49,7 @@ export function deleteAnalyticsExtensionsConnection(connection_luid, client) {
 /**
  * Remove the currently used analytics extension connection to an external service  from the
  * specified workbook. The connection remains configured, and is available for further usage
- * by the workbook. 
+ * by the workbook.
  */
 export function deleteConnectionFromWorkbook(workbook_luid, client) {
     const minVersion = "2020.2";
@@ -60,14 +60,14 @@ export function deleteConnectionFromWorkbook(workbook_luid, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/{workbook_luid}/selected_connection`)
+            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/${workbook_luid}/selected_connection`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Get the details of a specified analytics extension connection to an external service. 
+ * Get the details of a specified analytics extension connection to an external service.
  */
 export function getAnalyticsExtensionsConnection(connection_luid, client) {
     const minVersion = "2020.2";
@@ -78,14 +78,14 @@ export function getAnalyticsExtensionsConnection(connection_luid, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/-/settings/site/extensions/analytics/connections/{connection_luid}`)
+            .withPath(`/api/-/settings/site/extensions/analytics/connections/${connection_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Lists a site's analytics extension connections for external services. 
+ * Lists a site's analytics extension connections for external services.
  */
 export function getAnalyticsExtensionsConnections(client) {
     const minVersion = "2020.2";
@@ -102,7 +102,7 @@ export function getAnalyticsExtensionsConnections(client) {
 }
 
 /**
- * Gets the enabled/disabled state of analytics extensions on a server. 
+ * Gets the enabled/disabled state of analytics extensions on a server.
  */
 export function getAnalyticsExtensionsServerSettings(client) {
     const minVersion = "2020.2";
@@ -119,7 +119,7 @@ export function getAnalyticsExtensionsServerSettings(client) {
 }
 
 /**
- * Gets the enabled/disabled state of analytics extensions on a site. 
+ * Gets the enabled/disabled state of analytics extensions on a site.
  */
 export function getAnalyticsExtensionsSiteSettings(client) {
     const minVersion = "2020.2";
@@ -137,7 +137,7 @@ export function getAnalyticsExtensionsSiteSettings(client) {
 
 /**
  * Lists basic details of each analytics extension connection available for a specified
- * workbook, including connection type and name. 
+ * workbook, including connection type and name.
  */
 export function getConnectionOptionsForWorkbook(workbook_luid, client) {
     const minVersion = "2020.2";
@@ -148,7 +148,7 @@ export function getConnectionOptionsForWorkbook(workbook_luid, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/{workbook_luid}/connections`)
+            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/${workbook_luid}/connections`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -156,7 +156,7 @@ export function getConnectionOptionsForWorkbook(workbook_luid, client) {
 
 /**
  * Gets basic details, including connection type and name, of the analytics extension
- * connection to an external service that the specified workbook is currently using. 
+ * connection to an external service that the specified workbook is currently using.
  */
 export function getSelectedConnectionForWorkbook(workbook_luid, client) {
     const minVersion = "2020.2";
@@ -167,7 +167,7 @@ export function getSelectedConnectionForWorkbook(workbook_luid, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/{workbook_luid}/selected_connection`)
+            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/${workbook_luid}/selected_connection`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -175,7 +175,7 @@ export function getSelectedConnectionForWorkbook(workbook_luid, client) {
 
 /**
  * Updates the details of specified analytics extension connection for an external service
- * to a site. 
+ * to a site.
  */
 export function updateAnalyticsExtensionsConnection(connection_luid, connectionItem, client) {
     const minVersion = "2020.2";
@@ -186,7 +186,7 @@ export function updateAnalyticsExtensionsConnection(connection_luid, connectionI
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/-/settings/site/extensions/analytics/connections/{connection_luid}`)
+            .withPath(`/api/-/settings/site/extensions/analytics/connections/${connection_luid}`)
             .withHeaders({"Content-Type":"application/vnd.tableau.analyticsextensions.v1.ConnectionItem+json"})
             .withBodyParameters(connectionItem)
             .withAuthenticationToken(token)
@@ -195,7 +195,7 @@ export function updateAnalyticsExtensionsConnection(connection_luid, connectionI
 }
 
 /**
- * Enables or disables analytics extensions on a server. 
+ * Enables or disables analytics extensions on a server.
  */
 export function updateAnalyticsExtensionsServerSettings(serverSettings, client) {
     const minVersion = "2020.2";
@@ -214,7 +214,7 @@ export function updateAnalyticsExtensionsServerSettings(serverSettings, client) 
 }
 
 /**
- * Enables or disables analytics extensions on a site. 
+ * Enables or disables analytics extensions on a site.
  */
 export function updateAnalyticsExtensionsSiteSettings(siteSettings, client) {
     const minVersion = "2020.2";
@@ -234,7 +234,7 @@ export function updateAnalyticsExtensionsSiteSettings(siteSettings, client) {
 
 /**
  * Updates the analytics extension connection to external service currently used by a
- * workbook. 
+ * workbook.
  */
 export function updateWorkbookWithConnection(workbook_luid, connectionMapping, client) {
     const minVersion = "2020.2";
@@ -245,7 +245,7 @@ export function updateWorkbookWithConnection(workbook_luid, connectionMapping, c
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/{workbook_luid}/selected_connection`)
+            .withPath(`/api/-/settings/site/extensions/analytics/workbooks/${workbook_luid}/selected_connection`)
             .withHeaders({"Content-Type":"application/vnd.tableau.analyticsextensions.v1.ConnectionMapping+json"})
             .withBodyParameters(connectionMapping)
             .withAuthenticationToken(token)

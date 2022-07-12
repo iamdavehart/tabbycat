@@ -32,21 +32,21 @@ export function createProject(project, queryOptions, client) {
 }
 
 /**
- * Deletes the specified project on a specific site. When a project is deleted, all of its
- * assets are also deleted: associated workbooks, data sources, project view options, and
- * rights. Use this method with caution.
+ * Deletes the specified project on a specific site. When a project is deleted, all Tableau
+ * assets inside of it are also deleted, including assets like associated workbooks, data
+ * sources, project view options, and rights.
  */
-export function deleteProject(projectId, client) {
+export function deleteProject(projectLuid, client) {
     const minVersion = "1.0";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!projectId) return Promise.reject(new MissingPathParameterException("projectId"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/projects/${projectId}`)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}`)
             .withAuthenticationToken(token)
             .build()
     );

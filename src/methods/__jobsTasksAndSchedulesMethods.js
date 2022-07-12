@@ -108,25 +108,6 @@ export function deleteDataAccelerationTask(dataAccelerationId, client) {
 }
 
 /**
- * Deletes an extract refresh task.
- */
-export function deleteExtractRefreshTask(taskId, client) {
-    const minVersion = "3.6";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!taskId) return Promise.reject(new MissingPathParameterException("taskId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/tasks/extractRefreshes/${taskId}`)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
  * Deletes the specified schedule.
  */
 export function deleteSchedule(scheduleId, client) {

@@ -54,50 +54,6 @@ export function initiateFileUpload(client) {
 }
 
 /**
- * Publishes a data source on the specified site, or appends data to an existing data
- * source. To make other changes to a published data source, call Update Data Source or
- * Update Data Source Connection.
- */
-export function publishDataSource(datasource, file, queryOptions, client) {
-    const minVersion = "2.0";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.POST)
-            .withPath(`/api/${version}/sites/${siteId}/datasources`)
-            .withHeaders({"Content-Type":"multipart/mixed"})
-            .withQueryParameters(queryOptions)
-            .withBodyParameters(datasource)
-            .withBodyParameters(file)
-            .withFileParameters({ name: "tableau_datasource", file: file })
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
- * Publishes a flow on the specified site. To make other changes to a published flow, call
- * Update Flow or Update Flow Connection.
- */
-export function publishFlow(client) {
-    const minVersion = "3.3";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.POST)
-            .withPath(`/api/${version}/sites/${siteId}/flows`)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
  * Publishes a workbook on the specified site. To make changes to a published workbook, call
  * Update Workbook or Update Workbook Connection.
  */

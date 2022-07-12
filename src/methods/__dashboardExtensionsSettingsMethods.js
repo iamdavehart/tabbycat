@@ -10,7 +10,7 @@ import { failsVersionCheck } from "tabbycat/utils";
 import * as http from "tabbycat/httpMethods";
 
 /**
- * Adds a dashboard extension to the block list of a server.  
+ * Adds a dashboard extension to the block list of a server.
  */
 export function createDashboardExtensionsBlockListItem(blockListItem, client) {
     const minVersion = "2020.2";
@@ -29,7 +29,7 @@ export function createDashboardExtensionsBlockListItem(blockListItem, client) {
 }
 
 /**
- * Adds a dashboard extension to the safe list of the site you are  signed into. 
+ * Adds a dashboard extension to the safe list of the site you are  signed into.
  */
 export function createDashboardExtensionsSafeListItem(safeListItem, client) {
     const minVersion = "2020.2";
@@ -48,7 +48,7 @@ export function createDashboardExtensionsSafeListItem(safeListItem, client) {
 }
 
 /**
- * Deletes a specific extension from the block list of a server. 
+ * Deletes a specific extension from the block list of a server.
  */
 export function deleteDashboardExtensionsBlockListItem(block_list_item_luid, client) {
     const minVersion = "2020.2";
@@ -59,7 +59,7 @@ export function deleteDashboardExtensionsBlockListItem(block_list_item_luid, cli
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/-/settings/server/extensions/dashboard/blockListItems/{block_list_item_luid}`)
+            .withPath(`/api/-/settings/server/extensions/dashboard/blockListItems/${block_list_item_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -67,7 +67,7 @@ export function deleteDashboardExtensionsBlockListItem(block_list_item_luid, cli
 
 /**
  * Deletes a specific dashboard extension from the safe list of the site you are signed
- * into. 
+ * into.
  */
 export function deleteDashboardExtensionsSafeListItem(safe_list_item_luid, client) {
     const minVersion = "2020.2";
@@ -78,14 +78,14 @@ export function deleteDashboardExtensionsSafeListItem(safe_list_item_luid, clien
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/{safe_list_item_luid}`)
+            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/${safe_list_item_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Gets the details of a specific dashboard extension on the blocked list of a server. 
+ * Gets the details of a specific dashboard extension on the blocked list of a server.
  */
 export function getDashboardExtensionsBlockListItem(block_list_item_luid, client) {
     const minVersion = "2020.2";
@@ -96,14 +96,14 @@ export function getDashboardExtensionsBlockListItem(block_list_item_luid, client
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/-/settings/server/extensions/dashboard/blockListItems/{block_list_item_luid}`)
+            .withPath(`/api/-/settings/server/extensions/dashboard/blockListItems/${block_list_item_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Lists the dashboard extensions on the blocked list of a server. 
+ * Lists the dashboard extensions on the blocked list of a server.
  */
 export function getDashboardExtensionsBlockListItems(client) {
     const minVersion = "2020.2";
@@ -121,7 +121,7 @@ export function getDashboardExtensionsBlockListItems(client) {
 
 /**
  * Gets the details of a specific dashboard extension on the safe list of the site you are
- * signed into. 
+ * signed into.
  */
 export function getDashboardExtensionsSafeListItem(safe_list_item_luid, client) {
     const minVersion = "2020.2";
@@ -132,14 +132,14 @@ export function getDashboardExtensionsSafeListItem(safe_list_item_luid, client) 
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/{safe_list_item_luid}`)
+            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/${safe_list_item_luid}`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Lists the dashboard extensions on the safe list of the site you are signed into. 
+ * Lists the dashboard extensions on the safe list of the site you are signed into.
  */
 export function getDashboardExtensionsSafeListItems(client) {
     const minVersion = "2020.2";
@@ -156,7 +156,7 @@ export function getDashboardExtensionsSafeListItems(client) {
 }
 
 /**
- * Lists the dashboard extension settings of a server. 
+ * Lists the dashboard extension settings of a server.
  */
 export function getDashboardExtensionsServerSettings(client) {
     const minVersion = "2020.2";
@@ -173,7 +173,7 @@ export function getDashboardExtensionsServerSettings(client) {
 }
 
 /**
- * Lists the dashboard extension settings of the site you are signed into. 
+ * Lists the dashboard extension settings of the site you are signed into.
  */
 export function getDashboardExtensionsSiteSettings(client) {
     const minVersion = "2020.2";
@@ -191,7 +191,7 @@ export function getDashboardExtensionsSiteSettings(client) {
 
 /**
  * Updates the settings of a specific dashboard extension in the safe list of the site you
- * are signed into. 
+ * are signed into.
  */
 export function updateDashboardExtensionsSafeListItem(safe_list_item_luid, safeListItem, client) {
     const minVersion = "2020.2";
@@ -202,7 +202,7 @@ export function updateDashboardExtensionsSafeListItem(safe_list_item_luid, safeL
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
-            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/{safe_list_item_luid}`)
+            .withPath(`/api/-/settings/site/extensions/dashboard/safeListItems/${safe_list_item_luid}`)
             .withHeaders({"Content-Type":"application/vnd.tableau.extensions.dashboard.v1.SafeListItem+json"})
             .withBodyParameters(safeListItem)
             .withAuthenticationToken(token)
@@ -211,7 +211,7 @@ export function updateDashboardExtensionsSafeListItem(safe_list_item_luid, safeL
 }
 
 /**
- * Updates the settings for dashboard extensions of a server 
+ * Updates the settings for dashboard extensions of a server
  */
 export function updateDashboardExtensionsServerSettings(serverSettings, client) {
     const minVersion = "2020.2";
@@ -230,7 +230,7 @@ export function updateDashboardExtensionsServerSettings(serverSettings, client) 
 }
 
 /**
- * Updates the settings for dashboard extensions for the site you are signed into. 
+ * Updates the settings for dashboard extensions for the site you are signed into.
  */
 export function updateDashboardExtensionsSiteSettings(siteSettings, client) {
     const minVersion = "2020.2";

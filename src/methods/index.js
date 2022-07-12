@@ -4,8 +4,10 @@
  * and regenerate any files
  */
 export * from "./__analyticsExtensionsSettingsMethods";
+export * from "./__askDataLensMethods";
 export * from "./__authenticationMethods";
 export * from "./__connectedAppMethods";
+export * from "./__contentExplorationMethods";
 export * from "./__dashboardExtensionsSettingsMethods";
 export * from "./__dataSourcesMethods";
 export * from "./__extractAndEncryptionMethods";

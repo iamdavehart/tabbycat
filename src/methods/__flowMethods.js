@@ -210,30 +210,48 @@ export function getFlowRunTask(taskId, client) {
 }
 
 /**
- * Returns information about the specified flow run task. This method shows you information
- * about the scheduled task for the flow.
+ * Returns a list of scheduled flow tasks for the site.
  */
-export function getFlowRunTask(taskId, client) {
+export function getFlowRunTasks(client) {
     const minVersion = "3.3";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.GET)
+            .withPath(`/api/${version}/sites/${siteId}/tasks/runFlow`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Returns information about a specific linked task. This method shows you information about
+ * the scheduled linked task
+ */
+export function getLinkedTask(linkedTaskId, client) {
+    const minVersion = "3.15";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));
-	if (!taskId) return Promise.reject(new MissingPathParameterException("taskId"));  
+	if (!linkedTaskId) return Promise.reject(new MissingPathParameterException("linkedTaskId"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/tasks/runFlow/${taskId}`)
+            .withPath(`/api/${version}/sites/${siteId}/tasks/linked/${linkedTaskId}`)
             .withAuthenticationToken(token)
             .build()
     );
 }
 
 /**
- * Returns a list of scheduled flow tasks for the site.
+ * Returns a list of scheduled linked tasks for a site.
  */
-export function getFlowRunTasks(client) {
-    const minVersion = "3.3";
+export function getLinkedTasks(client) {
+    const minVersion = "3.15";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
@@ -241,25 +259,7 @@ export function getFlowRunTasks(client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/tasks/runFlow`)
-            .withAuthenticationToken(token)
-            .build()
-    );
-}
-
-/**
- * Returns a list of scheduled flow tasks for the site.
- */
-export function getFlowRunTasks(client) {
-    const minVersion = "3.3";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
-    if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
-    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
-    return execute(
-        TableauRestRequest.forServer(url)
-            .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/tasks/runFlow`)
+            .withPath(`/api/${version}/sites/${siteId}/tasks/linked`)
             .withAuthenticationToken(token)
             .build()
     );

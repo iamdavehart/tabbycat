@@ -5,45 +5,53 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { Paginated } from "tabbycat/types";
-import { PermissionsType } from "tabbycat/types";
-import { DataQualityWarningType } from "tabbycat/types";
-import { ContentListType } from "tabbycat/types";
-import { DataQualityTriggerType } from "tabbycat/types";
-import { TagListType } from "tabbycat/types";
-import { TagBatchType } from "tabbycat/types";
-import { DatabaseAnchorRequestType } from "tabbycat/types";
-import { ColumnType } from "tabbycat/types";
-import { DatabaseType } from "tabbycat/types";
-import { TableType } from "tabbycat/types";
-import { DataQualityIndicatorListType } from "tabbycat/types";
-import { DataQualityTriggerListType } from "tabbycat/types";
-import { DataQualityWarningListType } from "tabbycat/types";
-import { DatabaseAnchorResponseListType } from "tabbycat/types";
-import { ColumnListType } from "tabbycat/types";
-import { DatabaseListType } from "tabbycat/types";
-import { DataQualityIndicatorType } from "tabbycat/types";
-import { TableListType } from "tabbycat/types";
+import { PermissionsRequest } from "tabbycat/types";
+import { DataQualityWarningRequest } from "tabbycat/types";
+import { ContentListRequest } from "tabbycat/types";
+import { DataQualityTriggerRequest } from "tabbycat/types";
+import { TagsRequest } from "tabbycat/types";
+import { TagBatchRequest } from "tabbycat/types";
+import { DatabaseAnchorRequest } from "tabbycat/types";
+import { ContentLocationRequestRequest } from "tabbycat/types";
+import { column } from "tabbycat/types";
+import { DatabaseRequest } from "tabbycat/types";
+import { label } from "tabbycat/types";
+import { TableRequest } from "tabbycat/types";
+import { PermissionsResponse } from "tabbycat/types";
+import { DataQualityWarningResponse } from "tabbycat/types";
+import { DataQualityIndicatorListResponse } from "tabbycat/types";
+import { DataQualityTriggerListResponse } from "tabbycat/types";
+import { TagsResponse } from "tabbycat/types";
+import { DataQualityWarningListResponse } from "tabbycat/types";
+import { TagBatchResponse } from "tabbycat/types";
+import { DatabaseAnchorsResponse } from "tabbycat/types";
+import { labelList } from "tabbycat/types";
+import { columns } from "tabbycat/types";
+import { DatabaseResponse } from "tabbycat/types";
+import { databases } from "tabbycat/types";
+import { DataQualityIndicatorResponse } from "tabbycat/types";
+import { TableResponse } from "tabbycat/types";
+import { tables } from "tabbycat/types";
 
 /**
  * Add permissions to a database asset. To add permissions, the database asset must be
  * associated with a published data source.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {PermissionsType} permissions permissions
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @param {PermissionsRequest} permissions permissions
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function addDatabasePermissions(databaseId: string, permissions: PermissionsType, client?: ClientLite) : Promise<PermissionsType>;
+export function addDatabasePermissions(databaseLuid: string, permissions: PermissionsRequest, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
- * Applying default permissions to a database functions as a permissions template for the
- * database's children table assets. How default permissions are enforced depends on whether
- * the database is locked or unlocked.
- * @param {string} databaseId The unique ID of the database asset to set default
- * 		permissions for.
- * @param {PermissionsType} permissions permissions
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * Adds default permission capabilities to a user or group for table resources in that
+ * database. These default permissions function as a permissions template for the database's
+ * table assets.
+ * @param {string} databaseLuid The LUID of the database asset to set default permissions
+ * 		for.
+ * @param {PermissionsRequest} permissions permissions
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function addDatabasePermsDefault(databaseId: string, permissions: PermissionsType, client?: ClientLite) : Promise<PermissionsType>;
+export function addDatabasePermsDefault(databaseLuid: string, permissions: PermissionsRequest, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Create and apply a data quality warning to a database, table, published data source,
@@ -54,18 +62,18 @@ export function addDatabasePermsDefault(databaseId: string, permissions: Permiss
  * @param {string} contentLuid The unique ID of the asset (database, table, published
  * 		data source, flow, virtual connection, or virtual connection table). This is the same as
  * 		the content ID.
- * @param {DataQualityWarningType} dataQualityWarning dataQualityWarning
- * @returns {Promise<DataQualityWarningType>} Promise | undefined
+ * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
+ * @returns {Promise<DataQualityWarningResponse>} Promise | undefined
  */
-export function addDataQualityWarning(contentType: string, contentLuid: string, dataQualityWarning: DataQualityWarningType, client?: ClientLite) : Promise<DataQualityWarningType>;
+export function addDataQualityWarning(contentType: string, contentLuid: string, dataQualityWarning: DataQualityWarningRequest, client?: ClientLite) : Promise<DataQualityWarningResponse>;
 
 /**
  * Create or update one or more data quality certifications for different content and asset
  * items.
- * @param {ContentListType} contentList contentList
- * @returns {Promise<DataQualityIndicatorListType>} Promise | undefined
+ * @param {ContentListRequest} contentList contentList
+ * @returns {Promise<DataQualityIndicatorListResponse>} Promise | undefined
  */
-export function addDataQualityWarningCertification(contentList: ContentListType, client?: ClientLite) : Promise<DataQualityIndicatorListType>;
+export function addDataQualityWarningCertification(contentList: ContentListRequest, client?: ClientLite) : Promise<DataQualityIndicatorListResponse>;
 
 /**
  * Create or update one or more quality warning triggers to monitor and display alerts for
@@ -74,104 +82,103 @@ export function addDataQualityWarningCertification(contentList: ContentListType,
  * @param {string} contentType The type of content the quality warning trigger is being
  * 		applied to. Use one of the following values: datasource flow These values are not case
  * 		sensitive.
- * @param {DataQualityTriggerType} dataQualityTrigger dataQualityTrigger
+ * @param {DataQualityTriggerRequest} dataQualityTrigger dataQualityTrigger
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string} queryOptions.contentLuid The unique ID of the asset. This is the same
- * 		as the content ID.
- * @returns {Promise<DataQualityTriggerListType>} Promise | undefined
+ * @param {string} queryOptions.filter <parameter documentation missing>
+ * @returns {Promise<DataQualityTriggerListResponse>} Promise | undefined
  */
-export function addDataQualityWarningTrigger(contentType: string, dataQualityTrigger: DataQualityTriggerType, queryOptions?: { : string }, client?: ClientLite) : Promise<DataQualityTriggerListType>;
+export function addDataQualityWarningTrigger(contentType: string, dataQualityTrigger: DataQualityTriggerRequest, queryOptions?: { filter: string }, client?: ClientLite) : Promise<DataQualityTriggerListResponse>;
 
 /**
  * Add permissions to a table asset.
- * @param {string} tableId The unique ID of the table asset.
- * @param {PermissionsType} permissions permissions
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @param {string} tableLuid The LUID of the table asset.
+ * @param {PermissionsRequest} permissions permissions
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function addTablePermissions(tableId: string, permissions: PermissionsType, client?: ClientLite) : Promise<PermissionsType>;
+export function addTablePermissions(tableLuid: string, permissions: PermissionsRequest, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Add one or more tags to a column.
  * @param {string} columnId The unique ID of the column asset.
- * @param {TagListType} tags tags
- * @returns {Promise<TagListType>} Promise | undefined
+ * @param {TagsRequest} tags tags
+ * @returns {Promise<TagsResponse>} Promise | undefined
  */
-export function addTagsColumn(columnId: string, tags: TagListType, client?: ClientLite) : Promise<TagListType>;
+export function addTagsColumn(columnId: string, tags: TagsRequest, client?: ClientLite) : Promise<TagsResponse>;
 
 /**
  * Add one or more tags to a database.
  * @param {string} databaseId The unique ID of the database asset.
- * @param {TagListType} tags tags
- * @returns {Promise<TagListType>} Promise | undefined
+ * @param {TagsRequest} tags tags
+ * @returns {Promise<TagsResponse>} Promise | undefined
  */
-export function addTagsDatabase(databaseId: string, tags: TagListType, client?: ClientLite) : Promise<TagListType>;
+export function addTagsDatabase(databaseId: string, tags: TagsRequest, client?: ClientLite) : Promise<TagsResponse>;
 
 /**
  * Add one or more tags to a table.
  * @param {string} tableId The unique ID of the column asset.
- * @param {TagListType} tags tags
- * @returns {Promise<TagListType>} Promise | undefined
+ * @param {TagsRequest} tags tags
+ * @returns {Promise<TagsResponse>} Promise | undefined
  */
-export function addTagsTable(tableId: string, tags: TagListType, client?: ClientLite) : Promise<TagListType>;
+export function addTagsTable(tableId: string, tags: TagsRequest, client?: ClientLite) : Promise<TagsResponse>;
 
 /**
  * Add or update multiple data quality warnings (DQWs) for different content and asset
  * items.
- * @param {ContentListType} contentList contentList
- * @returns {Promise<DataQualityWarningListType>} Promise | undefined
+ * @param {ContentListRequest} contentList contentList
+ * @returns {Promise<DataQualityWarningListResponse>} Promise | undefined
  */
-export function batchAddDataQualityWarnings(contentList: ContentListType, client?: ClientLite) : Promise<DataQualityWarningListType>;
+export function batchAddDataQualityWarnings(contentList: ContentListRequest, client?: ClientLite) : Promise<DataQualityWarningListResponse>;
 
 /**
  * Add multiple tags to items that are different content and asset types.
- * @param {TagBatchType} tagBatch tagBatch
- * @returns {Promise<TagBatchType>} Promise | undefined
+ * @param {TagBatchRequest} tagBatch tagBatch
+ * @returns {Promise<TagBatchResponse>} Promise | undefined
  */
-export function batchAddTags(tagBatch: TagBatchType, client?: ClientLite) : Promise<TagBatchType>;
+export function batchAddTags(tagBatch: TagBatchRequest, client?: ClientLite) : Promise<TagBatchResponse>;
 
 /**
  * Permanently remove multiple data quality warning (DQW) items from different content and
  * asset types.
- * @param {ContentListType} contentList contentList
- * @returns {Promise<any>} Promise | undefined
+ * @param {ContentListRequest} contentList contentList
+ * @returns {Promise<>} Promise | undefined
  */
-export function batchDeleteDataQualityWarnings(contentList: ContentListType, client?: ClientLite) : Promise<any>;
+export function batchDeleteDataQualityWarnings(contentList: ContentListRequest, client?: ClientLite) : Promise<any>;
 
 /**
  * Delete multiple tags from items that are different content and asset types.
- * @param {TagBatchType} tagBatch tagBatch
- * @returns {Promise<TagBatchType>} Promise | undefined
+ * @param {TagBatchRequest} tagBatch tagBatch
+ * @returns {Promise<TagBatchResponse>} Promise | undefined
  */
-export function batchDeleteTags(tagBatch: TagBatchType, client?: ClientLite) : Promise<TagBatchType>;
+export function batchDeleteTags(tagBatch: TagBatchRequest, client?: ClientLite) : Promise<TagBatchResponse>;
 
 /**
  * Permanently remove the permissions applied to a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {string} groupId The unique ID of the group to remove the permissions for.
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @param {string} groupLuid The LUID of the group to remove the permissions for.
  * @param {string} capabilityName The explicit permissions capability to remove.
- * 		Capabilities that can be removed are Read, Write, or ChangePermissions.
+ * 		Capabilities that can be removed are Read, Write, ChangePermissions, or ChangeHierarchy.
  * @param {string} capabilityMode The permissions mode to remove. Modes that can be
  * 		removed are Allow or Deny.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteDatabasePermissionsForGroup(databaseId: string, groupId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+export function deleteDatabasePermissionsForGroup(databaseLuid: string, groupLuid: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the permissions applied to a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {string} userId The unique ID of the user to remove the permissions for.
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @param {string} userLuid The LUID of the user to remove the permissions for.
  * @param {string} capabilityName The explicit permissions capability to remove.
- * 		Capabilities that can be removed are Read, Write, or ChangePermissions.
+ * 		Capabilities that can be removed are Read, Write, ChangePermissions, or ChangeHierarchy.
  * @param {string} capabilityMode The permissions mode to remove. Modes that can be
  * 		removed are Allow or Deny.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteDatabasePermissionsForUser(databaseId: string, userId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+export function deleteDatabasePermissionsForUser(databaseLuid: string, userLuid: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove a data quality warning.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataQualityWarning(dataqualitywarningId: string, client?: ClientLite) : Promise<any>;
 
@@ -179,13 +186,13 @@ export function deleteDataQualityWarning(dataqualitywarningId: string, client?: 
  * Permanently remove a data quality certification from a content or asset item using the
  * data quality certification ID.
  * @param {string} certificationLuid The unique ID of the data quality certification.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataQualityWarningCertification(certificationLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove all data quality certifications from multiple content or asset items.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataQualityWarningCertifications(client?: ClientLite) : Promise<any>;
 
@@ -197,14 +204,14 @@ export function deleteDataQualityWarningCertifications(client?: ClientLite) : Pr
  * 		virtualconnectiontable Types are not case sensitive.
  * @param {string} contentLuid The LUID of the content (database, table, published data
  * 		source, flow, virtual connection, or virtual connection table).
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataQualityWarnings(contentType: string, contentLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove a quality warning trigger using the quality warning trigger ID.
  * @param {string} triggerId The unique ID of the quality warning trigger.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataQualityWarningTrigger(triggerId: string, client?: ClientLite) : Promise<any>;
 
@@ -215,133 +222,201 @@ export function deleteDataQualityWarningTrigger(triggerId: string, client?: Clie
  * 		applied to. In this case, use one of the following values: datasource flow These values
  * 		are not case sensitive.
  * @param {Object} queryOptions an object containing the query options for this request
- * @param {string} queryOptions.contentLuid The unique ID of the asset. This is the same
- * 		as the content ID.
- * @returns {Promise<any>} Promise | undefined
+ * @param {string} queryOptions.filter <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteDataQualityWarningTriggers(contentType: string, queryOptions?: { : string }, client?: ClientLite) : Promise<any>;
+export function deleteDataQualityWarningTriggers(contentType: string, queryOptions?: { filter: string }, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the default permissions on a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {string} groupId The ID of the group to remove the default permission for.
+ * @param {string} databaseLuid The LUID of the database asset.
  * @param {string} capabilityName The capability to remove the permissions for. Valid
  * 		capabilities for databases are the following: Read (view) Write (edit) ChangePermissions
- * 		(manage permissions) For more information, see Permissions.
+ * 		(set permissions) ChangeHierarchy (move) For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
  * 		the deny permission.
- * @returns {Promise<any>} Promise | undefined
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteDefaultDatabasePermissionsForGroup(databaseId: string, groupId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+export function deleteDefaultDatabasePermissionsForGroup(databaseLuid: string, capabilityName: string, capabilityMode: string, groupLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the default permissions on a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {string} userId The ID of the user to remove the default permission for.
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @param {string} userLuid The LUID of the user to remove the default permission for.
  * @param {string} capabilityName The capability to remove the permissions for. Valid
  * 		capabilities for databases are the following: Read (view) Write (edit) ChangePermissions
- * 		(manage permissions) For more information, see Permissions.
+ * 		(set permissions) ChangeHierarchy (move) For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
  * 		the deny permission.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteDefaultDatabasePermissionsForUser(databaseId: string, userId: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+export function deleteDefaultDatabasePermissionsForUser(databaseLuid: string, userLuid: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Deletes a data label by its LUID.
+ * @param {string} labelLuid The unique LUID of the label asset.
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteLabel(labelLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Deletes the data labels on one or more assets.
+ * @param {ContentListRequest} contentList contentList
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string} queryOptions.categories (Optional) A comma-separated list of
+ * 		categories used to limit the label deletions to only the listed categories. Valid
+ * 		categories are warning and certification.
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteLabelsOnAssets(contentList: ContentListRequest, queryOptions?: { categories: string }, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the permissions applied to a table asset.
+ * @param {string} tableLuid The LUID of the table asset.
+ * @param {string} groupLuid The LUID of the group to remove the permissions for.
+ * @param {string} capabilityName The explicit permissions capability to remove.
+ * 		Capabilities that can be removed are Read, Write, ChangePermissions, or ChangeHierarchy.
+ * @param {string} capabilityMode The permissions mode to remove. Modes that can be
+ * 		removed are Allow or Deny.
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteTablePermissionsForGroup(tableLuid: string, groupLuid: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Permanently remove the permissions applied to a table asset.
+ * @param {string} tableLuid The LUID of the table asset.
+ * @param {string} userLuid The LUID of the user to remove the permissions for.
+ * @param {string} capabilityName The explicit permissions capability to remove.
+ * 		Capabilities that can be removed are Read, Write, ChangePermissions, or ChangeHierarchy.
+ * @param {string} capabilityMode The permissions mode to remove. Modes that can be
+ * 		removed are Allow or Deny.
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteTablePermissionsForUser(tableLuid: string, userLuid: string, capabilityName: string, capabilityMode: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Delete a tag from a table.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<any>} Promise | undefined
+ * @param {string} tagName The keyword text of the tag.
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteTablePerms(tableId: string, client?: ClientLite) : Promise<any>;
+export function deleteTagsFromColumn(tableId: string, tagName: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Delete a tag from a column.
  * @param {string} columnId The unique ID of the column asset.
  * @param {string} tagName The keyword text of the tag.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteTagsDatabase(columnId: string, tagName: string, client?: ClientLite) : Promise<any>;
+export function deleteTagsFromDatabase(columnId: string, tagName: string, client?: ClientLite) : Promise<any>;
 
 /**
- * Delete a tag from a column.
- * @param {string} columnId The unique ID of the column asset.
+ * Delete a tag from a database.
+ * @param {string} databaseId The unique ID of the database asset.
  * @param {string} tagName The keyword text of the tag.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
-export function deleteTagsDatabase(columnId: string, tagName: string, client?: ClientLite) : Promise<any>;
-
-/**
- * Delete a tag from a column.
- * @param {string} columnId The unique ID of the column asset.
- * @param {string} tagName The keyword text of the tag.
- * @returns {Promise<any>} Promise | undefined
- */
-export function deleteTagsDatabase(columnId: string, tagName: string, client?: ClientLite) : Promise<any>;
+export function deleteTagsFromTable(databaseId: string, tagName: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Query databases and tables from the connection information in the data source (.tds or
  * .tdsx) or workbook (.tws or .twbx) file's XML.
- * @param {DatabaseAnchorRequestType} databaseAnchor databaseAnchor
- * @returns {Promise<DatabaseAnchorResponseListType>} Promise | undefined
+ * @param {DatabaseAnchorRequest} databaseAnchor databaseAnchor
+ * @returns {Promise<DatabaseAnchorsResponse>} Promise | undefined
  */
-export function getDatabasesAndTablesFromConnection(databaseAnchor: DatabaseAnchorRequestType, client?: ClientLite) : Promise<DatabaseAnchorResponseListType>;
+export function getDatabasesAndTablesFromConnection(databaseAnchor: DatabaseAnchorRequest, client?: ClientLite) : Promise<DatabaseAnchorsResponse>;
+
+/**
+ * Gets a data label by its LUID.
+ * @param {string} labelLuid The unique LUID of the label asset.
+ * @returns {Promise<label>} Promise | undefined
+ */
+export function getLabel(labelLuid: string, client?: ClientLite) : Promise<label>;
+
+/**
+ * Displays information about the data labels on one or more assets.
+ * @param {ContentListRequest} contentList contentList
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string} queryOptions.categories (Optional) A comma-separated list of
+ * 		categories used to limit the labels shown to only the listed categories. Valid categories
+ * 		are warning and certification.
+ * @returns {Promise<labelList>} Promise | undefined
+ */
+export function getLabelsOnAssets(contentList: ContentListRequest, queryOptions?: { categories: string }, client?: ClientLite) : Promise<labelList>;
+
+/**
+ * Move one or more databases to a project. You can move the database and its tables, or
+ * move only the database. To move a table independently of its database, use the Move Table
+ * method.
+ * @param {ContentLocationRequestRequest} contentLocationRequest contentLocationRequest
+ * @returns {Promise<>} Promise | undefined
+ */
+export function moveDatabase(contentLocationRequest: ContentLocationRequestRequest, client?: ClientLite) : Promise<any>;
+
+/**
+ * Moves one or more tables to a project.
+ * @param {ContentLocationRequestRequest} contentLocationRequest contentLocationRequest
+ * @returns {Promise<>} Promise | undefined
+ */
+export function moveTable(contentLocationRequest: ContentLocationRequestRequest, client?: ClientLite) : Promise<any>;
 
 /**
  * Get information about a column in a table asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @returns {Promise<ColumnType>} Promise | undefined
+ * @returns {Promise<column>} Promise | undefined
  */
-export function queryColumn(tableId: string, columnId: string, client?: ClientLite) : Promise<ColumnType>;
+export function queryColumn(tableId: string, columnId: string, client?: ClientLite) : Promise<column>;
 
 /**
  * Get information about the columns in a table asset.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<ColumnListType>} Promise | undefined
+ * @returns {Promise<columns>} Promise | undefined
  */
-export function queryColumns(tableId: string, client?: ClientLite) : Promise<ColumnListType>;
+export function queryColumns(tableId: string, client?: ClientLite) : Promise<columns>;
 
 /**
  * Get information about a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @returns {Promise<DatabaseType>} Promise | undefined
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @returns {Promise<DatabaseResponse>} Promise | undefined
  */
-export function queryDatabase(databaseId: string, client?: ClientLite) : Promise<DatabaseType>;
+export function queryDatabase(databaseLuid: string, client?: ClientLite) : Promise<DatabaseResponse>;
 
 /**
  * Get information about the permissions on a database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function queryDatabasePerms(databaseId: string, client?: ClientLite) : Promise<PermissionsType>;
+export function queryDatabasePerms(databaseLuid: string, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Get the default permissions applied to the database asset and its children tables.
- * @param {string} databaseId The unique ID of the database asset to set default
- * 		permissions for.
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @param {string} databaseLuid The LUID of the database asset to set default permissions
+ * 		for.
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function queryDatabasePermsDefault(databaseId: string, client?: ClientLite) : Promise<PermissionsType>;
+export function queryDatabasePermsDefault(databaseLuid: string, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Get information about all database assets for a site.
- * @returns {Promise<Paginated<DatabaseListType>>} Promise | undefined
+ * @returns {Promise<databases>} Promise | undefined
  */
-export function queryDatabases(client?: ClientLite) : Promise<Paginated<DatabaseListType>>;
+export function queryDatabases(client?: ClientLite) : Promise<databases>;
 
 /**
  * Get information about a specific data quality warning.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning.
- * @returns {Promise<DataQualityWarningType>} Promise | undefined
+ * @returns {Promise<DataQualityWarningResponse>} Promise | undefined
  */
-export function queryDataQualityWarning(dataqualitywarningId: string, client?: ClientLite) : Promise<DataQualityWarningType>;
+export function queryDataQualityWarning(dataqualitywarningId: string, client?: ClientLite) : Promise<DataQualityWarningResponse>;
 
 /**
  * Get information about a data quality certification.
  * @param {string} certificationLuid The unique ID of the data quality certification.
- * @returns {Promise<DataQualityIndicatorType>} Promise | undefined
+ * @returns {Promise<DataQualityIndicatorResponse>} Promise | undefined
  */
-export function queryDataQualityWarningCertification(certificationLuid: string, client?: ClientLite) : Promise<DataQualityIndicatorType>;
+export function queryDataQualityWarningCertification(certificationLuid: string, client?: ClientLite) : Promise<DataQualityIndicatorResponse>;
 
 /**
  * Get all data quality certifications for content or asset items.
@@ -350,9 +425,9 @@ export function queryDataQualityWarningCertification(certificationLuid: string, 
  * 		datasource virtualconnection virtualconnectiontable These values are not case sensitive.
  * @param {string} contentLuid The LUID of the content (database, table, published data
  * 		source, flow, virtual connection, or virtual connection table).
- * @returns {Promise<DataQualityIndicatorType>} Promise | undefined
+ * @returns {Promise<DataQualityIndicatorResponse>} Promise | undefined
  */
-export function queryDataQualityWarningCertifications(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityIndicatorType>;
+export function queryDataQualityWarningCertifications(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityIndicatorResponse>;
 
 /**
  * Get information about the data quality warning for the database, table, published data
@@ -363,9 +438,9 @@ export function queryDataQualityWarningCertifications(contentType: string, conte
  * 		case sensitive.
  * @param {string} contentLuid The LUID of the content (database, table, published data
  * 		source, flow, virtual connection, or virtual connection table).
- * @returns {Promise<DataQualityWarningListType>} Promise | undefined
+ * @returns {Promise<DataQualityWarningListResponse>} Promise | undefined
  */
-export function queryDataQualityWarnings(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityWarningListType>;
+export function queryDataQualityWarnings(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityWarningListResponse>;
 
 /**
  * Get information about all quality warning triggers for a content item.
@@ -374,60 +449,56 @@ export function queryDataQualityWarnings(contentType: string, contentLuid: strin
  * 		These values are not case sensitive.
  * @param {string} contentLuid The unique ID of the asset. This is the same as the
  * 		content ID.
- * @returns {Promise<DataQualityTriggerListType>} Promise | undefined
+ * @returns {Promise<DataQualityTriggerListResponse>} Promise | undefined
  */
-export function queryDataQualityWarningTriggers(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityTriggerListType>;
+export function queryDataQualityWarningTriggers(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityTriggerListResponse>;
 
 /**
- * Get information about all quality warning triggers for a content item.
- * @param {string} contentType The type of content that the quality warning trigger has
- * 		been applied to. To specify the type, use one of the following values: datasource flow
- * 		These values are not case sensitive.
- * @param {string} contentLuid The unique ID of the asset. This is the same as the
- * 		content ID.
- * @returns {Promise<DataQualityTriggerListType>} Promise | undefined
+ * Get information about a quality warning trigger.
+ * @param {string} triggerId The unique ID of the quality warning trigger.
+ * @returns {Promise<DataQualityTriggerListResponse>} Promise | undefined
  */
-export function queryDataQualityWarningTriggers(contentType: string, contentLuid: string, client?: ClientLite) : Promise<DataQualityTriggerListType>;
+export function queryQualityWarningTrigger(triggerId: string, client?: ClientLite) : Promise<DataQualityTriggerListResponse>;
 
 /**
  * Get information about a table asset.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<TableType>} Promise | undefined
+ * @returns {Promise<TableResponse>} Promise | undefined
  */
-export function queryTable(tableId: string, client?: ClientLite) : Promise<TableType>;
+export function queryTable(tableId: string, client?: ClientLite) : Promise<TableResponse>;
 
 /**
  * Get information about the permissions on a table asset.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<PermissionsType>} Promise | undefined
+ * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function queryTablePermissions(tableId: string, client?: ClientLite) : Promise<PermissionsType>;
+export function queryTablePermissions(tableId: string, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Get information about all table assets for a site.
- * @returns {Promise<TableListType>} Promise | undefined
+ * @returns {Promise<tables>} Promise | undefined
  */
-export function queryTables(client?: ClientLite) : Promise<TableListType>;
+export function queryTables(client?: ClientLite) : Promise<tables>;
 
 /**
  * Permanently remove the column from a table asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function removeColumn(tableId: string, columnId: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the database asset.
  * @param {string} databaseId The unique ID of the database asset.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function removeDatabase(databaseId: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Permanently remove the table asset.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function removeTable(tableId: string, client?: ClientLite) : Promise<any>;
 
@@ -435,41 +506,61 @@ export function removeTable(tableId: string, client?: ClientLite) : Promise<any>
  * Update the description of the column.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @param {ColumnType} column column
- * @returns {Promise<ColumnType>} Promise | undefined
+ * @param {column} column column
+ * @returns {Promise<column>} Promise | undefined
  */
-export function updateColumn(tableId: string, columnId: string, column: ColumnType, client?: ClientLite) : Promise<ColumnType>;
+export function updateColumn(tableId: string, columnId: string, column: column, client?: ClientLite) : Promise<column>;
 
 /**
- * Update the database description, certify a database, or assign a contact (must be a
- * Tableau Server or Tableau Online user) to the database asset.
- * @param {string} databaseId The unique ID of the database asset.
- * @param {DatabaseType} database database
- * @returns {Promise<DatabaseType>} Promise | undefined
+ * Update the database description, certify a database, set content permissions, or assign a
+ * contact (must be a Tableau Server or Tableau Online user) to the database asset.
+ * @param {string} databaseLuid The LUID of the database asset.
+ * @param {DatabaseRequest} database database
+ * @returns {Promise<DatabaseResponse>} Promise | undefined
  */
-export function updateDatabase(databaseId: string, database: DatabaseType, client?: ClientLite) : Promise<DatabaseType>;
+export function updateDatabase(databaseLuid: string, database: DatabaseRequest, client?: ClientLite) : Promise<DatabaseResponse>;
 
 /**
  * Update the warning type, status, and message of a data quality warning.
  * @param {string} dataqualitywarningId The unique ID of the data quality warning.
- * @param {DataQualityWarningType} dataQualityWarning dataQualityWarning
- * @returns {Promise<DataQualityWarningType>} Promise | undefined
+ * @param {DataQualityWarningRequest} dataQualityWarning dataQualityWarning
+ * @returns {Promise<DataQualityWarningResponse>} Promise | undefined
  */
-export function updateDataQualityWarning(dataqualitywarningId: string, dataQualityWarning: DataQualityWarningType, client?: ClientLite) : Promise<DataQualityWarningType>;
+export function updateDataQualityWarning(dataqualitywarningId: string, dataQualityWarning: DataQualityWarningRequest, client?: ClientLite) : Promise<DataQualityWarningResponse>;
 
 /**
  * Update a quality warning trigger.
  * @param {string} triggerId The unique ID of the quality warning trigger.
- * @param {DataQualityTriggerType} dataQualityTrigger dataQualityTrigger
- * @returns {Promise<DataQualityTriggerListType>} Promise | undefined
+ * @param {DataQualityTriggerRequest} dataQualityTrigger dataQualityTrigger
+ * @returns {Promise<DataQualityTriggerListResponse>} Promise | undefined
  */
-export function updateDataQualityWarningTrigger(triggerId: string, dataQualityTrigger: DataQualityTriggerType, client?: ClientLite) : Promise<DataQualityTriggerListType>;
+export function updateDataQualityWarningTrigger(triggerId: string, dataQualityTrigger: DataQualityTriggerRequest, client?: ClientLite) : Promise<DataQualityTriggerListResponse>;
+
+/**
+ * Updates a label by its LUID. This method can update the label value, message, active
+ * flag, and elevated flag.
+ * @param {string} labelLuid The unique LUID of the label asset.
+ * @param {label} label label
+ * @returns {Promise<label>} Promise | undefined
+ */
+export function updateLabel(labelLuid: string, label: label, client?: ClientLite) : Promise<label>;
+
+/**
+ * Creates or updates labels on one or more assets. (An asset can be Tableau content or an
+ * external asset.) Each asset listed in the request body is updated to have a label with the
+ * specified value, message, active flag, and elevated flag. Assets without an existing label
+ * of the corresponding category will have a new label created. Assets that already have a
+ * label of the same category will have the label updated.
+ * @param {ContentListRequest} contentList contentList
+ * @returns {Promise<labelList>} Promise | undefined
+ */
+export function updatesLabelsOnAssets(contentList: ContentListRequest, client?: ClientLite) : Promise<labelList>;
 
 /**
  * Update the table description, certify a table, or a assign a user contact to the table
  * asset.
  * @param {string} tableId The unique ID of the table asset.
- * @param {TableType} table table
- * @returns {Promise<TableType>} Promise | undefined
+ * @param {TableRequest} table table
+ * @returns {Promise<TableResponse>} Promise | undefined
  */
-export function updateTable(tableId: string, table: TableType, client?: ClientLite) : Promise<TableType>;
+export function updateTable(tableId: string, table: TableRequest, client?: ClientLite) : Promise<TableResponse>;

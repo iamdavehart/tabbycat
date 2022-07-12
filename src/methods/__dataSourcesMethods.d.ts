@@ -5,30 +5,32 @@
  */
 
 import { ClientLite } from "tabbycat/client";
-import { Paginated } from "tabbycat/types";
-import { TagListType } from "tabbycat/types";
-import { DataSourceType } from "tabbycat/types";
-import { ActionListType } from "tabbycat/types";
-import { ConnectionType } from "tabbycat/types";
-import { RevisionListType } from "tabbycat/types";
-import { ConnectionListType } from "tabbycat/types";
-import { DataSourceListType } from "tabbycat/types";
-import { JobType } from "tabbycat/types";
+import { TagsRequest } from "tabbycat/types";
+import { DatasourceRequest } from "tabbycat/types";
+import { ActionsRequest } from "tabbycat/types";
+import { ConnectionRequest } from "tabbycat/types";
+import { TagsResponse } from "tabbycat/types";
+import { RevisionsResponse } from "tabbycat/types";
+import { DatasourceResponse } from "tabbycat/types";
+import { ConnectionsResponse } from "tabbycat/types";
+import { DatasourcesResponse } from "tabbycat/types";
+import { JobResponse } from "tabbycat/types";
+import { ConnectionResponse } from "tabbycat/types";
 
 /**
  * Adds one or more tags to the specified data source.
  * @param {string} datasourceId The ID of the data source to add tags to.
- * @param {TagListType} tags tags
- * @returns {Promise<TagListType>} Promise | undefined
+ * @param {TagsRequest} tags tags
+ * @returns {Promise<TagsResponse>} Promise | undefined
  */
-export function addTagsToDataSource(datasourceId: string, tags: TagListType, client?: ClientLite) : Promise<TagListType>;
+export function addTagsToDataSource(datasourceId: string, tags: TagsRequest, client?: ClientLite) : Promise<TagsResponse>;
 
 /**
  * Deletes the specified data source from a site. When a data source is deleted, its
  * associated data connection is also deleted. Workbooks that use the data source are not
  * deleted, but they will no longer work properly.
  * @param {string} datasourceId The ID of the data source to delete.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteDataSource(datasourceId: string, client?: ClientLite) : Promise<any>;
 
@@ -36,7 +38,7 @@ export function deleteDataSource(datasourceId: string, client?: ClientLite) : Pr
  * Deletes a tag from the specified data source.
  * @param {string} datasourceId The ID of the data source to remove the tag from.
  * @param {string} tagName The name of the tag to remove from the data source.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function deleteTagFromDataSource(datasourceId: string, tagName: string, client?: ClientLite) : Promise<any>;
 
@@ -49,7 +51,7 @@ export function deleteTagFromDataSource(datasourceId: string, tagName: string, c
  * 		add the parameter ?includeExtract=False, the extract is not included when you download the
  * 		data source. You can use this parameter to improve performance if you are downloading
  * 		workbooks or data sources that have large extracts.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function downloadDataSource(datasourceId: string, queryOptions?: { includeExtract: string }, client?: ClientLite) : Promise<any>;
 
@@ -59,7 +61,7 @@ export function downloadDataSource(datasourceId: string, queryOptions?: { includ
  * @param {string} datasourceId The ID of the data source to download.
  * @param {number} revisionNumber The revision number of the data source to download. To
  * 		determine what versions are available, call Get Data Source Revisions.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function downloadDataSourceRevision(datasourceId: string, revisionNumber: number, client?: ClientLite) : Promise<any>;
 
@@ -72,15 +74,15 @@ export function downloadDataSourceRevision(datasourceId: string, revisionNumber:
  * 		see Paginating Results.
  * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default
  * 		is 1. For more information, see Paginating Results.
- * @returns {Promise<Paginated<RevisionListType>>} Promise | undefined
+ * @returns {Promise<RevisionsResponse>} Promise | undefined
  */
-export function getDataSourceRevisions(datasourceId: string, queryOptions?: { pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<Paginated<RevisionListType>>;
+export function getDataSourceRevisions(datasourceId: string, queryOptions?: { pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<RevisionsResponse>;
 
 /**
  * Publishes a data source on the specified site, or appends data to an existing data
  * source. To make other changes to a published data source, call Update Data Source or
  * Update Data Source Connection.
- * @param {DataSourceType} datasource datasource
+ * @param {DatasourceRequest} datasource datasource
  * @param {Object} file File Contents
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {boolean} queryOptions.overwrite (Optional) true to overwrite a data source
@@ -110,24 +112,24 @@ export function getDataSourceRevisions(datasourceId: string, queryOptions?: { pa
  * 		that you are uploading. This value is required if you are calling Publish Data Source in
  * 		order to commit a file that was previously uploaded using Append to File Upload. The value
  * 		is not used if you upload a file in the body of the request.
- * @returns {Promise<DataSourceType>} Promise | undefined
+ * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
-export function publishDataSource(datasource: DataSourceType, file: Object, queryOptions?: { overwrite: boolean, asJob: boolean, append: boolean, uploadSessionId: string, datasourceType: string }, client?: ClientLite) : Promise<DataSourceType>;
+export function publishDataSource(datasource: DatasourceRequest, file: Object, queryOptions?: { overwrite: boolean, asJob: boolean, append: boolean, uploadSessionId: string, datasourceType: string }, client?: ClientLite) : Promise<DatasourceResponse>;
 
 /**
  * Returns information about the specified data source.
  * @param {string} datasourceId The ID of the data source to get.
- * @returns {Promise<DataSourceType>} Promise | undefined
+ * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
-export function queryDataSource(datasourceId: string, client?: ClientLite) : Promise<DataSourceType>;
+export function queryDataSource(datasourceId: string, client?: ClientLite) : Promise<DatasourceResponse>;
 
 /**
  * Returns a list of data connections for the specified data source.
  * @param {string} datasourceId The ID of the data source to return connection
  * 		information about.
- * @returns {Promise<ConnectionListType>} Promise | undefined
+ * @returns {Promise<ConnectionsResponse>} Promise | undefined
  */
-export function queryDataSourceConnections(datasourceId: string, client?: ClientLite) : Promise<ConnectionListType>;
+export function queryDataSourceConnections(datasourceId: string, client?: ClientLite) : Promise<ConnectionsResponse>;
 
 /**
  * Returns a list of published data sources on the specified site, with optional parameters
@@ -152,16 +154,16 @@ export function queryDataSourceConnections(datasourceId: string, client?: Client
  * 		keywords such as _all_ or _default_, and you can specify individual fields for the data
  * 		sources or other supported resources. You can include multiple field expressions in a
  * 		request. For more information, see Using Fields in the Rest API.
- * @returns {Promise<Paginated<DataSourceListType>>} Promise | undefined
+ * @returns {Promise<DatasourcesResponse>} Promise | undefined
  */
-export function queryDataSources(queryOptions?: { pageSize: number, pageNumber: number, filter: string, sort: string, fields: string }, client?: ClientLite) : Promise<Paginated<DataSourceListType>>;
+export function queryDataSources(queryOptions?: { pageSize: number, pageNumber: number, filter: string, sort: string, fields: string }, client?: ClientLite) : Promise<DatasourcesResponse>;
 
 /**
  * Removes a specific version of a data source from the specified site.
  * @param {string} datasourceId The ID of the data source to remove the revision for.
  * @param {number} revisionNumber The revision number of the data source to remove. To
  * 		determine what versions are available, call Get Data Source Revisions.
- * @returns {Promise<any>} Promise | undefined
+ * @returns {Promise<>} Promise | undefined
  */
 export function removeDataSourceRevision(datasourceId: string, revisionNumber: number, client?: ClientLite) : Promise<any>;
 
@@ -174,15 +176,15 @@ export function removeDataSourceRevision(datasourceId: string, revisionNumber: n
  * @param {string} datasourceId The ID of the data source to update.
  * @param {string} connectionId The ID of the connection. To determine what connections
  * 		are available for a data source, call Query Data Source Connections.
- * @param {ActionListType} actions actions
+ * @param {ActionsRequest} actions actions
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {string} queryOptions.uploadSessionId The upload session ID. A user-generated
  * 		identifier that is unique to a request. If the server receives more than one request with
  * 		the same ID within 24 hours, all subsequent requests will be treated as duplicates and
  * 		ignored by the server. This can be used to guarantee idempotency of requests.
- * @returns {Promise<JobType>} Promise | undefined
+ * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function updateDataInHyperConnection(datasourceId: string, connectionId: string, actions: ActionListType, queryOptions?: { uploadSessionId: string }, client?: ClientLite) : Promise<JobType>;
+export function updateDataInHyperConnection(datasourceId: string, connectionId: string, actions: ActionsRequest, queryOptions?: { uploadSessionId: string }, client?: ClientLite) : Promise<JobResponse>;
 
 /**
  * Modifies defined portions of published live-to-Hyper data from a specified data source.
@@ -190,23 +192,23 @@ export function updateDataInHyperConnection(datasourceId: string, connectionId: 
  * has a single connection. For a data source with multiple connections use Update Data in
  * Hyper Connection.
  * @param {string} datasourceId The ID of the data source to update.
- * @param {ActionListType} actions actions
+ * @param {ActionsRequest} actions actions
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {string} queryOptions.uploadSessionId The upload session ID. A user-generated
  * 		identifier that is unique to a request. If the server receives more than one request with
  * 		the same ID within 24 hours, all subsequent requests will be treated as duplicates and
  * 		ignored by the server. This can be used to guarantee idempotency of requests.
- * @returns {Promise<JobType>} Promise | undefined
+ * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function updateDataInHyperDataSource(datasourceId: string, actions: ActionListType, queryOptions?: { uploadSessionId: string }, client?: ClientLite) : Promise<JobType>;
+export function updateDataInHyperDataSource(datasourceId: string, actions: ActionsRequest, queryOptions?: { uploadSessionId: string }, client?: ClientLite) : Promise<JobResponse>;
 
 /**
  * Updates the owner, project or certification status of the specified data source.
  * @param {string} datasourceId The ID of the data source to update.
- * @param {DataSourceType} datasource datasource
- * @returns {Promise<DataSourceType>} Promise | undefined
+ * @param {DatasourceRequest} datasource datasource
+ * @returns {Promise<DatasourceResponse>} Promise | undefined
  */
-export function updateDataSource(datasourceId: string, datasource: DataSourceType, client?: ClientLite) : Promise<DataSourceType>;
+export function updateDataSource(datasourceId: string, datasource: DatasourceRequest, client?: ClientLite) : Promise<DatasourceResponse>;
 
 /**
  * Updates the server address, port, username, or password for the specified data source
@@ -214,14 +216,14 @@ export function updateDataSource(datasourceId: string, datasource: DataSourceTyp
  * @param {string} datasourceId The ID of the data source to update.
  * @param {string} connectionId The ID of the connection to update. To determine what
  * 		connections are available for a data source, call Query Data Source Connections.
- * @param {ConnectionType} connection connection
- * @returns {Promise<ConnectionType>} Promise | undefined
+ * @param {ConnectionRequest} connection connection
+ * @returns {Promise<ConnectionResponse>} Promise | undefined
  */
-export function updateDataSourceConnection(datasourceId: string, connectionId: string, connection: ConnectionType, client?: ClientLite) : Promise<ConnectionType>;
+export function updateDataSourceConnection(datasourceId: string, connectionId: string, connection: ConnectionRequest, client?: ClientLite) : Promise<ConnectionResponse>;
 
 /**
  * Runs an extract refresh on the specified data source.
  * @param {string} datasourceId The ID of the data source to refresh.
- * @returns {Promise<JobType>} Promise | undefined
+ * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function updateDataSourceNow(datasourceId: string, client?: ClientLite) : Promise<JobType>;
+export function updateDataSourceNow(datasourceId: string, client?: ClientLite) : Promise<JobResponse>;

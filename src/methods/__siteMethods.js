@@ -102,6 +102,28 @@ export function getDataAccelerationReport(client) {
 }
 
 /**
+ * Returns the current embedding settings for a specific site. Embedding settings can be
+ * used to restrict embedding Tableau views to only certain domains. This setting impacts all
+ * embedding scenarios that are not set up to use connected apps for authentication,
+ * including, Tableau Javascript API v2, Embedding API v3, and the embed code from the share
+ * dialog. For more information, see Tableau Site Settings for Embedding.
+ */
+export function getEmbeddingSettingsForSite(client) {
+    const minVersion = "3.16";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.GET)
+            .withPath(`/api/${version}/sites/${siteId}/settings/embedding`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
  * Gets the details of the views and workbooks on a site that have been most recently
  * created, updated, or accessed by the signed in user. The 24 most recently viewed items are
  * returned, though it may take some minutes after being viewed for an item to appear in the
@@ -215,6 +237,29 @@ export function queryViewsForSite(queryOptions, client) {
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/views`)
             .withQueryParameters(queryOptions)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Updates the embedding settings for a site. Embedding settings can be used to restrict
+ * embedding Tableau views to only certain domains. This setting impacts all embedding
+ * scenarios that are not set up to use connected apps for authentication, including, Tableau
+ * Javascript API v2, Embedding API v3, and the embed code from the share dialog. For more
+ * information, see Tableau Site Settings for Embedding.
+ */
+export function updateEmbeddingSettingsForSite(site, client) {
+    const minVersion = "3.16";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.PUT)
+            .withPath(`/api/${version}/sites/${siteId}/settings/embedding`)
+            .withBodyParameters(site)
             .withAuthenticationToken(token)
             .build()
     );

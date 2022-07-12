@@ -48,6 +48,26 @@ export function getMetric(metricLuid, client) {
 }
 
 /**
+ * Returns the data for the specified metric as comma separated (CSV) format. The maximum
+ * number of rows returned is 10,000.
+ */
+export function getMetricData(metricLuid, client) {
+    const minVersion = "";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!metricLuid) return Promise.reject(new MissingPathParameterException("metricLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.GET)
+            .withPath(`/api/${version}/sites/${siteId}/metrics/${metricLuid}/data`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
  * Returns the metrics configured for a site.
  */
 export function listMetricsForSite(queryOptions, client) {

@@ -30,7 +30,7 @@ export function addUserToGroup(groupId, user, client) {
 }
 
 /**
- * Adds a user to Tableau Server and assigns the user to the specified site.
+ * Adds a user to Tableau Server or Tableau and assigns the user to the specified site.
  */
 export function addUserToSite(user, client) {
     const minVersion = "1.0";
