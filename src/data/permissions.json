@@ -1,0 +1,20 @@
+[
+    { "apiName": "AddComment", "serverName": "Add Comment" },
+    { "apiName": "ChangeHierarchy", "serverName": "Move" },
+    { "apiName": "ChangePermissions", "serverName": "Set Permissions" },
+    { "apiName": "Connect", "serverName": "Connect" },
+    { "apiName": "Delete", "serverName": "Delete" },
+    { "apiName": "Execute", "serverName": "Run Flow" },
+    { "apiName": "ExportData", "serverName": "View Summary Data" },
+    { "apiName": "ExportImage", "serverName": "Export Image" },
+    { "apiName": "ExportXml", "serverName": "Download" },
+    { "apiName": "Filter", "serverName": "Filter" },
+    { "apiName": "InheritedProjectLeader", "serverName": "Project Leader" },
+    { "apiName": "ProjectLeader", "serverName": "Project Leader" },
+    { "apiName": "Read", "serverName": "View" },
+    { "apiName": "ShareView", "serverName": "Share Customized" },
+    { "apiName": "ViewComments", "serverName": "View Comments" },
+    { "apiName": "ViewUnderlyingData", "serverName": "View Underlying Data" },
+    { "apiName": "WebAuthoring", "serverName": "Web Edit" },
+    { "apiName": "Write", "serverName": "Save" }
+]
