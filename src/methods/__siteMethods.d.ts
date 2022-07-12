@@ -30,9 +30,10 @@ export function deleteSiteByContentUrl(contentUrl: string, client?: ClientLite) 
 
 /**
  * Deletes the specified site.
+ * @param {string} siteId The ID of the site to delete.
  * @returns {Promise<>} Promise | undefined
  */
-export function deleteSiteByID(client?: ClientLite) : Promise<any>;
+export function deleteSiteByID(siteId: string, client?: ClientLite) : Promise<any>;
 
 /**
  * Deletes the specified site.
@@ -86,6 +87,7 @@ export function querySiteByContentUrl(contentUrl: string, queryOptions?: { inclu
 /**
  * Returns information about the specified site, with the option to return information about
  * the storage space and user count for the site.
+ * @param {string} siteId The ID of the site to get information for.
  * @param {Object} queryOptions an object containing the query options for this request
  * @param {boolean} queryOptions.includeUsage The boolean flag to include site usage
  * 		metrics in the response body. If true, then the site element of the response will contain
@@ -94,7 +96,7 @@ export function querySiteByContentUrl(contentUrl: string, queryOptions?: { inclu
  * 		a querystring element any valid query site URI.
  * @returns {Promise<SiteResponse>} Promise | undefined
  */
-export function querySiteByID(queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteResponse>;
+export function querySiteByID(siteId: string, queryOptions?: { includeUsage: boolean }, client?: ClientLite) : Promise<SiteResponse>;
 
 /**
  * Returns information about the specified site, with the option to return information about

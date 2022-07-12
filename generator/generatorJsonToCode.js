@@ -101,10 +101,13 @@ function generateCodeFromJson(config) {
                 console.log(signatureParams);
             }
 
+            // we have a strange exception with specific site methods where the
+            // site id will be passed in as a parameter not take from the clients "current" site
+            const siteIdFilter = (k) => (k !== "siteId" && k !== "siteLuid") || m.extendedMethodName?.endsWith("SiteByID");
 
             const signatureWrappedParamsArray = [
                 ...Object.keys(signatureParams.path)
-                    .filter((k) => k !== "siteId" && k !== "siteLuid")
+                    .filter(siteIdFilter)
                     .map((k) => signatureParams.path[k]),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k]),
                 ...(Object.keys(signatureParams.query).length
@@ -122,7 +125,7 @@ function generateCodeFromJson(config) {
 
             const signatureWrappedJS = [
                 ...Object.keys(signatureParams.path)
-                    .filter((k) => k !== "siteId" && k !== "siteLuid")
+                    .filter(siteIdFilter)
                     .map((k) => signatureParams.path[k].name),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => signatureParams.body[k].name),
                 ...(Object.keys(signatureParams.query).length ? ["queryOptions"] : []),
@@ -130,7 +133,7 @@ function generateCodeFromJson(config) {
             ].join(", ");
 
             const signatureWrappedTS = [
-                ...Object.keys(signatureParams.path).filter((k) => k !== "siteId" && k !== "siteLuid").map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
+                ...Object.keys(signatureParams.path).filter(siteIdFilter).map((k) => `${signatureParams.path[k].name}: ${signatureParams.path[k].paramType}`),
                 ...Object.keys(signatureParams.body).filter(k => k.toLowerCase() !== "empty").map((k) => `${signatureParams.body[k].name}: ${signatureParams.body[k].paramType}`),
                 ...(Object.keys(signatureParams.query).length ? [`queryOptions?: { ${Object.keys(signatureParams.query).map(q => signatureParams.query[q].qsKey + ": "+signatureParams.query[q].paramType ?? "any").join(", ")} }`] : []),
                 "client?: ClientLite"
@@ -185,7 +188,7 @@ function generateCodeFromJson(config) {
 `
 export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
     const minVersion = "${m.version}";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    const { url, version,${m.extendedMethodName?.endsWith("SiteByID") ? "" : " siteId,"} token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());${pathParameterValidation ? "\n"+pathParameterValidation : ""}  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(

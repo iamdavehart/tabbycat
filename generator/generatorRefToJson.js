@@ -1,7 +1,7 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
 const utils = require("./utils");
-const { over, pick, values, isArray, extend } = require("lodash");
+const { over, pick, values, isArray, isPlainObject, extend } = require("lodash");
 const camel = utils.camel;
 const stripAllWhitespace = utils.stripAllWhitespace;
 
@@ -443,7 +443,9 @@ function generateReferenceIntermediate(config) {
                         const cfgUri = cfg ? cfg[u] : null;
 
                         // find or create a new name
-                        const newName = cfgUri || m.name + "_" + i.toString();
+                        const newName = (isPlainObject(cfgUri) && cfgUri.hasOwnProperty("name") ? cfgUri.name : cfgUri) || m.name + "_" + i.toString();
+                        // find or create a new uri
+                        const newUri = (isPlainObject(cfgUri) && cfgUri.hasOwnProperty("uri") ? cfgUri.uri : u) || u;
                         // filter the urls down to only those that match
                         const newUrls = m.urls.filter((url) => url.startsWith(u));
                         // remove path parameters that aren't in the uri
@@ -459,7 +461,7 @@ function generateReferenceIntermediate(config) {
                             ...m,
                             name: newName,
                             extendedMethodName: camel(newName),
-                            uri: u,
+                            uri: newUri,
                             uris: [],
                             uriParams: newUriParams,
                             urls: newUrls,

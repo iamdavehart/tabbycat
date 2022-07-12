@@ -40,7 +40,7 @@ export function deleteSiteByContentUrl(contentUrl, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${contentUrl}`)
+            .withPath(`/api/${version}/sites/${siteName}?key=contentUrl`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -49,9 +49,9 @@ export function deleteSiteByContentUrl(contentUrl, client) {
 /**
  * Deletes the specified site.
  */
-export function deleteSiteByID(client) {
+export function deleteSiteByID(siteId, client) {
     const minVersion = "1.0";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    const { url, version, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
@@ -76,7 +76,7 @@ export function deleteSiteByName(siteName, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteName}`)
+            .withPath(`/api/${version}/sites/${siteName}?key=name`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -157,7 +157,7 @@ export function querySiteByContentUrl(contentUrl, queryOptions, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${contentUrl}`)
+            .withPath(`/api/${version}/sites/${siteName}?key=contentUrl`)
             .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
@@ -168,9 +168,9 @@ export function querySiteByContentUrl(contentUrl, queryOptions, client) {
  * Returns information about the specified site, with the option to return information about
  * the storage space and user count for the site.
  */
-export function querySiteByID(queryOptions, client) {
+export function querySiteByID(siteId, queryOptions, client) {
     const minVersion = "1.0";
-    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    const { url, version, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
 	if (!siteId) return Promise.reject(new MissingPathParameterException("siteId"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
@@ -197,7 +197,7 @@ export function querySiteByName(siteName, queryOptions, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteName}`)
+            .withPath(`/api/${version}/sites/${siteName}?key=name`)
             .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()

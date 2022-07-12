@@ -347,13 +347,13 @@
         "urlToMethodMapping": {
             "#delete_site": {
                 "/api/${apiVersion}/sites/${siteId}": "Delete Site By ID",
-                "/api/${apiVersion}/sites/${siteName}": "Delete Site By Name",
-                "/api/${apiVersion}/sites/${contentUrl}": "Delete Site By Content Url"
+                "/api/${apiVersion}/sites/${siteName}": { "name": "Delete Site By Name", "uri": "/api/${apiVersion}/sites/${siteName}?key=name" },
+                "/api/${apiVersion}/sites/${contentUrl}": { "name": "Delete Site By Content Url", "uri": "/api/${apiVersion}/sites/${siteName}?key=contentUrl" }
             },
             "#query_site": {
                 "/api/${apiVersion}/sites/${siteId}": "Query Site By ID",
-                "/api/${apiVersion}/sites/${siteName}": "Query Site By Name",
-                "/api/${apiVersion}/sites/${contentUrl}": "Query Site By Content Url"
+                "/api/${apiVersion}/sites/${siteName}": { "name": "Query Site By Name", "uri": "/api/${apiVersion}/sites/${siteName}?key=name" },
+                "/api/${apiVersion}/sites/${contentUrl}": { "name": "Query Site By Content Url", "uri": "/api/${apiVersion}/sites/${siteName}?key=contentUrl" }
             },
             "#delete_flow_permission": {
                 "/api/${apiVersion}/sites/${siteId}/flows/${flowId}/permissions/groups/${groupId}/${capabilityName}/${capabilityMode}": "Delete Flow Permissions For Group",
