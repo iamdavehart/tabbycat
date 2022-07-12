@@ -1,4 +1,4 @@
-import { UserFilterExpressionBuilder, DatasourceFilterExpressionBuilder } from "./expression-filter";
+import { UserFilterExpressionBuilder, DatasourceFilterExpressionBuilder } from "./filter";
 
 describe("Expression Builder Tests", () => {
     test("User Filter Expressions", () => {
