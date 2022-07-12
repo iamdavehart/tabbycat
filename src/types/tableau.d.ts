@@ -2,6 +2,7 @@
 // name: error
 // namespace: tableau
 export interface error {
-    httpErrorCode?: string;
-    message?: string;
+  httpErrorCode?: string;
+  message?: string;
 }
+
