@@ -11,7 +11,7 @@ export class MissingPathParameterException extends Error {
     }
 }
 
-export class ExecutiveException extends Error {
+export class MissingExecutiveException extends Error {
     constructor() {
         super(`could not find an execute method`)
     }
