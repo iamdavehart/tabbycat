@@ -1,0 +1,20 @@
+{
+  "connections": {
+    "connection": [
+      {
+        "id": "be786ae0-d2bf-4a4b-9b34-e2de8d2d4488",
+        "type": "textscan",
+        "serverAddress": "forty-two.net",
+        "userName": "duo",
+        "embedPassword": "true"
+      },
+      {
+        "id": "970e24bc-e200-4841-a3e9-66e7d122d77e",
+        "type": "sqlserver",
+        "serverAddress": "database.com",
+        "userName": "heero",
+        "embedPassword": "false"
+      }
+    ]
+  }
+}

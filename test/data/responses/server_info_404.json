@@ -1,0 +1,7 @@
+{
+  "error": {
+    "summary": "Resource Not Found",
+    "detail": "Unknown resource '/2.4/serverInfo' specified in URI.",
+    "code": "404003"
+  }
+}

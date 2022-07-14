@@ -1,0 +1,11 @@
+{
+  "group": {
+    "import": {
+      "domainName": "active-directory-domain-name",
+      "siteRole": "Creator",
+      "grantLicenseMode": "onLogin"
+    },
+    "id": "3e4a9ea0-a07a-4fe6-b50f-c345c8c81034",
+    "name": "試供品"
+  }
+}

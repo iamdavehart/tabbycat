@@ -1,0 +1,15 @@
+{
+  "job": {
+    "updateUploadedFileJob": {
+      "datasource": {
+        "id": "9dbd2263-16b5-46e1-9c43-a76bb8ab65fb",
+        "name": "test datasource"
+      },
+      "connectionLuid": "7ecaccd8-39b0-4875-a77d-094f6e930019"
+    },
+    "id": "5c0ba560-c959-424e-b08a-f32ef0bfb737",
+    "mode": "Asynchronous",
+    "type": "UpdateUploadedFile",
+    "createdAt": "2021-09-18T09:40:12Z"
+  }
+}

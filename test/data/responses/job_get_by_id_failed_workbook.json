@@ -1,0 +1,19 @@
+{
+  "job": {
+    "extractRefreshJob": {
+      "workbook": {
+        "id": "5998aaaf-1abe-4d38-b4d9-bc53e85bdd13",
+        "name": "Superstore"
+      },
+      "notes": "java.lang.RuntimeException: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Login failed for user.\\nIntegrated authentication failed."
+    },
+    "id": "bb1aab79-db54-4e96-9dd3-461d8f081d08",
+    "mode": "Asynchronous",
+    "type": "RefreshExtract",
+    "progress": "100",
+    "createdAt": "2021-10-05T18:53:34Z",
+    "startedAt": "2021-10-05T18:53:34Z",
+    "completedAt": "2021-10-05T18:53:35Z",
+    "finishCode": "1"
+  }
+}

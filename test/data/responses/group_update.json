@@ -1,0 +1,11 @@
+{
+  "group": {
+    "import": {
+      "domainName": "local",
+      "siteRole": "ExplorerCanPublish",
+      "grantLicenseMode": "onLogin"
+    },
+    "id": "ef8b19c0-43b6-11e6-af50-63f5805dbe3c",
+    "name": "Group updated name"
+  }
+}

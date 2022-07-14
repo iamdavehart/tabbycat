@@ -1,0 +1,12 @@
+{
+  "task": {
+    "extractRefresh": {
+      "schedule": {
+        "id": "schedule-id"
+      },
+      "datasource": {
+        "id": "datasource-id"
+      }
+    }
+  }
+}

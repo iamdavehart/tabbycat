@@ -1,0 +1,24 @@
+{
+  "favorites": {
+    "favorite": [
+      {
+        "workbook": {
+          "id": "a8076ca1-e9d8-495e-bae6-c684dbb55836"
+        },
+        "label": "Test workbook fav"
+      },
+      {
+        "view": {
+          "id": "d79634e1-6063-4ec9-95ff-50acbf609ff5"
+        },
+        "label": "Test view fav"
+      },
+      {
+        "view": {
+          "id": "1672c199-0155-4b49-ad35-1da91ac24579"
+        },
+        "label": "Test datasource fav"
+      }
+    ]
+  }
+}

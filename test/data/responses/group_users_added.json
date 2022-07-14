@@ -1,0 +1,15 @@
+{
+  "pagination": {
+    "pageNumber": "1",
+    "pageSize": "100",
+    "totalAvailable": "1"
+  },
+  "users": {
+    "user": {
+      "id": "5de011f8-5aa9-4d5b-b991-f462c8dd6bb7",
+      "name": "testuser",
+      "siteRole": "ServerAdministrator",
+      "externalAuthUserId": ""
+    }
+  }
+}

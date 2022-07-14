@@ -1,0 +1,22 @@
+{
+  "dataAccelerationReport": {
+    "comparisonRecord": [
+      {
+        "site": "site-1",
+        "sheetURI": "sheet-1",
+        "unacceleratedSessionCount": "0",
+        "averageNonAcceleratedPLT": "0.0",
+        "acceleratedSessionCount": "1",
+        "averageAcceleratedPLT": "0.166"
+      },
+      {
+        "site": "site-2",
+        "sheetURI": "sheet-2",
+        "unacceleratedSessionCount": "2",
+        "averageNonAcceleratedPLT": "1.29",
+        "acceleratedSessionCount": "3",
+        "averageAcceleratedPLT": "0.372"
+      }
+    ]
+  }
+}

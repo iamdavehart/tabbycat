@@ -1,0 +1,34 @@
+{
+  "pagination": {
+    "pageNumber": "1",
+    "pageSize": "100",
+    "totalAvailable": "3"
+  },
+  "revisions": {
+    "revision": [
+      {
+        "user": {
+          "id": "5de011f8-5aa9-4d5b-b991-f462c8dd6bb7",
+          "name": "Cassie"
+        },
+        "createdAt": "2016-07-26T20:34:56Z",
+        "revisionNumber": "1",
+        "isDeleted": "false"
+      },
+      {
+        "createdAt": "2016-07-27T20:34:56Z",
+        "revisionNumber": "2",
+        "isDeleted": "false"
+      },
+      {
+        "user": {
+          "id": "5de011f8-5aa9-4d5b-b991-f462c8dd6bb7",
+          "name": "Cassie"
+        },
+        "createdAt": "2016-07-28T20:34:56Z",
+        "revisionNumber": "3",
+        "isCurrent": "true"
+      }
+    ]
+  }
+}

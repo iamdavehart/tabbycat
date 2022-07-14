@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "project": {
+      "owner": {
+        "id": "f143dfe3-55e3-490a-9fdb-e98c0ec89171"
+      },
+      "id": "b4065286-80f0-11ea-af1b-cb7191f48e45",
+      "name": "Default"
+    },
+    "granteeCapabilities": {
+      "group": {
+        "id": "b4488bce-80f0-11ea-af1c-976d0c1dab39"
+      },
+      "capabilities": {
+        "capability": [
+          {
+            "name": "Read",
+            "mode": "Allow"
+          },
+          {
+            "name": "Write",
+            "mode": "Allow"
+          },
+          {
+            "name": "Connect",
+            "mode": "Allow"
+          },
+          {
+            "name": "ExportXml",
+            "mode": "Deny"
+          }
+        ]
+      }
+    }
+  }
+}

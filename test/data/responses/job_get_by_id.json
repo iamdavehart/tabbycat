@@ -1,0 +1,23 @@
+{
+  "job": {
+    "extractRefreshJob": {
+      "notes": "Job detail notes"
+    },
+    "statusNotes": {
+      "statusNote": {
+        "type": "CountOfUsersAddedToGroup",
+        "value": "5",
+        "text": "Description of how many users were added to the group during the import."
+      },
+      "_text": "More detail"
+    },
+    "id": "2eef4225-aa0c-41c4-8662-a76d89ed7336",
+    "mode": "job-mode",
+    "type": "extractRefreshJob",
+    "progress": "100",
+    "createdAt": "2020-05-13T20:23:45Z",
+    "updatedAt": "2020-05-13T20:25:18Z",
+    "completedAt": "2020-05-13T20:25:18Z",
+    "finishCode": "0"
+  }
+}

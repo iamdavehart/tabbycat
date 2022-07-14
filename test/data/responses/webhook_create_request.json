@@ -1,0 +1,14 @@
+{
+  "webhook": {
+    "webhook-source": {
+      "webhook-source-event-api-event-name": {}
+    },
+    "webhook-destination": {
+      "webhook-destination-http": {
+        "method": "POST",
+        "url": "url"
+      }
+    },
+    "name": "webhook-name"
+  }
+}

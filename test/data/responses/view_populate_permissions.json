@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "view": {
+      "owner": {
+        "id": "26183d16-82f7-4fcf-b163-0e607bf292bc"
+      },
+      "id": "e490bec4-2652-4fda-8c4e-f087db6fa328",
+      "name": "Overview"
+    },
+    "granteeCapabilities": {
+      "group": {
+        "id": "c8f2773a-c83a-11e8-8c8f-33e6d787b506"
+      },
+      "capabilities": {
+        "capability": [
+          {
+            "name": "ExportData",
+            "mode": "Allow"
+          },
+          {
+            "name": "ViewComments",
+            "mode": "Allow"
+          },
+          {
+            "name": "AddComment",
+            "mode": "Allow"
+          },
+          {
+            "name": "Read",
+            "mode": "Allow"
+          },
+          {
+            "name": "ExportImage",
+            "mode": "Allow"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "job": {
+    "id": "job-id",
+    "mode": "Asynchronous",
+    "type": "GroupImport",
+    "progress": "0",
+    "createdAt": "time-job-created"
+  }
+}

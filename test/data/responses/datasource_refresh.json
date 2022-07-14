@@ -1,0 +1,14 @@
+{
+  "job": {
+    "extractRefreshJob": {
+      "datasource": {
+        "id": "9dbd2263-16b5-46e1-9c43-a76bb8ab65fb",
+        "name": "datasource-name"
+      }
+    },
+    "id": "7c3d599e-949f-44c3-94a1-f30ba85757e4",
+    "mode": "Asynchronous",
+    "type": "RefreshExtract",
+    "createdAt": "2020-03-05T22:05:32Z"
+  }
+}

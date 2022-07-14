@@ -1,0 +1,22 @@
+{
+  "task": {
+    "dataAcceleration": {
+      "schedule": {
+        "id": "schedule-id"
+      },
+      "workbook": {
+        "id": "workbook-id"
+      }
+    }
+  },
+  "warnings": {
+    "warning": [
+      {
+        "message": "warning 1"
+      },
+      {
+        "message": "warning 2"
+      }
+    ]
+  }
+}

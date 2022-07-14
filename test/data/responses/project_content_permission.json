@@ -1,0 +1,9 @@
+{
+  "project": {
+    "id": "cb3759e5-da4a-4ade-b916-7e2b4ea7ec86",
+    "name": "Test Project Permissions",
+    "description": "Project created for testing",
+    "contentPermissions": "LockedToProjectWithoutNested",
+    "parentProjectId": "7687bc43-a543-42f3-b86f-80caed03a813"
+  }
+}

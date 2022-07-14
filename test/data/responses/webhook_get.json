@@ -1,0 +1,21 @@
+{
+  "webhooks": {
+    "webhook": {
+      "webhook-source": {
+        "webhook-source-event-datasource-created": {}
+      },
+      "webhook-destination": {
+        "webhook-destination-http": {
+          "method": "POST",
+          "url": "url"
+        }
+      },
+      "owner": {
+        "id": "webhook_owner_luid",
+        "name": "webhook_owner_name"
+      },
+      "id": "webhook-id",
+      "name": "webhook-name"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "favorites": {
+    "favorite": {
+      "project": {
+        "id": "1d0304cd-3796-429f-b815-7258370b9b74",
+        "name": "Tableau",
+        "description": "",
+        "contentPermissions": "ManagedByOwner"
+      }
+    }
+  }
+}

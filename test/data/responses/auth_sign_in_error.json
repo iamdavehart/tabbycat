@@ -1,0 +1,7 @@
+{
+  "error": {
+    "summary": "Signin Error",
+    "detail": "Error signing in to Tableau Server",
+    "code": "401001"
+  }
+}

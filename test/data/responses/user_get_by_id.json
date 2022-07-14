@@ -1,0 +1,14 @@
+{
+  "user": {
+    "domain": {
+      "name": "local"
+    },
+    "id": "dd2239f6-ddf1-4107-981a-4cf94e415794",
+    "name": "alice",
+    "fullName": "Alice",
+    "siteRole": "Publisher",
+    "authSetting": "ServerDefault",
+    "lastLogin": "2016-08-16T23:17:06Z",
+    "externalAuthUserId": ""
+  }
+}

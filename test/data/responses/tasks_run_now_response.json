@@ -1,0 +1,7 @@
+{
+  "job": {
+    "id": "7b6b59a8-ac3c-4d1d-2e9e-0b5b4ba8a7b6",
+    "mode": "Asynchronous",
+    "type": "RefreshExtract"
+  }
+}

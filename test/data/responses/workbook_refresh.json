@@ -1,0 +1,14 @@
+{
+  "job": {
+    "extractRefreshJob": {
+      "workbook": {
+        "id": "3cc6cd06-89ce-4fdc-b935-5294135d6d42",
+        "name": "workbook-name"
+      }
+    },
+    "id": "7c3d599e-949f-44c3-94a1-f30ba85757e4",
+    "mode": "Asynchronous",
+    "type": "RefreshExtract",
+    "createdAt": "2020-03-05T22:05:32Z"
+  }
+}

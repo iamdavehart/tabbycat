@@ -1,0 +1,12 @@
+{
+  "task": {
+    "materializeView": {
+      "schedule": {
+        "id": "schedule-id"
+      },
+      "workbook": {
+        "id": "workbook-id"
+      }
+    }
+  }
+}

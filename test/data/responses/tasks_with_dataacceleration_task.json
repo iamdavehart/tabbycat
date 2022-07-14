@@ -1,0 +1,35 @@
+{
+  "tasks": {
+    "task": {
+      "dataAcceleration": {
+        "schedule": {
+          "frequencyDetails": {
+            "intervals": {
+              "interval": {
+                "hours": "2"
+              }
+            },
+            "start": "02:30:00",
+            "end": "23:00:00"
+          },
+          "id": "b22190b4-6ac2-4eed-9563-4afc03444413",
+          "name": "Hourly4-Schedule",
+          "state": "Active",
+          "priority": "75",
+          "createdAt": "2019-12-06T03:27:35Z",
+          "updatedAt": "2019-12-09T20:30:59Z",
+          "type": "DataAcceleration",
+          "frequency": "Hourly",
+          "nextRunAt": "2019-12-09T22:30:00Z"
+        },
+        "workbook": {
+          "id": "a462c148-fc40-4670-a8e4-39b7f0c58c7f"
+        },
+        "lastRunAt": "2019-12-09T20:45:04Z",
+        "id": "2b217acb-194a-4291-ae90-7d5ec360395d",
+        "consecutiveFailedCount": "0",
+        "type": "MaterializeViewsTask"
+      }
+    }
+  }
+}

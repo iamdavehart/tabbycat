@@ -1,0 +1,12 @@
+{
+  "task": {
+    "runFlow": {
+      "schedule": {
+        "id": "schedule-id"
+      },
+      "flow": {
+        "id": "flow-id"
+      }
+    }
+  }
+}

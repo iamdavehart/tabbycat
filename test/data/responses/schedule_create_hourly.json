@@ -1,0 +1,23 @@
+{
+  "schedule": {
+    "frequencyDetails": {
+      "intervals": {
+        "interval": {
+          "hours": "8"
+        }
+      },
+      "start": "02:30:00",
+      "end": "23:00:00"
+    },
+    "id": "5f42be25-8a43-47ba-971a-63f2d4e7029c",
+    "name": "hourly-schedule-1",
+    "state": "Active",
+    "priority": "50",
+    "createdAt": "2016-09-15T20:47:33Z",
+    "updatedAt": "2016-09-15T20:47:33Z",
+    "type": "Extract",
+    "frequency": "Hourly",
+    "nextRunAt": "2016-09-16T01:30:00Z",
+    "executionOrder": "Parallel"
+  }
+}
