@@ -15,9 +15,9 @@ import { PageOfContentResponse } from "tabbycat/types";
  * 		for which items are relevant to return. The items may be of any supported content type.
  * 		The relevance may be assessed based on any element of a given item. If no term is
  * 		supplied, then results will be based filtering and page size limits.
- * @param {integer} queryOptions.page *(Optional)* The number of the page in the list
+ * @param {number} queryOptions.page *(Optional)* The number of the page in the list
  * 		response pages to return. Maximum number of items returned is 10,000
- * @param {integer} queryOptions.limit *(Optional)* The number of items to return on each
+ * @param {number} queryOptions.limit *(Optional)* The number of items to return on each
  * 		response page. The default is 10.
  * @param {string} queryOptions.order_by <br />*(Optional)* The sorting method for items
  * 		returned, based on the popularity of the item. You can sort based on:
@@ -84,4 +84,4 @@ import { PageOfContentResponse } from "tabbycat/types";
  * 		
  * @returns {Promise<PageOfContentResponse>} Promise | undefined
  */
-export function getSearch(queryOptions?: { terms: string, page: integer, limit: integer, order_by: string, filter: string }, client?: ClientLite) : Promise<PageOfContentResponse>;
+export function getSearch(queryOptions?: { terms: string, page: number, limit: number, order_by: string, filter: string }, client?: ClientLite) : Promise<PageOfContentResponse>;

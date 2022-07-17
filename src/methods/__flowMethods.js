@@ -174,7 +174,7 @@ export function getFlowRun(flowRunId, client) {
 /**
  * Get flow runs.
  */
-export function getFlowRuns(client) {
+export function getFlowRuns(queryOptions, client) {
     const minVersion = "3.10";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -184,6 +184,7 @@ export function getFlowRuns(client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/flows/runs`)
+            .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
     );
@@ -269,7 +270,7 @@ export function getLinkedTasks(client) {
  * Publishes a flow on the specified site. To make other changes to a published flow, call
  * Update Flow or Update Flow Connection.
  */
-export function publishFlow(client) {
+export function publishFlow(flow, file, queryOptions, client) {
     const minVersion = "3.3";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -279,6 +280,10 @@ export function publishFlow(client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.POST)
             .withPath(`/api/${version}/sites/${siteId}/flows`)
+            .withHeaders({"Content-Type":"multipart/mixed"})
+            .withQueryParameters(queryOptions)
+            .withBodyParameters(flow)
+            .withFileParameters({ name: "tableau_flow", file: file })
             .withAuthenticationToken(token)
             .build()
     );
@@ -346,7 +351,7 @@ export function queryFlowPermissions(flowId, client) {
  * Returns the flows on a site. If the user is not an administrator, the method returns just
  * the flows that the user has permissions to view.
  */
-export function queryFlowsForSite(client) {
+export function queryFlowsForSite(queryOptions, client) {
     const minVersion = "3.3";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -356,6 +361,7 @@ export function queryFlowsForSite(client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/flows`)
+            .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
     );

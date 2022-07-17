@@ -218,7 +218,7 @@ export function deleteWorkbookFromFavorites(userId, workbookId, client) {
  * Returns a list of favorite projects, data sources, views, workbooks, and flows for a
  * user.
  */
-export function getFavoritesForUser(userId, client) {
+export function getFavoritesForUser(userId, queryOptions, client) {
     const minVersion = "2.5";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -229,6 +229,7 @@ export function getFavoritesForUser(userId, client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/favorites/${userId}`)
+            .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
     );

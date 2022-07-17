@@ -251,7 +251,7 @@ export function getViewRecommendations(client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
-            .withPath(`/api/${version}/sites/${siteId}/recommendations/`)
+            .withPath(`/api/${version}/sites/${siteId}/recommendations/?type=view`)
             .withAuthenticationToken(token)
             .build()
     );
@@ -513,7 +513,7 @@ export function unhideViewRecommendation(queryOptions, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
-            .withPath(`/api/${version}/sites/${siteId}/recommendations/dismissals/`)
+            .withPath(`/api/${version}/sites/${siteId}/recommendations/dismissals/?type=view`)
             .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()

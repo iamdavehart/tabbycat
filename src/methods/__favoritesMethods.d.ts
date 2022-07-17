@@ -100,9 +100,15 @@ export function deleteWorkbookFromFavorites(userId: string, workbookId: string, 
  * Returns a list of favorite projects, data sources, views, workbooks, and flows for a
  * user.
  * @param {string} userId The ID of the user for which you want to get a list favorites.
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {number} queryOptions.pageSize (Optional) The number of items to return in one
+ * 		response. The minimum is 1. The maximum is 1000. The default is 100. For more information,
+ * 		see Paginating Results.
+ * @param {number} queryOptions.pageNumber (Optional) The offset for paging. The default
+ * 		is 1. For more information, see Paginating Results.
  * @returns {Promise<FavoritesResponse>} Promise | undefined
  */
-export function getFavoritesForUser(userId: string, client?: ClientLite) : Promise<FavoritesResponse>;
+export function getFavoritesForUser(userId: string, queryOptions?: { pageSize: number, pageNumber: number }, client?: ClientLite) : Promise<FavoritesResponse>;
 
 /**
  * Move an item to organize a user's favorites.

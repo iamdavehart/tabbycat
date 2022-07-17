@@ -103,8 +103,7 @@ export function deleteUsersFromSiteWithCsv(file, client) {
             .withMethod(http.POST)
             .withPath(`/api/${version}/sites/${siteId}/users/delete`)
             .withHeaders({"Content-Type":"multipart/mixed"})
-            .withBodyParameters(file)
-            .withFileParameters({ name: "tableau_file", file: file })
+            .withFileParameters({ name: "tableau_user_delete", file: file })
             .withAuthenticationToken(token)
             .build()
     );
@@ -173,7 +172,7 @@ export function getUsersOnSite(queryOptions, client) {
  * Creates a job to import the users listed in a specified .csv file to a site, and assign
  * their roles and authorization settings.
  */
-export function importUsersToSiteFromCsv(file, client) {
+export function importUsersToSiteFromCsv(users, file, client) {
     const minVersion = "3.15";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -184,8 +183,8 @@ export function importUsersToSiteFromCsv(file, client) {
             .withMethod(http.POST)
             .withPath(`/api/${version}/sites/${siteId}/users/import`)
             .withHeaders({"Content-Type":"multipart/mixed"})
-            .withBodyParameters(file)
-            .withFileParameters({ name: "tableau_file", file: file })
+            .withBodyParameters(users)
+            .withFileParameters({ name: "tableau_user_import", file: file })
             .withAuthenticationToken(token)
             .build()
     );
@@ -255,7 +254,7 @@ export function removeUserFromGroup(groupId, userId, client) {
  * other assets other than subscriptions. If a user still owns content (assets) on Tableau
  * Server, the user cannot be deleted unless the ownership is reassigned first.
  */
-export function removeUserFromSite(userId, client) {
+export function removeUserFromSite(userId, queryOptions, client) {
     const minVersion = "1.0";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -266,6 +265,7 @@ export function removeUserFromSite(userId, client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.DELETE)
             .withPath(`/api/${version}/sites/${siteId}/users/${userId}`)
+            .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
     );
@@ -274,7 +274,7 @@ export function removeUserFromSite(userId, client) {
 /**
  * Updates a group.
  */
-export function updateGroup(groupId, group, client) {
+export function updateGroup(groupId, group, queryOptions, client) {
     const minVersion = "3.9";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -285,6 +285,7 @@ export function updateGroup(groupId, group, client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.PUT)
             .withPath(`/api/${version}/sites/${siteId}/groups/${groupId}`)
+            .withQueryParameters(queryOptions)
             .withBodyParameters(group)
             .withAuthenticationToken(token)
             .build()

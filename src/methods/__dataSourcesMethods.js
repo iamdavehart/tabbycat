@@ -149,7 +149,6 @@ export function publishDataSource(datasource, file, queryOptions, client) {
             .withHeaders({"Content-Type":"multipart/mixed"})
             .withQueryParameters(queryOptions)
             .withBodyParameters(datasource)
-            .withBodyParameters(file)
             .withFileParameters({ name: "tableau_datasource", file: file })
             .withAuthenticationToken(token)
             .build()

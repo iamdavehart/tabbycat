@@ -7,7 +7,7 @@
 import { ClientLite } from "tabbycat/client";
 import { UserRequest } from "tabbycat/types";
 import { GroupRequest } from "tabbycat/types";
-import { file } from "tabbycat/types";
+import { UsersRequest } from "tabbycat/types";
 import { UserResponse } from "tabbycat/types";
 import { GroupResponse } from "tabbycat/types";
 import { GroupsResponse } from "tabbycat/types";
@@ -115,10 +115,11 @@ export function getUsersOnSite(queryOptions?: { filter: string, sort: string, pa
 /**
  * Creates a job to import the users listed in a specified .csv file to a site, and assign
  * their roles and authorization settings.
+ * @param {UsersRequest} users users
  * @param {Object} file File Contents
  * @returns {Promise<JobResponse>} Promise | undefined
  */
-export function importUsersToSiteFromCsv(file: Object, client?: ClientLite) : Promise<JobResponse>;
+export function importUsersToSiteFromCsv(users: UsersRequest, file: Object, client?: ClientLite) : Promise<JobResponse>;
 
 /**
  * Returns a list of groups on the specified site, with optional parameters for specifying
@@ -160,17 +161,26 @@ export function removeUserFromGroup(groupId: string, userId: string, client?: Cl
  * other assets other than subscriptions. If a user still owns content (assets) on Tableau
  * Server, the user cannot be deleted unless the ownership is reassigned first.
  * @param {string} userId The ID of the user to remove.
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string} queryOptions.mapAssetsTo The ID of a user that receives ownership of
+ * 		contents of the user being remove.
  * @returns {Promise<>} Promise | undefined
  */
-export function removeUserFromSite(userId: string, client?: ClientLite) : Promise<any>;
+export function removeUserFromSite(userId: string, queryOptions?: { mapAssetsTo: string }, client?: ClientLite) : Promise<any>;
 
 /**
  * Updates a group.
  * @param {string} groupId The ID of the group to update.
  * @param {GroupRequest} group group
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {boolean} queryOptions.asJob A Boolean value that is used if you are importing
+ * 		from Active Directory. Set this value to true to synchronize with Active Directory as a
+ * 		background task, or set this value to false to synchronize immediately (synchronously).
+ * 		The default is false. Note: This parameter has no effect if the server is configured to
+ * 		use local authentication.
  * @returns {Promise<GroupResponse>} Promise | undefined
  */
-export function updateGroup(groupId: string, group: GroupRequest, client?: ClientLite) : Promise<GroupResponse>;
+export function updateGroup(groupId: string, group: GroupRequest, queryOptions?: { asJob: boolean }, client?: ClientLite) : Promise<GroupResponse>;
 
 /**
  * Modifies information about the specified user.

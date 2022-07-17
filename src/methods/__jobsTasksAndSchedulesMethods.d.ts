@@ -118,9 +118,11 @@ export function queryJob(jobId: string, client?: ClientLite) : Promise<JobRespon
  * Returns a list of active jobs on the specified site. To get details on a specific job,
  * pass a job ID returned by this method to the Query Job method. To cancel an active job,
  * pass a job ID returned by this method to the Cancel Job method.
+ * @param {Object} queryOptions an object containing the query options for this request
+ * @param {string} queryOptions.filter undefined
  * @returns {Promise<BackgroundJobsResponse>} Promise | undefined
  */
-export function queryJobs(client?: ClientLite) : Promise<BackgroundJobsResponse>;
+export function queryJobs(queryOptions?: { filter: string }, client?: ClientLite) : Promise<BackgroundJobsResponse>;
 
 /**
  * Returns a list of flows, extract and subscription schedules. For each schedule, the API

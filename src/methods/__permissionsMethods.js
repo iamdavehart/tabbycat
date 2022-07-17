@@ -419,6 +419,398 @@ export function deleteDataSourcePermissionForUser(datasourceId, userId, capabili
  * are locked to the project(Link opens in a new window), then the same is true for all
  * existing child content of the project.
  */
+export function deleteDefaultDatasourcePermissionsForGroup(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/datasources/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultFlowPermissionForGroup(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/flows/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultFlowPermissionForUser(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/flows/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_12(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/databases/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_13(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/databases/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_14(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/tables/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_15(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/tables/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_2(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/datasources/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_4(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/dataroles/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_5(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/dataroles/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_6(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/lenses/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_7(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/lenses/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_8(capabilityName, capabilityMode, projectLuid, userLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!userLuid) return Promise.reject(new MissingPathParameterException("userLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/metrics/users/${userLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
+export function deleteDefaultPermission_9(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
+    const minVersion = "2.1";
+    const { url, version, siteId, token, execute } = client ?? this ?? {};
+    if (!execute) return Promise.reject(new MissingExecutiveException());
+	if (!capabilityName) return Promise.reject(new MissingPathParameterException("capabilityName"));
+	if (!capabilityMode) return Promise.reject(new MissingPathParameterException("capabilityMode"));
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!projectLuid) return Promise.reject(new MissingPathParameterException("projectLuid"));
+	if (!groupLuid) return Promise.reject(new MissingPathParameterException("groupLuid"));  
+    if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
+    return execute(
+        TableauRestRequest.forServer(url)
+            .withMethod(http.DELETE)
+            .withPath(`/api/${version}/sites/${siteId}/projects/${projectLuid}/default-permissions/metrics/groups/${groupLuid}/${capabilityName}/${capabilityMode}`)
+            .withAuthenticationToken(token)
+            .build()
+    );
+}
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ */
 export function deleteDefaultWorkbookPermissionForGroup(capabilityName, capabilityMode, projectLuid, groupLuid, client) {
     const minVersion = "2.1";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
@@ -604,11 +996,12 @@ export function deleteWorkbookPermissionForUser(workbookId, userId, capabilityNa
  * List all permissions configured for the specified ask data lens that the user has read
  * capability for.
  */
-export function listAskDataLensPermissionss(client) {
+export function listAskDataLensPermissionss(lensLuid, client) {
     const minVersion = "";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
-	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));  
+	if (!siteLuid) return Promise.reject(new MissingPathParameterException("siteLuid"));
+	if (!lensLuid) return Promise.reject(new MissingPathParameterException("lensLuid"));  
     if (failsVersionCheck(version, minVersion)) return Promise.reject(new VersionException(version, minVersion));
     return execute(
         TableauRestRequest.forServer(url)

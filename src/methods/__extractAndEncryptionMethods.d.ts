@@ -62,7 +62,8 @@ export function deleteExtractRefreshTask(taskId: string, client?: ClientLite) : 
 
 /**
  * Delete all extracts of embedded data sources in a workbook.
- * @param {string} workbookId <parameter documentation missing>
+ * @param {string} workbookId The LUID of the workbook containing the extract to be
+ * 		deleted.
  * @param {DatasourcesRequest} datasources datasources
  * @returns {Promise<>} Promise | undefined
  */

@@ -13,9 +13,9 @@ import { TagsRequest } from "tabbycat/types";
 import { TagBatchRequest } from "tabbycat/types";
 import { DatabaseAnchorRequest } from "tabbycat/types";
 import { ContentLocationRequestRequest } from "tabbycat/types";
-import { column } from "tabbycat/types";
+import { ColumnRequest } from "tabbycat/types";
 import { DatabaseRequest } from "tabbycat/types";
-import { label } from "tabbycat/types";
+import { LabelRequest } from "tabbycat/types";
 import { TableRequest } from "tabbycat/types";
 import { PermissionsResponse } from "tabbycat/types";
 import { DataQualityWarningResponse } from "tabbycat/types";
@@ -25,13 +25,15 @@ import { TagsResponse } from "tabbycat/types";
 import { DataQualityWarningListResponse } from "tabbycat/types";
 import { TagBatchResponse } from "tabbycat/types";
 import { DatabaseAnchorsResponse } from "tabbycat/types";
-import { labelList } from "tabbycat/types";
-import { columns } from "tabbycat/types";
+import { LabelResponse } from "tabbycat/types";
+import { LabelListResponse } from "tabbycat/types";
+import { ColumnResponse } from "tabbycat/types";
+import { ColumnsResponse } from "tabbycat/types";
 import { DatabaseResponse } from "tabbycat/types";
-import { databases } from "tabbycat/types";
+import { DatabasesResponse } from "tabbycat/types";
 import { DataQualityIndicatorResponse } from "tabbycat/types";
 import { TableResponse } from "tabbycat/types";
-import { tables } from "tabbycat/types";
+import { TablesResponse } from "tabbycat/types";
 
 /**
  * Add permissions to a database asset. To add permissions, the database asset must be
@@ -235,7 +237,7 @@ export function deleteDataQualityWarningTriggers(contentType: string, queryOptio
  * 		(set permissions) ChangeHierarchy (move) For more information, see Permissions.
  * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
  * 		the deny permission.
- * @param {string} groupLuid <parameter documentation missing>
+ * @param {string} groupLuid The LUID of the group to remove the default permission for
  * @returns {Promise<>} Promise | undefined
  */
 export function deleteDefaultDatabasePermissionsForGroup(databaseLuid: string, capabilityName: string, capabilityMode: string, groupLuid: string, client?: ClientLite) : Promise<any>;
@@ -330,9 +332,9 @@ export function getDatabasesAndTablesFromConnection(databaseAnchor: DatabaseAnch
 /**
  * Gets a data label by its LUID.
  * @param {string} labelLuid The unique LUID of the label asset.
- * @returns {Promise<label>} Promise | undefined
+ * @returns {Promise<LabelResponse>} Promise | undefined
  */
-export function getLabel(labelLuid: string, client?: ClientLite) : Promise<label>;
+export function getLabel(labelLuid: string, client?: ClientLite) : Promise<LabelResponse>;
 
 /**
  * Displays information about the data labels on one or more assets.
@@ -341,9 +343,9 @@ export function getLabel(labelLuid: string, client?: ClientLite) : Promise<label
  * @param {string} queryOptions.categories (Optional) A comma-separated list of
  * 		categories used to limit the labels shown to only the listed categories. Valid categories
  * 		are warning and certification.
- * @returns {Promise<labelList>} Promise | undefined
+ * @returns {Promise<LabelListResponse>} Promise | undefined
  */
-export function getLabelsOnAssets(contentList: ContentListRequest, queryOptions?: { categories: string }, client?: ClientLite) : Promise<labelList>;
+export function getLabelsOnAssets(contentList: ContentListRequest, queryOptions?: { categories: string }, client?: ClientLite) : Promise<LabelListResponse>;
 
 /**
  * Move one or more databases to a project. You can move the database and its tables, or
@@ -365,16 +367,16 @@ export function moveTable(contentLocationRequest: ContentLocationRequestRequest,
  * Get information about a column in a table asset.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @returns {Promise<column>} Promise | undefined
+ * @returns {Promise<ColumnResponse>} Promise | undefined
  */
-export function queryColumn(tableId: string, columnId: string, client?: ClientLite) : Promise<column>;
+export function queryColumn(tableId: string, columnId: string, client?: ClientLite) : Promise<ColumnResponse>;
 
 /**
  * Get information about the columns in a table asset.
  * @param {string} tableId The unique ID of the table asset.
- * @returns {Promise<columns>} Promise | undefined
+ * @returns {Promise<ColumnsResponse>} Promise | undefined
  */
-export function queryColumns(tableId: string, client?: ClientLite) : Promise<columns>;
+export function queryColumns(tableId: string, client?: ClientLite) : Promise<ColumnsResponse>;
 
 /**
  * Get information about a database asset.
@@ -400,9 +402,9 @@ export function queryDatabasePermsDefault(databaseLuid: string, client?: ClientL
 
 /**
  * Get information about all database assets for a site.
- * @returns {Promise<databases>} Promise | undefined
+ * @returns {Promise<DatabasesResponse>} Promise | undefined
  */
-export function queryDatabases(client?: ClientLite) : Promise<databases>;
+export function queryDatabases(client?: ClientLite) : Promise<DatabasesResponse>;
 
 /**
  * Get information about a specific data quality warning.
@@ -476,9 +478,9 @@ export function queryTablePermissions(tableId: string, client?: ClientLite) : Pr
 
 /**
  * Get information about all table assets for a site.
- * @returns {Promise<tables>} Promise | undefined
+ * @returns {Promise<TablesResponse>} Promise | undefined
  */
-export function queryTables(client?: ClientLite) : Promise<tables>;
+export function queryTables(client?: ClientLite) : Promise<TablesResponse>;
 
 /**
  * Permanently remove the column from a table asset.
@@ -506,10 +508,10 @@ export function removeTable(tableId: string, client?: ClientLite) : Promise<any>
  * Update the description of the column.
  * @param {string} tableId The unique ID of the table asset.
  * @param {string} columnId The unique ID of the column asset.
- * @param {column} column column
- * @returns {Promise<column>} Promise | undefined
+ * @param {ColumnRequest} column column
+ * @returns {Promise<ColumnResponse>} Promise | undefined
  */
-export function updateColumn(tableId: string, columnId: string, column: column, client?: ClientLite) : Promise<column>;
+export function updateColumn(tableId: string, columnId: string, column: ColumnRequest, client?: ClientLite) : Promise<ColumnResponse>;
 
 /**
  * Update the database description, certify a database, set content permissions, or assign a
@@ -540,10 +542,10 @@ export function updateDataQualityWarningTrigger(triggerId: string, dataQualityTr
  * Updates a label by its LUID. This method can update the label value, message, active
  * flag, and elevated flag.
  * @param {string} labelLuid The unique LUID of the label asset.
- * @param {label} label label
- * @returns {Promise<label>} Promise | undefined
+ * @param {LabelRequest} label label
+ * @returns {Promise<LabelResponse>} Promise | undefined
  */
-export function updateLabel(labelLuid: string, label: label, client?: ClientLite) : Promise<label>;
+export function updateLabel(labelLuid: string, label: LabelRequest, client?: ClientLite) : Promise<LabelResponse>;
 
 /**
  * Creates or updates labels on one or more assets. (An asset can be Tableau content or an
@@ -552,9 +554,9 @@ export function updateLabel(labelLuid: string, label: label, client?: ClientLite
  * of the corresponding category will have a new label created. Assets that already have a
  * label of the same category will have the label updated.
  * @param {ContentListRequest} contentList contentList
- * @returns {Promise<labelList>} Promise | undefined
+ * @returns {Promise<LabelListResponse>} Promise | undefined
  */
-export function updatesLabelsOnAssets(contentList: ContentListRequest, client?: ClientLite) : Promise<labelList>;
+export function updatesLabelsOnAssets(contentList: ContentListRequest, client?: ClientLite) : Promise<LabelListResponse>;
 
 /**
  * Update the table description, certify a table, or a assign a user contact to the table

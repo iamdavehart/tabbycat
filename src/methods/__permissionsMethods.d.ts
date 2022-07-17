@@ -239,6 +239,314 @@ export function deleteDataSourcePermissionForUser(datasourceId: string, userId: 
  * @param {string} groupLuid <parameter documentation missing>
  * @returns {Promise<>} Promise | undefined
  */
+export function deleteDefaultDatasourcePermissionsForGroup(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultFlowPermissionForGroup(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultFlowPermissionForUser(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_12(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_13(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_14(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_15(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_2(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_4(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_5(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_6(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_7(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} userLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_8(capabilityName: string, capabilityMode: string, projectLuid: string, userLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
+export function deleteDefaultPermission_9(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
+
+/**
+ * Removes default permission rules for workbook, data source, data role, lens, flow, and
+ * metric resources in a project for a user or group. If Tableau Catalog is enabled, also
+ * removes default permission rules for database or table resources in a project for a user
+ * or group. After removing default permission rules, new resources of the type you specify
+ * that are added to the project will no longer have those permission rules. If permissions
+ * are locked to the project(Link opens in a new window), then the same is true for all
+ * existing child content of the project.
+ * @param {string} capabilityName The capability to remove the permissions for. Valid
+ * 		capabilities for a workbook are AddComment, ChangeHierarchy, ChangePermissions, Delete,
+ * 		ExportData, ExportImage, ExportXml, Filter, Read (view), ShareView, ViewComments,
+ * 		ViewUnderlyingData, WebAuthoring, Write, RunExplainData, and CreateRefreshMetrics. Valid
+ * 		capabilities for a data source are ChangePermissions, Connect, Delete, ExportXml, SaveAs,
+ * 		Read (view), and Write. For more information, see Permissions.
+ * @param {string} capabilityMode Allow to remove the allow permission, or Deny to remove
+ * 		the deny permission. This value is case sensitive.
+ * @param {string} projectLuid <parameter documentation missing>
+ * @param {string} groupLuid <parameter documentation missing>
+ * @returns {Promise<>} Promise | undefined
+ */
 export function deleteDefaultWorkbookPermissionForGroup(capabilityName: string, capabilityMode: string, projectLuid: string, groupLuid: string, client?: ClientLite) : Promise<any>;
 
 /**
@@ -354,9 +662,11 @@ export function deleteWorkbookPermissionForUser(workbookId: string, userId: stri
 /**
  * List all permissions configured for the specified ask data lens that the user has read
  * capability for.
+ * @param {string} lensLuid The LUID of the ask data lens whose permissions are being
+ * 		listed.
  * @returns {Promise<PermissionsResponse>} Promise | undefined
  */
-export function listAskDataLensPermissionss(client?: ClientLite) : Promise<PermissionsResponse>;
+export function listAskDataLensPermissionss(lensLuid: string, client?: ClientLite) : Promise<PermissionsResponse>;
 
 /**
  * Returns a list of permissions for a specific data source.

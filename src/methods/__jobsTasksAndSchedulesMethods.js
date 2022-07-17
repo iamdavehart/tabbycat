@@ -244,7 +244,7 @@ export function queryJob(jobId, client) {
  * pass a job ID returned by this method to the Query Job method. To cancel an active job,
  * pass a job ID returned by this method to the Cancel Job method.
  */
-export function queryJobs(client) {
+export function queryJobs(queryOptions, client) {
     const minVersion = "3.1";
     const { url, version, siteId, token, execute } = client ?? this ?? {};
     if (!execute) return Promise.reject(new MissingExecutiveException());
@@ -254,6 +254,7 @@ export function queryJobs(client) {
         TableauRestRequest.forServer(url)
             .withMethod(http.GET)
             .withPath(`/api/${version}/sites/${siteId}/jobs`)
+            .withQueryParameters(queryOptions)
             .withAuthenticationToken(token)
             .build()
     );

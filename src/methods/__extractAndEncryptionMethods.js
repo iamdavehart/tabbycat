@@ -123,7 +123,7 @@ export function deleteExtractsFromWorkbook(workbookId, datasources, client) {
     return execute(
         TableauRestRequest.forServer(url)
             .withMethod(http.POST)
-            .withPath(`/api/${version}/sites/${siteId}/workbookss/${workbookId}/deleteExtract`)
+            .withPath(`/api/${version}/sites/${siteId}/workbooks/${workbookId}/deleteExtract`)
             .withBodyParameters(datasources)
             .withAuthenticationToken(token)
             .build()
