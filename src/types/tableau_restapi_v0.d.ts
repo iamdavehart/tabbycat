@@ -1,29 +1,80 @@
 // type: type
-// name: ContentLocationRequestType
-export type ContentLocationRequestType =
-  | (
-      | { location?: LocationType }
-      | { noLocation?: NoLocationType }
-    )
-  | { [k: string]: unknown };
+// name: AccelerationStatusType
+export type AccelerationStatusType = "accelerated" | "failed" | "inProgress" | "notUseful" | "unknown" | "waiting";
+
+
+// type: type
+// name: ColumnListType
+export type ColumnListType = ColumnType | ColumnType[];
+
+
+// type: type
+// name: DataAlertUpdateStatusType
+export type DataAlertUpdateStatusType = {
+  error: ErrorType;
+};
+
+
+// type: type
+// name: DatabaseListType
+export type DatabaseListType = DatabaseType | DatabaseType[];
 
 
 // type: type
 // name: DatabaseTypeType
-export type DatabaseTypeType = "DatabaseServer" | "File" | "WebDataConnector" | "CloudFile";
+export type DatabaseTypeType = "CloudFile" | "DatabaseServer" | "File" | "WebDataConnector";
 
 
 // type: type
-// name: DataTypeType
-export type DataTypeType = "DATA_TYPE_UNSPECIFIED" | "DATE" | "DATETIME" | "STRING" | "INT" | "FLOAT" | "BOOL";
+// name: DataUpdateActionListType
+export type DataUpdateActionListType = DataUpdateActionType | DataUpdateActionType[];
+
+
+
+// type: type
+// name: DataUpdateActionType
+export type DataUpdateActionType =
+  | {
+      action: string;
+      condition?: DataUpdateConditionType;
+      "source-file": string;
+      "source-schema": string;
+      "source-table": string;
+      "target-schema": string;
+      "target-table": string;
+    }
+  | { actions?: DataUpdateActionType };
+
+
+// type: type
+// name: DataUpdateConditionType
+export type DataUpdateConditionType =
+  | {
+      const: DataUpdateConstConditionType;
+      "source-col": string;
+      "target-col": string;
+    }
+  | { args: DataUpdateConditionType | DataUpdateConditionType[] };
+
+
+// type: type
+// name: ExplanationType
+export type ExplanationType = {
+  users: UserListType;
+};
+
+
+// type: type
+// name: ExplanationTypeType
+export type ExplanationTypeType = "data_monitoring_candidate" | "popular" | "similar_users";
 
 
 // type: type
 // name: ExtractRefreshJobType
 export type ExtractRefreshJobType =
+  | { datasource: DataSourceType }
   | { view: ViewType }
-  | { workbook: WorkbookType }
-  | { datasource: DataSourceType };
+  | { workbook: WorkbookType };
 
 
 // type: type
@@ -36,31 +87,26 @@ export type ExtractType =
 // type: type
 // name: FavoriteType
 export type FavoriteType =
-  | { view: ViewType }
-  | { workbook: WorkbookType }
+  | { collection: CollectionType }
   | { datasource: DataSourceType }
-  | { project: ProjectType }
   | { flow: FlowType }
   | { metric: MetricType }
-  | { collection: CollectionType };
+  | { project: ProjectType }
+  | { view: ViewType }
+  | { workbook: WorkbookType };
 
 
 // type: type
 // name: FavoriteTypeType
 export type FavoriteTypeType =
-  | "view"
-  | "workbook"
+  | "collection"
+  | "datarole"
+  | "datasource"
   | "flow"
   | "metric"
-  | "datasource"
   | "project"
-  | "datarole"
-  | "collection";
-
-
-// type: type
-// name: FieldRoleType
-export type FieldRoleType = "FIELD_ROLE_UNSPECIFIED" | "DIMENSION" | "MEASURE";
+  | "view"
+  | "workbook";
 
 
 // type: type
@@ -78,7 +124,6 @@ export type FlowParameterAnyDomainType = FlowParameterDomainType & unknown;
 export type FlowParameterBinaryDomainType = FlowParameterDomainType & unknown;
 
 
-
 // type: type
 // name: FlowParameterListDomainType
 export type FlowParameterListDomainType = FlowParameterDomainType & {
@@ -89,10 +134,10 @@ export type FlowParameterListDomainType = FlowParameterDomainType & {
 // type: type
 // name: FlowParameterRangeDomainType
 export type FlowParameterRangeDomainType = FlowParameterDomainType & {
-  "minValue"?: string;
-  "maxValue"?: string;
-  "stepSize"?: string;
   "dateValueIncrement"?: string;
+  "maxValue"?: string;
+  "minValue"?: string;
+  "stepSize"?: string;
 };
 
 
@@ -116,44 +161,48 @@ export type ImportSourceType = "ActiveDirectory";
 
 
 // type: type
-// name: NameCharacteristicsType
-export type NameCharacteristicsType =
-  | { textPattern?: TextPatternType }
-  | { [k: string]: unknown };
+// name: LabelListType
+export type LabelListType = LabelType | LabelType[];
+
+
+// type: type
+// name: LicensingRoleType
+export type LicensingRoleType = "Guest" | "Interactor" | "Unlicensed" | "Viewer";
 
 
 // type: type
 // name: PaginatedResponseGroup
 export type PaginatedResponseGroup =
-  | { columns: ColumnListType }
-  | { databases: DatabaseListType }
   | { datasources: DataSourceListType }
   | { extracts: ExtractListType }
-  | { flows: FlowListType }
   | { flowOutputSteps: FlowOutputStepListType }
   | { flowRuns: FlowRunListType }
+  | { flows: FlowListType }
   | { groups: GroupListType }
+  | { linkedTasks: LinkedTaskListType }
   | { metrics: MetricListType }
   | { projects: ProjectListType }
   | { revisions: RevisionListType }
   | { schedules: ScheduleListType }
   | { sites: SiteListType }
-  | { tables: TableListType }
+  | { subscriptions: SubscriptionListType }
   | { users: UserListType }
-  | { workbooks: WorkbookListType }
-  | { subscriptions: SubscriptionListType };
+  | { workbooks: WorkbookListType };
 
 
 // type: type
 // name: PermissionsType
 export type PermissionsType =
   | (
-      | { flow: FlowType }
+      | { collection: CollectionType }
+      | { database: DatabaseType }
       | { datasource: DataSourceType }
+      | { flow: FlowType }
+      | { metric: MetricType }
       | { project: ProjectType }
+      | { table: TableType }
       | { view: ViewType }
       | { workbook: WorkbookType }
-      | { metric: MetricType }
     )
   | { [k: string]: unknown };
 
@@ -161,6 +210,35 @@ export type PermissionsType =
 // type: type
 // name: ProductVersion
 export type ProductVersion = string;
+
+
+// type: type
+// name: RecentType
+export type RecentType =
+  | { datasource: DataSourceType }
+  | { flow: FlowType }
+  | { project: ProjectType }
+  | { view: ViewType }
+  | { workbook: WorkbookType };
+
+
+// type: type
+// name: RecommendationDismissalType
+export type RecommendationDismissalType = {
+  view: ViewType;
+};
+
+
+// type: type
+// name: RecommendationType
+export type RecommendationType = {
+  view: ViewType;
+};
+
+
+// type: type
+// name: RecommendedContentType
+export type RecommendedContentType = "view";
 
 
 // type: type
@@ -179,20 +257,8 @@ export type RevisionLimitType = "-1";
 
 
 // type: type
-// name: SemanticsValueType
-export type SemanticsValueType =
-  | (
-      | { numberValue?: number }
-      | { stringValue?: string }
-      | { timeValue?: string }
-      | { boolValue?: boolean | number }
-    )
-  | { [k: string]: unknown };
-
-
-// type: type
 // name: SeverityLevelType
-export type SeverityLevelType = "critical" | "error" | "warn" | "info";
+export type SeverityLevelType = "critical" | "error" | "info" | "warn";
 
 
 // type: type
@@ -212,27 +278,27 @@ export type SiteRoleType =
   | "Explorer"
   | "ExplorerCanPublish"
   | "Guest"
-  | "Interactor"
-  | "Publisher"
-  | "ReadOnly"
   | "ServerAdministrator"
-  | "SiteAdministrator"
   | "SiteAdministratorCreator"
   | "SiteAdministratorExplorer"
+  | "SupportUser"
   | "Unlicensed"
-  | "UnlicensedWithPublish"
-  | "Viewer"
-  | "ViewerWithPublish";
+  | "Viewer";
 
 
 // type: type
 // name: SiteUserAuthSettingType
-export type SiteUserAuthSettingType = "ServerDefault" | "SAML";
+export type SiteUserAuthSettingType = "OpenID" | "SAML" | "ServerDefault";
 
 
 // type: type
 // name: StateType
 export type StateType = "Active" | "Suspended";
+
+
+// type: type
+// name: TableListType
+export type TableListType = TableType | TableType[];
 
 
 // type: type
@@ -245,66 +311,68 @@ export type TaskDataAccelerationType = {
 // type: type
 // name: TaskExtractRefreshType
 export type TaskExtractRefreshType =
+  | { datasource: DataSourceType }
   | { view: ViewType }
-  | { workbook: WorkbookType }
-  | { datasource: DataSourceType };
+  | { workbook: WorkbookType };
 
 
 // type: type
 // name: TaskType
 export type TaskType =
+  | { dataAcceleration: TaskDataAccelerationType }
   | { extractRefresh: TaskExtractRefreshType }
   | { flowRun: TaskRunFlowType }
-  | { dataAcceleration: TaskDataAccelerationType }
   | { schedule?: ScheduleType };
 
 
 // type: type
 // name: TsRequest
 export type TsRequest =
+  | { actions?: DataUpdateActionType | DataUpdateActionType[] }
   | { broadcastViewSend: BroadcastViewSendType }
-  | { column: ColumnType }
   | { connectedApplication: ConnectedApplicationType }
   | { connectedApplications: ConnectedApplicationListType }
   | { connection: ConnectionType }
   | { connections: ConnectionListType }
   | { contentList: ContentListType }
+  | { contentLocationRequest: ContentLocationRequestType }
   | { credentials: TableauCredentialsType }
   | { dataAlert: DataAlertType }
+  | { dataAlerts: DataAlertListType }
   | { dataQualityIndicator: DataQualityIndicatorType }
   | { dataQualityTrigger: DataQualityTriggerType }
   | { dataQualityWarning: DataQualityWarningType }
-  | { dataRole: DataRoleType }
   | { database: DatabaseType }
-  | { contentLocationRequest: ContentLocationRequestType }
   | { databaseAnchor: DatabaseAnchorRequestType }
-  | { databaseGroup: DatabaseGroupType }
   | { datasource: DataSourceType }
-  | { distinctValues: DistinctValueListType }
+  | { datasources: DataSourceListType }
+  | { domain: DomainDirectiveType }
+  | { extensionsServerSettings: ExtensionsServerSettingsType }
+  | { extensionsSiteSettings: ExtensionsSiteSettingsType }
   | { favorite: FavoriteType }
   | { favoriteOrderings: FavoriteOrderingListType }
-  | { field: FieldType }
-  | { fieldConcept: FieldConceptType }
   | { flow: FlowType }
   | { flowRunSpec: FlowRunSpecType }
-  | { flowWarnings: FlowWarningsListContainerType }
   | { group: GroupType }
   | { metric: MetricType }
   | { mobileSecuritySettingsList: MobileSecuritySettingsListType }
   | { permissions: PermissionsType }
   | { project: ProjectType }
+  | { recommendationDismissal: RecommendationDismissalType }
   | { schedule: ScheduleType }
   | { site: SiteType }
+  | { sites: SiteListType }
+  | { subscription: SubscriptionType }
   | { table: TableType }
+  | { tagBatch: TagBatchType }
   | { tags: TagListType }
+  | { task: TaskType }
   | { user: UserType }
   | { userNotificationsPreference: UserNotificationsPreferenceType }
   | { userNotificationsPreferences: UserNotificationsPreferenceListType }
+  | { view: ViewType }
   | { webhook: WebhookType }
-  | { workbook: WorkbookType }
-  | { subscription: SubscriptionType }
-  | { task: TaskType }
-  | { tagBatch: TagBatchType };
+  | { workbook: WorkbookType };
 
 
 // type: type
@@ -315,85 +383,76 @@ export type TsResponse =
   | { backgroundJobs: BackgroundJobListType }
   | { broadcastView: BroadcastViewType }
   | { broadcastViews: BroadcastViewListType }
-  | { column: ColumnType }
   | { connectedApplication: ConnectedApplicationType }
-  | { connectedApplications: ConnectedApplicationListType }
   | { connectedApplicationSecret: ConnectedApplicationSecretType }
+  | { connectedApplications: ConnectedApplicationListType }
   | { connection: ConnectionType }
   | { connections: ConnectionListType }
   | { contentLocation: LocationType }
   | { credentials: TableauCredentialsType }
   | { dataAlert: DataAlertType }
+  | { dataAlertUpdateResults: DataAlertUpdateStatusListType }
   | { dataAlerts: DataAlertListType }
+  | { dataAlertsRecipient: DataAlertsRecipientType }
+  | { dataAlertsRecipientList: DataAlertsRecipientListType }
   | { dataQualityIndicator: DataQualityIndicatorType }
   | { dataQualityIndicatorList: DataQualityIndicatorListType }
+  | { dataQualityTrigger: DataQualityTriggerType }
+  | { dataQualityTriggerList: DataQualityTriggerListType }
   | { dataQualityWarning: DataQualityWarningType }
   | { dataQualityWarningList: DataQualityWarningListType }
-  | { dataRole: DataRoleType }
   | { database: DatabaseType }
   | { databaseAnchors: DatabaseAnchorResponseListType }
   | { datasource: DataSourceType }
+  | { domain: DomainDirectiveType }
+  | { domainList: DomainDirectiveListType }
+  | { downgradeInfo: DegradationListType }
   | { error: ErrorType }
+  | { extensionUrlStatus: ExtensionUrlStatusType }
+  | { extensionsServerSettings: ExtensionsServerSettingsType }
+  | { extensionsSiteSettings: ExtensionsSiteSettingsType }
   | { favorites: FavoriteListType }
   | { fileUpload: FileUploadType }
   | { flow: FlowType }
   | { flowRun: FlowRunType }
+  | { flowWarnings: FlowWarningsListContainerType }
   | { group: GroupType }
   | { job: JobType }
+  | { linkedTask: LinkedTaskType }
   | { linkedTaskJob: LinkedTaskJobType }
   | { metric: MetricType }
   | { mobileSecuritySettingsList: MobileSecuritySettingsListType }
+  | { notificationPreferenceUpdateStatus: NotificationPreferenceUpdateStatusType }
+  | { notificationUpdateResult: NotificationsPreferenceUpdateStatusListType }
   | { permissions: PermissionsType }
   | { personalSpace: PersonalSpaceType }
   | { project: ProjectType }
-  | { dataAlertsRecipient: DataAlertsRecipientType }
-  | { dataAlertsRecipientList: DataAlertsRecipientListType }
-  | { dataQualityTrigger: DataQualityTriggerType }
-  | { dataQualityTriggerList: DataQualityTriggerListType }
+  | { recents: RecentListType }
+  | { recommendations: RecommendationListType }
+  | { salesforceApps: SalesforceAppListType }
   | { schedule: ScheduleType }
   | { serverInfo: ServerInfo }
   | { serverSettings: ServerSettings }
+  | { session: SessionType }
+  | { sessions: SessionsType }
   | { site: SiteType }
+  | { status: string }
+  | { subscription: SubscriptionType }
   | { table: TableType }
+  | { tagBatch: TagBatchType }
   | { tags: TagListType }
+  | { task: TaskType }
+  | { tasks: TaskListType }
+  | { uri: string }
   | { user: UserType }
+  | { userNotificationsPreference: UserNotificationsPreferenceType }
+  | { userNotificationsPreferences: UserNotificationsPreferenceListType }
   | { view: ViewType }
   | { views: ViewListType }
   | { webhook: WebhookType }
-  | { webhooks: WebhookListType }
   | { webhookTestResult: WebhookTestResultType }
-  | { workbook: WorkbookType }
-  | { subscription: SubscriptionType }
-  | { task: TaskType }
-  | { tasks: TaskListType }
-  | { warnings: WarningListType }
-  | { degradations: DegradationListType }
-  | { listFieldConcepts: ListFieldConceptsType }
-  | { fieldMatches: FieldMatchListType }
-  | { valueMatches: MatchValuesResultType }
-  | { valueConceptCount: ValueConceptCountType }
-  | { listValueConcepts: ListValueConceptsType }
-  | { fieldConcept: FieldConceptType }
-  | { getIndexingStatus: IndexingStatusType }
-  | { ungroupedDatabases: DatabaseIdListType }
-  | { userNotificationsPreference: UserNotificationsPreferenceType }
-  | { userNotificationsPreferences: UserNotificationsPreferenceListType }
-  | { notificationUpdateStatus: NotificationsPreferenceUpdateStatusListType }
-  | { tagBatch: TagBatchType };
-
-
-// type: type
-// name: ValueCharacteristicsType
-export type ValueCharacteristicsType =
-  | { textPattern?: TextPatternType }
-  | { [k: string]: unknown };
-
-
-// type: type
-// name: ValueSourceType
-export type ValueSourceType =
-  | { datasourceValueStore?: DataSourceValueStoreType }
-  | { [k: string]: unknown };
+  | { webhooks: WebhookListType }
+  | { workbook: WorkbookType };
 
 
 // type: type
@@ -406,38 +465,20 @@ export type WebhookDestinationType = {
 // type: type
 // name: WebhookSourceType
 export type WebhookSourceType =
-  | { "webhook-source-event-datasource-refresh-started": WebhookSourceEventDatasourceRefreshStartedType }
-  | { "webhook-source-event-datasource-refresh-succeeded": WebhookSourceEventDatasourceRefreshSucceededType }
-  | { "webhook-source-event-datasource-refresh-failed": WebhookSourceEventDatasourceRefreshFailedType }
-  | { "webhook-source-event-datasource-updated": WebhookSourceEventDatasourceUpdatedType }
   | { "webhook-source-event-datasource-created": WebhookSourceEventDatasourceCreatedType }
   | { "webhook-source-event-datasource-deleted": WebhookSourceEventDatasourceDeletedType }
-  | { "webhook-source-event-workbook-updated": WebhookSourceEventWorkbookUpdatedType }
+  | { "webhook-source-event-datasource-refresh-failed": WebhookSourceEventDatasourceRefreshFailedType }
+  | { "webhook-source-event-datasource-refresh-started": WebhookSourceEventDatasourceRefreshStartedType }
+  | { "webhook-source-event-datasource-refresh-succeeded": WebhookSourceEventDatasourceRefreshSucceededType }
+  | { "webhook-source-event-datasource-updated": WebhookSourceEventDatasourceUpdatedType }
+  | { "webhook-source-event-flow-completed": WebhookSourceEventFlowCompletedType }
+  | { "webhook-source-event-view-deleted": WebhookSourceEventViewDeletedType }
   | { "webhook-source-event-workbook-created": WebhookSourceEventWorkbookCreatedType }
   | { "webhook-source-event-workbook-deleted": WebhookSourceEventWorkbookDeletedType }
-  | { "webhook-source-event-view-deleted": WebhookSourceEventViewDeletedType }
+  | { "webhook-source-event-workbook-refresh-failed": WebhookSourceEventWorkbookRefreshFailedType }
   | { "webhook-source-event-workbook-refresh-started": WebhookSourceEventWorkbookRefreshStartedType }
   | { "webhook-source-event-workbook-refresh-succeeded": WebhookSourceEventWorkbookRefreshSucceededType }
-  | { "webhook-source-event-workbook-refresh-failed": WebhookSourceEventWorkbookRefreshFailedType };
-
-
-// type: interface
-// name: ActionListType
-export interface ActionListType {
-  actions?: ActionType[];
-}
-
-
-// type: interface
-// name: ActionType
-export interface ActionType {
-  action?: string;
-  "source-schema"?: string;
-  "source-table"?: string;
-  "target-schema"?: string;
-  "target-table"?: string;
-  condition?: string;
-}
+  | { "webhook-source-event-workbook-updated": WebhookSourceEventWorkbookUpdatedType };
 
 
 // type: interface
@@ -450,15 +491,15 @@ export interface BackgroundJobListType {
 // type: interface
 // name: BackgroundJobType
 export interface BackgroundJobType {
-  "id"?: ResourceIdType;
-  "status"?: "Pending" | "InProgress" | "Success" | "Failed" | "Cancelled";
   "createdAt"?: string;
-  "startedAt"?: string;
   "endedAt"?: string;
-  "priority"?: number;
+  "id"?: ResourceIdType;
   "jobType"?: string;
-  "title"?: string;
+  "priority"?: number;
+  "startedAt"?: string;
+  "status"?: "Cancelled" | "Failed" | "InProgress" | "Pending" | "Success";
   "subtitle"?: string;
+  "title"?: string;
 }
 
 
@@ -472,9 +513,9 @@ export interface BroadcastViewListType {
 // type: interface
 // name: BroadcastViewSendType
 export interface BroadcastViewSendType {
-  "viewId"?: ResourceIdType;
   "showTabs"?: boolean | number;
   "showWatermark"?: boolean | number;
+  "viewId"?: ResourceIdType;
 }
 
 
@@ -489,12 +530,15 @@ export interface BroadcastViewType {
 // type: interface
 // name: CapabilityType
 export interface CapabilityType {
+  "mode": "Allow" | "Deny";
   "name":
     | "AddComment"
     | "ChangeHierarchy"
     | "ChangePermissions"
     | "Connect"
+    | "CreateRefreshMetrics"
     | "Delete"
+    | "RunExplainData"
     | "Execute"
     | "ExportData"
     | "ExportImage"
@@ -506,8 +550,9 @@ export interface CapabilityType {
     | "ViewComments"
     | "ViewUnderlyingData"
     | "WebAuthoring"
-    | "Write";
-  "mode": "Allow" | "Deny";
+    | "WebAuthoringForFlows"
+    | "Write"
+    | "SaveAs";
 }
 
 
@@ -515,35 +560,28 @@ export interface CapabilityType {
 // name: CollectionType
 export interface CollectionType {
   owner?: UserType;
+  "createdAt"?: string;
+  "description"?: string;
   "id"?: ResourceIdType;
   "name"?: string;
-  "createdAt"?: string;
-  "updatedAt"?: string;
-  "description"?: string;
   "permissionedItemCount"?: number;
   "totalItemCount"?: number;
+  "updatedAt"?: string;
   "visibility"?: string;
-}
-
-
-// type: interface
-// name: ColumnListType
-export interface ColumnListType {
-  column?: ColumnType | ColumnType[];
 }
 
 
 // type: interface
 // name: ColumnType
 export interface ColumnType {
+  id?: string;
+  name?: string;
+  description?: string;
+  remoteType?: string;
+  parentTableId?: string;
+  nullable?: boolean;
   site?: SiteType;
-  tags: TagListType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "description"?: string;
-  "remoteType"?: string;
-  "parentTableId"?: ResourceIdType;
-  "nullable"?: boolean | number;
+  tags?: TagListType;
 }
 
 
@@ -569,9 +607,9 @@ export interface ConnectedApplicationListType {
 // type: interface
 // name: ConnectedApplicationSecretType
 export interface ConnectedApplicationSecretType {
-  "value"?: string;
-  "id"?: ResourceIdType;
   "createdAt"?: string;
+  "id"?: ResourceIdType;
+  "value"?: string;
 }
 
 
@@ -579,12 +617,12 @@ export interface ConnectedApplicationSecretType {
 // name: ConnectedApplicationType
 export interface ConnectedApplicationType {
   secret?: ConnectedApplicationSecretType | ConnectedApplicationSecretType[];
-  "name"?: string;
-  "enabled"?: boolean | number;
   "clientId"?: ResourceIdType;
-  "projectId"?: ResourceIdType;
   "createdAt"?: string;
   "domainSafelist"?: string;
+  "enabled"?: boolean | number;
+  "name"?: string;
+  "projectId"?: ResourceIdType;
   "unrestrictedEmbedding"?: boolean | number;
 }
 
@@ -592,10 +630,10 @@ export interface ConnectedApplicationType {
 // type: interface
 // name: ConnectionCredentialsType
 export interface ConnectionCredentialsType {
+  "embed"?: string;
   "name"?: string;
+  "oAuth"?: string;
   "password"?: string;
-  "embed"?: boolean | number;
-  "oAuth"?: boolean | number;
 }
 
 
@@ -616,20 +654,27 @@ export interface ConnectionParamsForAnchorType {
 // type: interface
 // name: ConnectionType
 export interface ConnectionType {
-  datasource?: DataSourceType;
   connectionCredentials?: ConnectionCredentialsType;
-  "id"?: ResourceIdType;
-  "type"?: string;
+  datasource?: DataSourceType;
   "dbClass"?: string;
-  "scope"?: string;
+  "embedPassword"?: boolean | number;
   "filename"?: string;
   "googleSheetId"?: string;
-  "embedPassword"?: boolean | number;
+  "id"?: ResourceIdType;
+  "password"?: string;
+  "queryTaggingEnabled"?: boolean | number;
+  "scope"?: string;
   "serverAddress"?: string;
   "serverPort"?: number;
+  "type"?: string;
   "userName"?: string;
-  "queryTaggingEnabled"?: string;
-  "password"?: string;
+}
+
+
+// type: interface
+// name: ContentActionType
+export interface ContentActionType {
+  "action": "MoveDatabaseOnly" | "MoveDatabaseAndAllTables";
 }
 
 
@@ -641,25 +686,39 @@ export interface ContentListType {
 
 
 // type: interface
-// name: ContentLocationResponseType
-export interface ContentLocationResponseType {
-  locationMetadataResponse?: LocationMetadataResponseType | LocationMetadataResponseType[];
+// name: ContentLocationRequestType
+export interface ContentLocationRequestType {
+  location?: LocationType;
+  contentAction?: ContentActionType;
+  resourceList: ResourceList;
+}
+
+
+// type: interface
+// name: ContentsCountsType
+export interface ContentsCountsType {
+  "datasourceCount"?: number;
+  "projectCount"?: number;
+  "viewCount"?: number;
+  "workbookCount"?: number;
 }
 
 
 // type: interface
 // name: ContentTypeAndIdType
 export interface ContentTypeAndIdType {
-  "id"?: ResourceIdType;
   "contentType"?: string;
+  "id"?: ResourceIdType;
 }
 
 
 // type: interface
 // name: DataAccelerationInfoType
 export interface DataAccelerationInfoType {
-  "accelerationEnabled"?: boolean | number;
   "accelerateNow"?: boolean | number;
+  "accelerationEnabled"?: boolean | number;
+  "accelerationStatus"?: AccelerationStatusType;
+  "lastUpdatedAt"?: string;
 }
 
 
@@ -688,8 +747,8 @@ export interface DataAlertsRecipientListType {
 // name: DataAlertsRecipientType
 export interface DataAlertsRecipientType {
   "id"?: ResourceIdType;
-  "name"?: string;
   "lastSent"?: string;
+  "name"?: string;
 }
 
 
@@ -697,16 +756,25 @@ export interface DataAlertsRecipientType {
 // name: DataAlertType
 export interface DataAlertType {
   owner: UserType;
-  view: ViewType;
   recipients?: DataAlertsRecipientListType;
-  "id"?: ResourceIdType;
-  "subject"?: string;
-  "creatorId"?: ResourceIdType;
-  "createdAt"?: string;
-  "updatedAt"?: string;
-  "frequency"?: "AsFrequentlyAsPossible" | "Hourly" | "Daily" | "Weekly" | "Once";
+  view: ViewType;
   "alertCondition"?: string;
   "alertThreshold"?: string;
+  "createdAt"?: string;
+  "creatorId"?: ResourceIdType;
+  "frequency"?: "AsFrequentlyAsPossible" | "Daily" | "Hourly" | "Once" | "Weekly";
+  "id"?: ResourceIdType;
+  "public"?: boolean | number;
+  "subject"?: string;
+  "suspended"?: boolean | number;
+  "updatedAt"?: string;
+}
+
+
+// type: interface
+// name: DataAlertUpdateStatusListType
+export interface DataAlertUpdateStatusListType {
+  dataAlertUpdateStatus?: DataAlertUpdateStatusType | DataAlertUpdateStatusType[];
 }
 
 
@@ -714,9 +782,9 @@ export interface DataAlertType {
 // name: DatabaseAnchorRequestType
 export interface DatabaseAnchorRequestType {
   connectionParams: ConnectionParamsForAnchorType;
-  "isArchived"?: boolean | number;
   "datasourceFormattedName"?: string;
   "datasourceName"?: string;
+  "isArchived"?: boolean | number;
 }
 
 
@@ -737,60 +805,31 @@ export interface DatabaseAnchorResponseType {
 
 
 // type: interface
-// name: DatabaseGroupType
-export interface DatabaseGroupType {
-  database?: DatabaseIdType | DatabaseIdType[];
-  "metadataDatabaseId"?: ResourceIdType;
-}
-
-
-// type: interface
-// name: DatabaseIdListType
-export interface DatabaseIdListType {
-  database?: DatabaseIdType | DatabaseIdType[];
-}
-
-
-// type: interface
-// name: DatabaseIdType
-export interface DatabaseIdType {
-  "id"?: ResourceIdType;
-}
-
-
-// type: interface
-// name: DatabaseListType
-export interface DatabaseListType {
-  database?: DatabaseType | DatabaseType[];
-}
-
-
-// type: interface
 // name: DatabaseType
 export interface DatabaseType {
-  site?: SiteType;
-  contact: UserType;
   certifier: UserType;
-  tags: TagListType;
+  contact: UserType;
   location: LocationType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "connectionType"?: string;
-  "isEmbedded"?: boolean | number;
-  "description"?: string;
-  "isCertified"?: boolean | number;
+  site?: SiteType;
+  tags: TagListType;
   "certificationNote"?: string;
-  "type"?: DatabaseTypeType;
-  "hostName"?: string;
-  "port"?: number;
-  "filePath"?: string;
-  "provider"?: string;
-  "mimeType"?: string;
-  "fileId"?: string;
+  "connectionType"?: string;
   "connectorUrl"?: string;
-  "requestUrl"?: string;
-  "fileExtension"?: string;
   "contentPermissions"?: "LockedToDatabase" | "ManagedByOwner";
+  "description"?: string;
+  "fileExtension"?: string;
+  "fileId"?: string;
+  "filePath"?: string;
+  "hostName"?: string;
+  "id"?: ResourceIdType;
+  "isCertified"?: boolean | number;
+  "isEmbedded"?: boolean | number;
+  "mimeType"?: string;
+  "name"?: string;
+  "port"?: number;
+  "provider"?: string;
+  "requestUrl"?: string;
+  "type"?: DatabaseTypeType;
 }
 
 
@@ -804,18 +843,18 @@ export interface DataQualityIndicatorListType {
 // type: interface
 // name: DataQualityIndicatorType
 export interface DataQualityIndicatorType {
-  site?: SiteType;
   owner?: UserType;
-  "id"?: ResourceIdType;
-  "userDisplayName"?: string;
+  site?: SiteType;
+  "active"?: boolean | number;
   "contentId"?: ResourceIdType;
   "contentType"?: string;
+  "createdAt"?: string;
+  "elevated"?: boolean | number;
+  "id"?: ResourceIdType;
   "message"?: string;
   "type"?: string;
-  "active"?: boolean | number;
-  "elevated"?: boolean | number;
-  "createdAt"?: string;
   "updatedAt"?: string;
+  "userDisplayName"?: string;
 }
 
 
@@ -829,18 +868,18 @@ export interface DataQualityTriggerListType {
 // type: interface
 // name: DataQualityTriggerType
 export interface DataQualityTriggerType {
-  "id"?: ResourceIdType;
-  "siteId"?: ResourceIdType;
-  "userId"?: ResourceIdType;
-  "userDisplayName"?: string;
+  "active"?: boolean | number;
   "contentId"?: ResourceIdType;
   "contentType"?: string;
-  "message"?: string;
-  "type"?: string;
-  "active"?: boolean | number;
   "createdAt"?: string;
-  "updatedAt"?: string;
+  "id"?: ResourceIdType;
+  "message"?: string;
   "severe"?: boolean | number;
+  "siteId"?: ResourceIdType;
+  "type"?: string;
+  "updatedAt"?: string;
+  "userDisplayName"?: string;
+  "userId"?: ResourceIdType;
 }
 
 
@@ -854,33 +893,18 @@ export interface DataQualityWarningListType {
 // type: interface
 // name: DataQualityWarningType
 export interface DataQualityWarningType {
-  site?: SiteType;
   owner?: UserType;
-  "id"?: ResourceIdType;
-  "userDisplayName"?: string;
+  site?: SiteType;
   "contentId"?: ResourceIdType;
   "contentType"?: string;
+  "createdAt"?: string;
+  "id"?: ResourceIdType;
+  "isActive"?: boolean | number;
+  "isSevere"?: boolean | number;
   "message"?: string;
   "type"?: string;
-  "isActive"?: boolean | number;
-  "createdAt"?: string;
   "updatedAt"?: string;
-  "isSevere"?: boolean | number;
-}
-
-
-// type: interface
-// name: DataRoleType
-export interface DataRoleType {
-  site?: SiteType;
-  project?: ProjectType;
-  owner?: UserType;
-  name: string;
-  description?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  fieldConcept: FieldConceptType;
-  url: string;
+  "userDisplayName"?: string;
 }
 
 
@@ -888,14 +912,7 @@ export interface DataRoleType {
 // name: DataSourceListType
 export interface DataSourceListType {
   datasource?: DataSourceType | DataSourceType[];
-}
-
-
-// type: interface
-// name: DataSourcesListType
-export interface DataSourcesListType {
-  includeAll?: boolean;
-  datasources?: DataSourceType[];
+  "includeAll"?: boolean | number;
 }
 
 
@@ -903,46 +920,47 @@ export interface DataSourcesListType {
 // name: DataSourceType
 export interface DataSourceType {
   connectionCredentials?: ConnectionCredentialsType;
-  site?: SiteType;
-  project?: ProjectType;
   location?: LocationType;
   owner?: UserType;
+  project?: ProjectType;
+  site?: SiteType;
   tags?: TagListType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "contentUrl"?: string;
-  "webpageUrl"?: string;
-  "description"?: string;
-  "type"?: string;
-  "createdAt"?: string;
-  "updatedAt"?: string;
-  "isCertified"?: boolean | number;
   "certificationNote"?: string;
-  "serverName"?: string;
-  "databaseName"?: string;
-  "hasExtracts"?: boolean | number;
-  "hasAlert"?: boolean | number;
-  "size"?: number;
-  "isPublished"?: boolean | number;
   "connectedWorkbooksCount"?: number;
-  "favoritesTotal"?: number;
+  "contentUrl"?: string;
+  "createdAt"?: string;
+  "databaseName"?: string;
+  "description"?: string;
   "encryptExtracts"?: string;
+  "favoritesTotal"?: number;
+  "hasAlert"?: boolean | number;
+  "hasExtracts"?: boolean | number;
+  "id"?: ResourceIdType;
+  "isCertified"?: boolean | number;
+  "isPublished"?: boolean | number;
+  "name"?: string;
+  "parentType"?: "DataRole";
+  "serverName"?: string;
+  "size"?: number;
+  "type"?: string;
+  "updatedAt"?: string;
   "useRemoteQueryAgent"?: boolean | number;
+  "webpageUrl"?: string;
 }
 
 
 // type: interface
-// name: DataSourceValueStoreType
-export interface DataSourceValueStoreType {
-  datasourceID?: string;
-  fieldName?: string;
+// name: DataUpdateConstConditionType
+export interface DataUpdateConstConditionType {
+  type: "boolean" | "datetime" | "double" | "integer" | "string";
+  v: string;
 }
 
 
 // type: interface
 // name: DegradationListType
 export interface DegradationListType {
-  degradation?: DegradationType | DegradationType[];
+  downgradedFeature?: DegradationType | DegradationType[];
 }
 
 
@@ -955,64 +973,73 @@ export interface DegradationType {
 
 
 // type: interface
-// name: DistinctValueListType
-export interface DistinctValueListType {
-  distinctValue?: DistinctValueType | DistinctValueType[];
-}
-
-
-// type: interface
-// name: DistinctValueType
-export interface DistinctValueType {
-  value: SemanticsValueType;
-  frequency: number;
+// name: DomainDirectiveListType
+export interface DomainDirectiveListType {
+  domain?: DomainDirectiveType | DomainDirectiveType[];
 }
 
 
 // type: interface
 // name: DomainDirectiveType
 export interface DomainDirectiveType {
+  "id"?: string;
   "name": string;
-}
-
-
-// type: interface
-// name: DomainListType
-export interface DomainListType {
-  domainList?: DomainType[];
-}
-
-
-// type: interface
-// name: DomainType
-export interface DomainType {
-  id?: number;
-  name?: string;
-  shortName?: string;
-}
-
-
-// type: interface
-// name: DowngradedFeatureType
-export interface DowngradedFeatureType {
-  name?: string;
-  severity?: string;
-}
-
-
-// type: interface
-// name: DowngradeInfoListType
-export interface DowngradeInfoListType {
-  downgradeInfo?: DowngradedFeatureType[];
+  "shortName"?: string;
 }
 
 
 // type: interface
 // name: ErrorType
 export interface ErrorType {
-  summary: string;
+  callstack: string;
   detail: string;
+  summary: string;
   "code": number;
+}
+
+
+// type: interface
+// name: ExtensionsSafeListEntry
+export interface ExtensionsSafeListEntry {
+  fullDataAllowed: boolean | number;
+  promptNeeded: boolean | number;
+  url: string;
+  "locale"?: string;
+  "language"?: string;
+}
+
+
+// type: interface
+// name: ExtensionsServerSettingsType
+export interface ExtensionsServerSettingsType {
+  blockList?: unknown;
+  extensionsGloballyEnabled: boolean | number;
+}
+
+
+// type: interface
+// name: ExtensionsSiteSettingsType
+export interface ExtensionsSiteSettingsType {
+  safeList?: ExtensionsSafeListEntry | ExtensionsSafeListEntry[];
+  extensionsEnabled: boolean | number;
+  useDefaultSetting: boolean | number;
+}
+
+
+// type: interface
+// name: ExtensionUrlStatusType
+export interface ExtensionUrlStatusType {
+  "status"?: string;
+}
+
+
+// type: interface
+// name: ExtractCreationJobType
+export interface ExtractCreationJobType {
+  datasource: DataSourceType;
+  jobLuid: string;
+  notes: string;
+  workbook: WorkbookType;
 }
 
 
@@ -1041,64 +1068,17 @@ export interface FavoriteOrderingListType {
 // name: FavoriteOrderingType
 export interface FavoriteOrderingType {
   "favoriteId": ResourceIdType;
-  "favoriteType": FavoriteTypeType;
   "favoriteIdMoveAfter": ResourceIdType;
+  "favoriteType": FavoriteTypeType;
   "favoriteTypeMoveAfter": FavoriteTypeType;
-}
-
-
-// type: interface
-// name: FieldConceptType
-export interface FieldConceptType {
-  uri: string;
-  objectConceptURI: string;
-  names?: NameType | NameType[];
-  nameCharacteristics?: NameCharacteristicsType;
-  description?: string;
-  parentFieldConceptURI?: string;
-  dataTypes?: DataTypeType | DataTypeType[];
-  fieldRoles?: FieldRoleType | FieldRoleType[];
-  defaultFormats?: unknown;
-  valueCharacteristics?: ValueCharacteristicsType;
-  ownerID?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  valueSource?: ValueSourceType;
-}
-
-
-// type: interface
-// name: FieldMatchListType
-export interface FieldMatchListType {
-  fieldMatch?: FieldMatchType | FieldMatchType[];
-}
-
-
-// type: interface
-// name: FieldMatchType
-export interface FieldMatchType {
-  fieldConceptURI: string;
-  weight: number;
-  fieldConcept?: FieldConceptType;
-  valueMatches?: ValueMatchType | ValueMatchType[];
-}
-
-
-// type: interface
-// name: FieldType
-export interface FieldType {
-  sampleValues?: DistinctValueType | DistinctValueType[];
-  dataType?: DataTypeType;
-  fieldRole?: FieldRoleType;
-  name?: string;
 }
 
 
 // type: interface
 // name: FileUploadType
 export interface FileUploadType {
+  "fileSize"?: string;
   "uploadSessionId": FileUploadSessionIdType;
-  "fileSize"?: number;
 }
 
 
@@ -1155,18 +1135,18 @@ export interface FlowParameterRunListType {
 // type: interface
 // name: FlowParameterRunType
 export interface FlowParameterRunType {
-  "parameterId"?: ResourceIdType;
-  "name"?: string;
   "description"?: string;
+  "name"?: string;
   "overrideValue"?: string;
+  "parameterId"?: ResourceIdType;
 }
 
 
 // type: interface
 // name: FlowParameterSpecType
 export interface FlowParameterSpecType {
-  "parameterId"?: ResourceIdType;
   "overrideValue"?: string;
+  "parameterId"?: ResourceIdType;
 }
 
 
@@ -1174,12 +1154,12 @@ export interface FlowParameterSpecType {
 // name: FlowParameterType
 export interface FlowParameterType {
   domain: FlowParameterDomainType;
-  "id"?: ResourceIdType;
-  "type"?: string;
-  "name"?: string;
   "description"?: string;
-  "value"?: string;
+  "id"?: ResourceIdType;
   "isRequired"?: boolean | number;
+  "name"?: string;
+  "type"?: string;
+  "value"?: string;
 }
 
 
@@ -1200,7 +1180,7 @@ export interface FlowRunSpecType {
     flowParameterSpec: FlowParameterSpecType | FlowParameterSpecType[];
   };
   "flowId"?: ResourceIdType;
-  "runMode"?: "incremental" | "full";
+  "runMode"?: "full" | "incremental";
 }
 
 
@@ -1208,31 +1188,31 @@ export interface FlowRunSpecType {
 // name: FlowRunType
 export interface FlowRunType {
   flowParameterRuns?: FlowParameterRunListType;
-  "id"?: ResourceIdType;
-  "flowId"?: string;
-  "status"?: "Pending" | "InProgress" | "Success" | "Failed" | "Cancelled";
-  "startedAt"?: string;
-  "completedAt"?: string;
-  "progress"?: number;
   "backgroundJobId"?: string;
+  "completedAt"?: string;
+  "flowId"?: string;
+  "id"?: ResourceIdType;
+  "progress"?: number;
+  "startedAt"?: string;
+  "status"?: "Cancelled" | "Failed" | "InProgress" | "Pending" | "Success";
 }
 
 
 // type: interface
 // name: FlowType
 export interface FlowType {
-  site?: SiteType;
-  project?: ProjectType;
   owner?: UserType;
-  tags?: TagListType;
   parameters?: FlowParameterListType;
+  project?: ProjectType;
+  site?: SiteType;
+  tags?: TagListType;
+  "createdAt"?: string;
+  "description"?: string;
+  "fileType"?: string;
   "id"?: ResourceIdType;
   "name"?: string;
-  "description"?: string;
-  "webpageUrl"?: string;
-  "fileType"?: string;
-  "createdAt"?: string;
   "updatedAt"?: string;
+  "webpageUrl"?: string;
 }
 
 
@@ -1240,10 +1220,10 @@ export interface FlowType {
 // name: FrequencyDetailsType
 export interface FrequencyDetailsType {
   intervals: {
-    interval: IntervalType | IntervalType[];
+    interval?: IntervalType | IntervalType[];
   };
-  "start": string;
   "end"?: string;
+  "start": string;
 }
 
 
@@ -1260,92 +1240,114 @@ export interface GroupType {
   domain?: DomainDirectiveType;
   import?: ImportDirectiveType;
   "id"?: ResourceIdType;
+  "minimumSiteRole"?: SiteRoleType;
   "name"?: string;
   "userCount"?: number;
-  "minimumSiteRole"?: SiteRoleType;
 }
 
 
 // type: interface
 // name: ImportDirectiveType
 export interface ImportDirectiveType {
-  "source": ImportSourceType;
   "domainName": string;
+  "grantLicenseMode": "onLogin" | "onSync";
   "siteRole": SiteRoleType;
-  "grantLicenseMode"?: "onSync" | "onLogin";
-}
-
-
-// type: interface
-// name: IndexingStatusType
-export interface IndexingStatusType {
-  indexingStatusCode: string;
-  indexingErrorCode: string;
-  indexedValueConceptVersion?: number;
+  "source": ImportSourceType;
 }
 
 
 // type: interface
 // name: IntervalType
 export interface IntervalType {
+  "hours"?: "1" | "12" | "2" | "4" | "6" | "8";
   "minutes"?: "15" | "30";
-  "hours"?: "1" | "2" | "4" | "6" | "8" | "12";
-  "weekDay"?: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
   "monthDay"?: "LastDay";
+  "weekDay"?: "Friday" | "Monday" | "Saturday" | "Sunday" | "Thursday" | "Tuesday" | "Wednesday";
 }
 
 
 // type: interface
 // name: JobType
 export interface JobType {
-  statusNotes?: StatusNoteListType;
+  extractCreationJob?: ExtractCreationJobType;
   extractRefreshJob?: ExtractRefreshJobType;
   runFlowJobType?: RunFlowJobType;
+  statusNotes?: StatusNoteListType;
+  subscriptionJobType?: SubscriptionJobType;
+  updateUploadedFileJob?: UpdateUploadedFileJobType;
+  "completedAt"?: string;
+  "createdAt"?: string;
+  "finishCode"?: number;
   "id"?: ResourceIdType;
   "mode"?: "Asynchronous";
-  "type"?: "GroupSync" | "RefreshExtract" | "PublishWorkbook" | "PublishDatasource" | "RunFlow";
   "progress"?: number;
-  "createdAt"?: string;
   "startedAt"?: string;
+  "type"?: "GroupSync" | "PublishDatasource" | "PublishWorkbook" | "RefreshExtract" | "RunFlow";
   "updatedAt"?: string;
-  "completedAt"?: string;
-  "finishCode"?: number;
+}
+
+
+// type: interface
+// name: LabelType
+export interface LabelType {
+  userDisplayName?: string;
+  contentId?: string;
+  contentType?: string;
+  message?: string;
+  value?: string;
+  category?: string;
+  active?: boolean;
+  elevated?: boolean;
+  createdAt?: boolean;
+  updatedAt?: string;
+  site?: SiteType;
+  owner?: UserType;
 }
 
 
 // type: interface
 // name: LinkedTaskJobType
 export interface LinkedTaskJobType {
+  "createdAt"?: string;
+  "endedAt"?: string;
   "id"?: ResourceIdType;
   "linkedTaskId"?: ResourceIdType;
-  "status"?: "Pending" | "InProgress" | "Success" | "Failed" | "Cancelled";
-  "createdAt"?: string;
   "startedAt"?: string;
-  "endedAt"?: string;
+  "status"?: "Cancelled" | "Failed" | "InProgress" | "Pending" | "Success";
 }
 
 
 // type: interface
-// name: ListFieldConceptsType
-export interface ListFieldConceptsType {
-  fieldConcepts?: FieldConceptType | FieldConceptType[];
-  nextPageToken: string;
+// name: LinkedTaskListType
+export interface LinkedTaskListType {
+  linkedTasks?: LinkedTaskType | LinkedTaskType[];
 }
 
 
 // type: interface
-// name: ListValueConceptsType
-export interface ListValueConceptsType {
-  valueConcepts?: ValueConceptType | ValueConceptType[];
-  nextPageToken?: string;
+// name: LinkedTaskStepListType
+export interface LinkedTaskStepListType {
+  linkedTaskSteps?: LinkedTaskStepType | LinkedTaskStepType[];
 }
 
 
 // type: interface
-// name: LocationMetadataResponseType
-export interface LocationMetadataResponseType {
-  resource: WarningType;
-  location: LocationType;
+// name: LinkedTaskStepType
+export interface LinkedTaskStepType {
+  task: TaskType;
+  "id"?: ResourceIdType;
+  "stepNumber"?: number;
+  "stopDownstreamTasksOnFailure"?: boolean | number;
+}
+
+
+// type: interface
+// name: LinkedTaskType
+export interface LinkedTaskType {
+  linkedTaskSteps: LinkedTaskStepListType;
+  schedule?: ScheduleType;
+  "id"?: ResourceIdType;
+  "numSteps"?: number;
 }
 
 
@@ -1353,16 +1355,8 @@ export interface LocationMetadataResponseType {
 // name: LocationType
 export interface LocationType {
   "id"?: ResourceIdType;
-  "type"?: "Project" | "PersonalSpace";
   "name"?: string;
-}
-
-
-// type: interface
-// name: MatchValuesResultType
-export interface MatchValuesResultType {
-  averageMatchWeight?: number;
-  valueMatches?: ValueMatchType | ValueMatchType[];
+  "type"?: "PersonalSpace" | "Project";
 }
 
 
@@ -1376,51 +1370,44 @@ export interface MetricListType {
 // type: interface
 // name: MetricType
 export interface MetricType {
-  site?: SiteType;
-  project?: ProjectType;
   owner?: UserType;
+  project?: ProjectType;
+  site?: SiteType;
   tags?: TagListType;
   underlyingView?: ViewType;
+  "createdAt"?: string;
+  "description"?: string;
   "id"?: ResourceIdType;
   "name"?: string;
-  "description"?: string;
-  "webpageUrl"?: string;
-  "createdAt"?: string;
-  "updatedAt"?: string;
   "suspended"?: boolean | number;
+  "updatedAt"?: string;
+  "webpageUrl"?: string;
 }
 
 
 // type: interface
 // name: MobileSecuritySettingsListType
 export interface MobileSecuritySettingsListType {
-  mobileSecuritySettings?: PolicyType | PolicyType[];
+  mobileSecuritySettings?: MobileSecuritySettingsPolicyType | MobileSecuritySettingsPolicyType[];
 }
 
 
 // type: interface
-// name: NameType
-export interface NameType {
-  locale?: string;
-  name?: string;
-  weight?: number;
-  isPrimary?: boolean | number;
-}
-
-
-// type: interface
-// name: NoLocationType
-export interface NoLocationType {
-  [k: string]: unknown;
+// name: MobileSecuritySettingsPolicyType
+export interface MobileSecuritySettingsPolicyType {
+  androidConfig: PolicyType;
+  iosConfig: PolicyType;
+  "enabled": boolean | number;
+  "name": string;
 }
 
 
 // type: interface
 // name: NotificationPreferenceUpdateStatusType
 export interface NotificationPreferenceUpdateStatusType {
-  status: "Success" | "Failed";
-  userNotificationsPreference: UserNotificationsPreferenceType;
   error?: ErrorType;
+  status: "Failed" | "Success";
+  userNotificationsPreference: UserNotificationsPreferenceType;
 }
 
 
@@ -1429,14 +1416,6 @@ export interface NotificationPreferenceUpdateStatusType {
 export interface NotificationsPreferenceUpdateStatusListType {
   notificationUpdateStatus?: NotificationPreferenceUpdateStatusType | NotificationPreferenceUpdateStatusType[];
 }
-
-
-// type: interface
-// name: NotificationUpdateResultType
-export interface NotificationUpdateResultType {
-  [k: string]: unknown;
-}
-
 
 
 // type: interface
@@ -1453,7 +1432,6 @@ export interface PaginationType {
 export interface ParentType {
   "id": ResourceIdType;
   "type": "Project";
-  "name"?: unknown;
 }
 
 
@@ -1469,9 +1447,7 @@ export interface PersonalSpaceType {
 // type: interface
 // name: PolicyType
 export interface PolicyType {
-  "name": string;
-  "enabled": boolean | number;
-  "value": string;
+  valueList: unknown;
   "severity": SeverityLevelType;
 }
 
@@ -1486,58 +1462,33 @@ export interface ProjectListType {
 // type: interface
 // name: ProjectType
 export interface ProjectType {
+  contentsCounts?: ContentsCountsType;
   owner?: UserType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "description"?: string;
-  "topLevelProject"?: boolean | number;
-  "parentProjectId"?: ResourceIdType;
+  "contentPermissions"?: "LockedToProject" | "LockedToProjectWithoutNested" | "ManagedByOwner";
   "controllingPermissionsProjectId"?: ResourceIdType;
   "createdAt"?: string;
-  "updatedAt"?: string;
+  "description"?: string;
   "favoritesTotal"?: number;
-  "contentPermissions"?: "LockedToProject" | "ManagedByOwner" | "LockedToProjectWithoutNested";
+  "id"?: ResourceIdType;
+  "name"?: string;
+  "parentProjectId"?: ResourceIdType;
+  "topLevelProject"?: boolean | number;
+  "updatedAt"?: string;
+  "writeable"?: boolean | number;
 }
 
 
 // type: interface
-// name: RecentlyViewedListType
-export interface RecentlyViewedListType {
-  recents?: RecentlyViewedType[];
-}
-
-
-// type: interface
-// name: RecentlyViewedType
-export interface RecentlyViewedType {
-  view?: ViewType;
-  workbook?: WorkbookType;
-}
-
-
-// type: interface
-// name: RecommendationDismissalType
-export interface RecommendationDismissalType {
-  view?: ViewType;
+// name: RecentListType
+export interface RecentListType {
+  recent?: RecentType | RecentType[];
 }
 
 
 // type: interface
 // name: RecommendationListType
 export interface RecommendationListType {
-  recommendations?: RecommendationType[];
-}
-
-
-// type: interface
-// name: RecommendationType
-export interface RecommendationType {
-  score?: number;
-  view?: ViewType;
-  similarUsersExplanation?: SimilarUsersExplanationType;
-  popularExplanation?: {
-    [k: string]: unknown;
-  };
+  recommendation?: RecommendationType | RecommendationType[];
 }
 
 
@@ -1559,10 +1510,10 @@ export interface RevisionListType {
 // name: RevisionType
 export interface RevisionType {
   publisher?: UserType;
-  "revisionNumber"?: number;
-  "publishedAt"?: string;
-  "deleted"?: boolean | number;
   "current"?: boolean | number;
+  "deleted"?: boolean | number;
+  "publishedAt"?: string;
+  "revisionNumber"?: number;
   "sizeInBytes"?: number;
 }
 
@@ -1570,9 +1521,24 @@ export interface RevisionType {
 // type: interface
 // name: RunFlowJobType
 export interface RunFlowJobType {
-  notes: string;
   flow: FlowType;
+  notes: string;
   "flowRunId"?: string;
+}
+
+
+// type: interface
+// name: SalesforceAppListType
+export interface SalesforceAppListType {
+  salesforceApp: SalesforceAppType | SalesforceAppType[];
+}
+
+
+// type: interface
+// name: SalesforceAppType
+export interface SalesforceAppType {
+  "id"?: string;
+  "name"?: string;
 }
 
 
@@ -1587,27 +1553,27 @@ export interface ScheduleListType {
 // name: ScheduleType
 export interface ScheduleType {
   frequencyDetails?: FrequencyDetailsType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "state"?: StateType;
-  "priority"?: number;
   "createdAt"?: string;
-  "updatedAt"?: string;
-  "type"?: "Extract" | "Subscription" | "ActiveDirectorySync" | "Flow" | "DataAcceleration";
-  "frequency"?: "Hourly" | "Daily" | "Weekly" | "Monthly";
-  "nextRunAt"?: string;
   "endScheduleAt"?: string;
   "executionOrder"?: "Parallel" | "Serial";
+  "frequency"?: "Daily" | "Hourly" | "Monthly" | "Weekly";
+  "id"?: ResourceIdType;
+  "name"?: string;
+  "nextRunAt"?: string;
+  "priority"?: number;
+  "state"?: string;
+  "type"?: "ActiveDirectorySync" | "DataAcceleration" | "Extract" | "Flow" | "Subscription";
+  "updatedAt"?: string;
 }
 
 
 // type: interface
 // name: ServerInfo
 export interface ServerInfo {
-  productVersion: ProductVersion;
-  prepConductorVersion: string;
-  restApiVersion: RestApiVersion;
   platform: string;
+  prepConductorVersion: string;
+  productVersion: ProductVersion;
+  restApiVersion: RestApiVersion;
   serverSettings: ServerSettings;
 }
 
@@ -1616,28 +1582,34 @@ export interface ServerInfo {
 // name: ServerSettings
 export interface ServerSettings {
   oAuthEnabled: boolean | number;
-  sheetImageMaxAgeFloor: number;
-  sheetImageMaxAgeCeiling: number;
   offlineInteractionSupportedPhase: number;
+  sheetImageMaxAgeCeiling: number;
+  sheetImageMaxAgeFloor: number;
+}
+
+
+// type: interface
+// name: SessionsType
+export interface SessionsType {
+  session?: SessionType | SessionType[];
 }
 
 
 // type: interface
 // name: SessionType
 export interface SessionType {
-  session?: {
-    site?: SiteType;
-    user?: UserType;
-    [k: string]: unknown;
-  };
+  site: SiteType;
+  user: UserType;
 }
 
 
 // type: interface
-// name: SimilarUsersExplanationType
-export interface SimilarUsersExplanationType {
-  users?: UserType[];
+// name: SiteEmbeddingSettingsType
+export interface SiteEmbeddingSettingsType {
+  unrestrictedEmbedding?: boolean;
+  allowList?: string;
 }
+
 
 
 // type: interface
@@ -1651,74 +1623,78 @@ export interface SiteListType {
 // name: SiteType
 export interface SiteType {
   usage?: {
-    "numUsers": number;
     "numCreators"?: number;
     "numExplorers"?: number;
+    "numUsers": number;
     "numViewers"?: number;
     "storage": number;
   };
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "contentUrl"?: string;
-  "adminMode"?: "ContentOnly" | "ContentAndUsers";
-  "userQuota"?: SiteQuotaType;
-  "storageQuota"?: SiteQuotaType;
-  "tierCreatorCapacity"?: SiteCapacityType;
-  "tierExplorerCapacity"?: SiteCapacityType;
-  "tierViewerCapacity"?: SiteCapacityType;
-  "disableSubscriptions"?: boolean | number;
-  "state"?: StateType;
-  "revisionHistoryEnabled"?: boolean | number;
-  "revisionLimit"?: RevisionLimitType;
-  "subscribeOthersEnabled"?: boolean | number;
+  "adminInsightsPublishFrequency"?: number;
+  "adminMode"?: "ContentAndUsers" | "ContentOnly";
   "allowSubscriptionAttachments"?: boolean | number;
-  "guestAccessEnabled"?: boolean | number;
+  "askDataMode"?: "DisabledAlways" | "DisabledByDefault";
+  "authoringEnabled"?: boolean | number;
+  "autoSuspendRefreshEnabled"?: boolean | number;
+  "autoSuspendRefreshInactivityWindow"?: number;
   "cacheWarmupEnabled"?: boolean | number;
-  "dataAlertsEnabled"?: boolean | number;
+  "catalogObfuscationEnabled"?: boolean | number;
+  "catalogingEnabled"?: boolean | number;
   "commentingEnabled"?: boolean | number;
   "commentingMentionsEnabled"?: boolean | number;
-  "cacheeWarmupThreshold"?: number;
-  "flowsEnabled"?: boolean | number;
+  "contentUrl"?: string;
+  "customSubscriptionEmail"?: string;
+  "customSubscriptionEmailEnabled"?: boolean | number;
+  "customSubscriptionFooter"?: string;
+  "customSubscriptionFooterEnabled"?: boolean | number;
+  "dataAccelerationMode"?: string;
+  "dataAlertsEnabled"?: boolean | number;
+  "derivedPermissionsEnabled"?: boolean | number;
+  "disableSubscriptions"?: boolean | number;
+  "dqwSubscriptionsEnabled"?: boolean | number;
   "editingFlowsEnabled"?: boolean | number;
-  "schedulingFlowsEnabled"?: boolean | number;
   "einsteinInFlowEnabled"?: boolean | number;
   "explainDataEnabled"?: boolean | number;
   "extractEncryptionMode"?: string;
-  "dataAccelerationMode"?: string;
-  "mobileBiometricsEnabled"?: boolean | number;
-  "sheetImageEnabled"?: boolean | number;
-  "catalogingEnabled"?: boolean | number;
-  "derivedPermissionsEnabled"?: boolean | number;
-  "askDataMode"?: "EnabledByDefault" | "DisabledByDefault" | "DisabledAlways";
-  "authoringEnabled"?: boolean | number;
-  "customSubscriptionEmailEnabled"?: boolean | number;
-  "customSubscriptionEmail"?: string;
-  "customSubscriptionFooterEnabled"?: boolean | number;
-  "customSubscriptionFooter"?: string;
-  "userVisibilityMode"?: string;
-  "requestAccessEnabled"?: boolean | number;
-  "catalogObfuscationEnabled"?: boolean | number;
   "flowAutoSaveEnabled"?: boolean | number;
-  "webExtractionEnabled"?: boolean | number;
-  "runNowEnabled"?: boolean | number;
+  "flowOutputSubscriptionsDataAsEmailAttachmentEnabled"?: boolean | number;
+  "flowOutputSubscriptionsDataInEmailBodyEnabled"?: boolean | number;
+  "flowOutputSubscriptionsEnabled"?: boolean | number;
+  "flowParametersAnyTypeEnabled"?: boolean | number;
+  "flowParametersEnabled"?: boolean | number;
+  "flowsEnabled"?: boolean | number;
+  "guestAccessEnabled"?: boolean | number;
+  "id"?: ResourceIdType;
+  "linkedTaskRunNowEnabled"?: boolean | number;
+  "linkedTaskSchedulingEnabled"?: boolean | number;
+  "loginBasedLicenseManagementEnabled"?: boolean | number;
   "metricsContentTypeEnabled"?: boolean | number;
-  "tagLimit"?: number;
-  "webZoneContentEnabled"?: boolean | number;
-  "notifySiteAdminsOnThrottle"?: boolean | number;
+  "mobileBiometricsEnabled"?: boolean | number;
+  "name"?: string;
   "namedSharingEnabled"?: boolean | number;
-  "useDefaultTimeZone"?: boolean | number;
-  "timeZone"?: string;
-  "autoSuspendRefreshEnabled"?: boolean | number;
-  "autoSuspendRefreshInactivityWindow"?: number;
+  "notifySiteAdminsOnThrottle"?: boolean | number;
   "personalSpaceEnabled"?: boolean | number;
   "personalSpaceStorageQuota"?: string;
-  "flowOutputSubscriptionsEnabled"?: boolean | number;
-  "flowOutputSubscriptionsDataInEmailBodyEnabled"?: boolean | number;
-  "flowOutputSubscriptionsDataAsEmailAttachmentEnabled"?: boolean | number;
-  "dqwSubscriptionsEnabled"?: boolean | number;
-  "flowParametersEnabled"?: boolean | number;
-  "flowParametersAnyTypeEnabled"?: boolean | number;
-  "adminInsightsPublishFrequency"?: number;
+  "requestAccessEnabled"?: boolean | number;
+  "revisionHistoryEnabled"?: boolean | number;
+  "revisionLimit"?: RevisionLimitType;
+  "runNowEnabled"?: boolean | number;
+  "schedulingFlowsEnabled"?: boolean | number;
+  "selfServiceScheduleForRefreshEnabled"?: boolean | number;
+  "sheetImageEnabled"?: boolean | number;
+  "siteInviteEmailEnabled"?: boolean | number;
+  "state"?: string;
+  "storageQuota"?: string;
+  "subscribeOthersEnabled"?: boolean | number;
+  "tagLimit"?: number;
+  "tierCreatorCapacity"?: SiteCapacityType;
+  "tierExplorerCapacity"?: SiteCapacityType;
+  "tierViewerCapacity"?: SiteCapacityType;
+  "timeZone"?: string;
+  "useDefaultTimeZone"?: boolean | number;
+  "userQuota"?: string;
+  "userVisibilityMode"?: string;
+  "webExtractionEnabled"?: boolean | number;
+  "webZoneContentEnabled"?: boolean | number;
 }
 
 
@@ -1732,19 +1708,19 @@ export interface StatusNoteListType {
 // type: interface
 // name: StatusNoteType
 export interface StatusNoteType {
+  "text"?: string;
   "type":
     | "CountOfUsersAddedToGroup"
     | "CountOfUsersAddedToSite"
-    | "CountOfUsersWithInsufficientLicenses"
     | "CountOfUsersInActiveDirectoryGroup"
-    | "CountOfUsersProcessed"
-    | "CountOfUsersSkipped"
     | "CountOfUsersInformationUpdated"
-    | "CountOfUsersSiteRoleUpdated"
+    | "CountOfUsersProcessed"
     | "CountOfUsersRemovedFromGroup"
-    | "CountOfUsersUnlicensed";
+    | "CountOfUsersSiteRoleUpdated"
+    | "CountOfUsersSkipped"
+    | "CountOfUsersUnlicensed"
+    | "CountOfUsersWithInsufficientLicenses";
   "value"?: string;
-  "text"?: string;
 }
 
 
@@ -1752,8 +1728,18 @@ export interface StatusNoteType {
 // name: SubscriptionContentType
 export interface SubscriptionContentType {
   "id": ResourceIdType;
-  "type": "Workbook" | "View";
   "name"?: unknown;
+  "sendIfViewEmpty"?: boolean | number;
+  "type": "View" | "Workbook";
+}
+
+
+// type: interface
+// name: SubscriptionJobType
+export interface SubscriptionJobType {
+  notes: string;
+  subscriptionId: ResourceIdType;
+  subscriptionSubject: string;
 }
 
 
@@ -1770,10 +1756,15 @@ export interface SubscriptionType {
   content: SubscriptionContentType;
   schedule: ScheduleType;
   user: UserType;
-  "id"?: ResourceIdType;
-  "subject": string;
   "attachImage"?: boolean | number;
   "attachPdf"?: boolean | number;
+  "id"?: ResourceIdType;
+  "message"?: string;
+  "pageOrientation"?: string;
+  "pageSizeOption"?: string;
+  "refreshExtractTriggered"?: boolean | number;
+  "subject"?: string;
+  "suspended"?: boolean | number;
 }
 
 
@@ -1787,9 +1778,9 @@ export interface TableAnchorListType {
 // type: interface
 // name: TableAnchorType
 export interface TableAnchorType {
+  "fullName"?: string;
   "id"?: ResourceIdType;
   "name"?: string;
-  "fullName"?: string;
 }
 
 
@@ -1798,35 +1789,29 @@ export interface TableAnchorType {
 export interface TableauCredentialsType {
   site: SiteType;
   user?: UserType;
+  "estimatedTimeToExpiration"?: string;
   "name"?: string;
   "password"?: string;
-  "token"?: string;
   "personalAccessTokenName"?: string;
   "personalAccessTokenSecret"?: string;
-}
-
-
-// type: interface
-// name: TableListType
-export interface TableListType {
-  table?: TableType | TableType[];
+  "token"?: string;
 }
 
 
 // type: interface
 // name: TableType
 export interface TableType {
-  site?: SiteType;
-  contact: UserType;
   certifier: UserType;
-  tags: TagListType;
+  contact: UserType;
   location: LocationType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "description"?: string;
-  "isEmbedded"?: boolean | number;
-  "isCertified"?: boolean | number;
+  site?: SiteType;
+  tags: TagListType;
   "certificationNote"?: string;
+  "description"?: string;
+  "id"?: ResourceIdType;
+  "isCertified"?: boolean | number;
+  "isEmbedded"?: boolean | number;
+  "name"?: string;
   "schema"?: string;
 }
 
@@ -1834,8 +1819,8 @@ export interface TableType {
 // type: interface
 // name: TagBatchType
 export interface TagBatchType {
-  tags: TagListType;
   contents: ContentListType;
+  tags: TagListType;
 }
 
 
@@ -1863,20 +1848,22 @@ export interface TaskListType {
 // type: interface
 // name: TaskRunFlowType
 export interface TaskRunFlowType {
-  schedule?: ScheduleType;
   flow: FlowType;
   flowRunSpec: FlowRunSpecType;
+  schedule?: ScheduleType;
+  "consecutiveFailedCount"?: number;
   "id"?: string;
   "priority"?: number;
-  "consecutiveFailedCount"?: number;
   "type"?: string;
 }
 
 
 // type: interface
-// name: TextPatternType
-export interface TextPatternType {
-  regex?: unknown;
+// name: UpdateUploadedFileJobType
+export interface UpdateUploadedFileJobType {
+  connectionLuid: string;
+  datasource: DataSourceType;
+  notes: string;
 }
 
 
@@ -1898,9 +1885,9 @@ export interface UserNotificationsPreferenceListType {
 // name: UserNotificationsPreferenceType
 export interface UserNotificationsPreferenceType {
   "channel"?: string;
-  "notificationType"?: string;
-  "enabled"?: boolean | number;
   "disabledByOverride"?: boolean | number;
+  "enabled"?: boolean | number;
+  "notificationType"?: string;
 }
 
 
@@ -1908,48 +1895,21 @@ export interface UserNotificationsPreferenceType {
 // name: UserType
 export interface UserType {
   domain?: DomainDirectiveType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "fullName"?: string;
-  "email"?: string;
-  "password"?: string;
-  "siteRole"?: SiteRoleType;
   "authSetting"?: SiteUserAuthSettingType;
-  "lastLogin"?: string;
+  "contentAdmin"?: boolean | number;
+  "email"?: string;
   "externalAuthUserId"?: string;
-  "locale"?: string;
+  "fullName"?: string;
+  "id"?: ResourceIdType;
   "language"?: string;
-}
-
-
-// type: interface
-// name: ValueConceptCountType
-export interface ValueConceptCountType {
-  count: number;
-}
-
-
-// type: interface
-// name: ValueConceptType
-export interface ValueConceptType {
-  uri: string;
-  fieldConceptURI: string;
-  names?: NameType | NameType[];
-  nameCharacteristics?: NameCharacteristicsType;
-  description?: string;
-  parentValueConceptURI?: string;
-  value?: SemanticsValueType;
-}
-
-
-// type: interface
-// name: ValueMatchType
-export interface ValueMatchType {
-  value?: SemanticsValueType;
-  weight?: number;
-  valueConcept?: ValueConceptType;
-  valueConceptURI?: string;
-  fieldConceptURI?: string;
+  "lastLogin"?: string;
+  "locale"?: string;
+  "name"?: string;
+  "password"?: string;
+  "publish"?: boolean | number;
+  "role"?: LicensingRoleType;
+  "siteRole"?: SiteRoleType;
+  "suppressGettingStarted"?: boolean | number;
 }
 
 
@@ -1963,22 +1923,24 @@ export interface ViewListType {
 // type: interface
 // name: ViewType
 export interface ViewType {
-  workbook?: WorkbookType;
+  dataAccelerationConfig?: DataAccelerationInfoType;
+  location?: LocationType;
   owner?: UserType;
   project?: ProjectType;
   tags?: TagListType;
   usage?: {
     "totalViewCount": number;
   };
-  "id"?: ResourceIdType;
-  "name"?: string;
+  workbook?: WorkbookType;
   "contentUrl"?: string;
   "createdAt"?: string;
-  "updatedAt"?: string;
-  "sheetType"?: string;
   "favoritesTotal"?: number;
   "hidden"?: boolean | number;
+  "id"?: ResourceIdType;
+  "name"?: string;
   "recentlyViewed"?: boolean | number;
+  "sheetType"?: string;
+  "updatedAt"?: string;
   "viewUrlName"?: string;
 }
 
@@ -1993,9 +1955,9 @@ export interface WarningListType {
 // type: interface
 // name: WarningType
 export interface WarningType {
-  "message"?: string;
-  "id"?: string;
   "errorCode"?: string;
+  "id"?: string;
+  "message"?: string;
 }
 
 
@@ -2052,6 +2014,13 @@ export interface WebhookSourceEventDatasourceRefreshSucceededType {
 // type: interface
 // name: WebhookSourceEventDatasourceUpdatedType
 export interface WebhookSourceEventDatasourceUpdatedType {
+  [k: string]: unknown;
+}
+
+
+// type: interface
+// name: WebhookSourceEventFlowCompletedType
+export interface WebhookSourceEventFlowCompletedType {
   [k: string]: unknown;
 }
 
@@ -2117,16 +2086,16 @@ export interface WebhookTestResultType {
 // type: interface
 // name: WebhookType
 export interface WebhookType {
-  "webhook-source": WebhookSourceType;
+  owner: UserType;
   "webhook-destination": WebhookDestinationType;
-  owner?: UserType;
-  "id"?: ResourceIdType;
-  "name"?: string;
-  "event"?: string;
-  "enabled"?: boolean | number;
+  "webhook-source": WebhookSourceType;
   "createdAt"?: string;
-  "updatedAt"?: string;
+  "event"?: string;
+  "id"?: ResourceIdType;
+  "isEnabled"?: boolean | number;
+  "name"?: string;
   "statusChangeReason"?: string;
+  "updatedAt"?: string;
 }
 
 
@@ -2140,30 +2109,30 @@ export interface WorkbookListType {
 // type: interface
 // name: WorkbookType
 export interface WorkbookType {
-  connections?: ConnectionListType;
   connectionCredentials?: ConnectionCredentialsType;
-  site?: SiteType;
-  project?: ProjectType;
+  connections?: ConnectionListType;
+  dataAccelerationConfig?: DataAccelerationInfoType;
   location?: LocationType;
   owner?: UserType;
+  project?: ProjectType;
+  site?: SiteType;
   tags?: TagListType;
   views?: ViewListType;
-  dataAccelerationConfig?: DataAccelerationInfoType;
+  "contentUrl"?: string;
+  "createdAt"?: string;
+  "defaultViewId"?: ResourceIdType;
+  "description"?: string;
+  "encryptExtracts"?: string;
+  "hasExtracts"?: boolean | number;
   "id"?: ResourceIdType;
   "name"?: string;
-  "description"?: string;
-  "contentUrl"?: string;
-  "webpageUrl"?: string;
-  "showTabs"?: boolean | number;
-  "thumbnailsUserId"?: ResourceIdType;
-  "size"?: number;
-  "createdAt"?: string;
-  "updatedAt"?: string;
-  "sheetCount"?: number;
-  "hasExtracts"?: boolean | number;
-  "encryptExtracts"?: string;
   "recentlyViewed"?: boolean | number;
-  "defaultViewId"?: ResourceIdType;
+  "sheetCount"?: number;
+  "showTabs"?: string;
+  "size"?: number;
+  "thumbnailsUserId"?: ResourceIdType;
+  "updatedAt"?: string;
+  "webpageUrl"?: string;
 }
 
 
@@ -2210,13 +2179,13 @@ export interface SearchResultsRepresentationV2 {
 
 
 // type: type
-// name: BroadcastViewSendRequest
-export type BroadcastViewSendRequest = { broadcastViewSend : BroadcastViewSendType };
+// name: ActionsRequest
+export type ActionsRequest = { actions : DataUpdateActionListType };
 
 
 // type: type
-// name: ColumnRequest
-export type ColumnRequest = { column : ColumnType };
+// name: BroadcastViewSendRequest
+export type BroadcastViewSendRequest = { broadcastViewSend : BroadcastViewSendType };
 
 
 // type: type
@@ -2260,6 +2229,11 @@ export type DataAlertRequest = { dataAlert : DataAlertType };
 
 
 // type: type
+// name: DataAlertsRequest
+export type DataAlertsRequest = { dataAlerts : DataAlertListType };
+
+
+// type: type
 // name: DataQualityIndicatorRequest
 export type DataQualityIndicatorRequest = { dataQualityIndicator : DataQualityIndicatorType };
 
@@ -2275,11 +2249,6 @@ export type DataQualityWarningRequest = { dataQualityWarning : DataQualityWarnin
 
 
 // type: type
-// name: DataRoleRequest
-export type DataRoleRequest = { dataRole : DataRoleType };
-
-
-// type: type
 // name: DatabaseRequest
 export type DatabaseRequest = { database : DatabaseType };
 
@@ -2290,18 +2259,28 @@ export type DatabaseAnchorRequest = { databaseAnchor : DatabaseAnchorRequestType
 
 
 // type: type
-// name: DatabaseGroupRequest
-export type DatabaseGroupRequest = { databaseGroup : DatabaseGroupType };
-
-
-// type: type
 // name: DatasourceRequest
 export type DatasourceRequest = { datasource : DataSourceType };
 
 
 // type: type
-// name: DistinctValuesRequest
-export type DistinctValuesRequest = { distinctValues : DistinctValueListType };
+// name: DatasourcesRequest
+export type DatasourcesRequest = { datasources : DataSourceListType };
+
+
+// type: type
+// name: DomainRequest
+export type DomainRequest = { domain : DomainDirectiveType };
+
+
+// type: type
+// name: ExtensionsServerSettingsRequest
+export type ExtensionsServerSettingsRequest = { extensionsServerSettings : ExtensionsServerSettingsType };
+
+
+// type: type
+// name: ExtensionsSiteSettingsRequest
+export type ExtensionsSiteSettingsRequest = { extensionsSiteSettings : ExtensionsSiteSettingsType };
 
 
 // type: type
@@ -2315,16 +2294,6 @@ export type FavoriteOrderingsRequest = { favoriteOrderings : FavoriteOrderingLis
 
 
 // type: type
-// name: FieldRequest
-export type FieldRequest = { field : FieldType };
-
-
-// type: type
-// name: FieldConceptRequest
-export type FieldConceptRequest = { fieldConcept : FieldConceptType };
-
-
-// type: type
 // name: FlowRequest
 export type FlowRequest = { flow : FlowType };
 
@@ -2332,11 +2301,6 @@ export type FlowRequest = { flow : FlowType };
 // type: type
 // name: FlowRunSpecRequest
 export type FlowRunSpecRequest = { flowRunSpec : FlowRunSpecType };
-
-
-// type: type
-// name: FlowWarningsRequest
-export type FlowWarningsRequest = { flowWarnings : FlowWarningsListContainerType };
 
 
 // type: type
@@ -2365,6 +2329,11 @@ export type ProjectRequest = { project : ProjectType };
 
 
 // type: type
+// name: RecommendationDismissalRequest
+export type RecommendationDismissalRequest = { recommendationDismissal : RecommendationDismissalType };
+
+
+// type: type
 // name: ScheduleRequest
 export type ScheduleRequest = { schedule : ScheduleType };
 
@@ -2372,6 +2341,11 @@ export type ScheduleRequest = { schedule : ScheduleType };
 // type: type
 // name: SiteRequest
 export type SiteRequest = { site : SiteType };
+
+
+// type: type
+// name: SitesRequest
+export type SitesRequest = { sites : SiteListType };
 
 
 // type: type
@@ -2415,6 +2389,11 @@ export type UserNotificationsPreferencesRequest = { userNotificationsPreferences
 
 
 // type: type
+// name: ViewRequest
+export type ViewRequest = { view : ViewType };
+
+
+// type: type
 // name: WebhookRequest
 export type WebhookRequest = { webhook : WebhookType };
 
@@ -2425,23 +2404,18 @@ export type WorkbookRequest = { workbook : WorkbookType };
 
 
 // type: type
-// name: DomainRequest
-export type DomainRequest = { domain : DomainType };
+// name: ColumnRequest
+export type ColumnRequest = { column : ColumnListType };
 
 
 // type: type
-// name: RecommendationDismissalRequest
-export type RecommendationDismissalRequest = { recommendationDismissal : RecommendationDismissalType };
+// name: LabelRequest
+export type LabelRequest = { label : LabelType };
 
 
 // type: type
-// name: ActionsRequest
-export type ActionsRequest = { actions : ActionListType };
-
-
-// type: type
-// name: DatasourcesRequest
-export type DatasourcesRequest = { datasources : DataSourceListType };
+// name: UsersRequest
+export type UsersRequest = { users : UserListType };
 
 
 // type: type
@@ -2462,11 +2436,6 @@ export type BroadcastViewResponse = { broadcastView : BroadcastViewType };
 // type: type
 // name: BroadcastViewsResponse
 export type BroadcastViewsResponse = { broadcastViews : BroadcastViewListType };
-
-
-// type: type
-// name: ColumnResponse
-export type ColumnResponse = { column : ColumnType };
 
 
 // type: type
@@ -2507,6 +2476,11 @@ export type CredentialsResponse = { credentials : TableauCredentialsType };
 // type: type
 // name: DataAlertResponse
 export type DataAlertResponse = { dataAlert : DataAlertType };
+
+
+// type: type
+// name: DataAlertUpdateResultsResponse
+export type DataAlertUpdateResultsResponse = { dataAlertUpdateResults : DataAlertUpdateStatusListType };
 
 
 // type: type
@@ -2555,11 +2529,6 @@ export type DataQualityWarningListResponse = { dataQualityWarningList : DataQual
 
 
 // type: type
-// name: DataRoleResponse
-export type DataRoleResponse = { dataRole : DataRoleType };
-
-
-// type: type
 // name: DatabaseResponse
 export type DatabaseResponse = { database : DatabaseType };
 
@@ -2575,8 +2544,18 @@ export type DatasourceResponse = { datasource : DataSourceType };
 
 
 // type: type
-// name: DegradationsResponse
-export type DegradationsResponse = { degradations : DegradationListType };
+// name: DomainResponse
+export type DomainResponse = { domain : DomainDirectiveType };
+
+
+// type: type
+// name: DomainListResponse
+export type DomainListResponse = { domainList : DomainDirectiveListType };
+
+
+// type: type
+// name: DowngradeInfoResponse
+export type DowngradeInfoResponse = { downgradeInfo : DegradationListType };
 
 
 // type: type
@@ -2585,18 +2564,23 @@ export type ErrorResponse = { error : ErrorType };
 
 
 // type: type
+// name: ExtensionUrlStatusResponse
+export type ExtensionUrlStatusResponse = { extensionUrlStatus : ExtensionUrlStatusType };
+
+
+// type: type
+// name: ExtensionsServerSettingsResponse
+export type ExtensionsServerSettingsResponse = { extensionsServerSettings : ExtensionsServerSettingsType };
+
+
+// type: type
+// name: ExtensionsSiteSettingsResponse
+export type ExtensionsSiteSettingsResponse = { extensionsSiteSettings : ExtensionsSiteSettingsType };
+
+
+// type: type
 // name: FavoritesResponse
 export type FavoritesResponse = { favorites : FavoriteListType };
-
-
-// type: type
-// name: FieldConceptResponse
-export type FieldConceptResponse = { fieldConcept : FieldConceptType };
-
-
-// type: type
-// name: FieldMatchesResponse
-export type FieldMatchesResponse = { fieldMatches : FieldMatchListType };
 
 
 // type: type
@@ -2615,8 +2599,8 @@ export type FlowRunResponse = { flowRun : FlowRunType };
 
 
 // type: type
-// name: GetIndexingStatusResponse
-export type GetIndexingStatusResponse = { getIndexingStatus : IndexingStatusType };
+// name: FlowWarningsResponse
+export type FlowWarningsResponse = { flowWarnings : FlowWarningsListContainerType };
 
 
 // type: type
@@ -2630,18 +2614,13 @@ export type JobResponse = { job : JobType };
 
 
 // type: type
+// name: LinkedTaskResponse
+export type LinkedTaskResponse = { linkedTask : LinkedTaskType };
+
+
+// type: type
 // name: LinkedTaskJobResponse
 export type LinkedTaskJobResponse = { linkedTaskJob : LinkedTaskJobType };
-
-
-// type: type
-// name: ListFieldConceptsResponse
-export type ListFieldConceptsResponse = { listFieldConcepts : ListFieldConceptsType };
-
-
-// type: type
-// name: ListValueConceptsResponse
-export type ListValueConceptsResponse = { listValueConcepts : ListValueConceptsType };
 
 
 // type: type
@@ -2655,8 +2634,13 @@ export type MobileSecuritySettingsListResponse = { mobileSecuritySettingsList : 
 
 
 // type: type
-// name: NotificationUpdateStatusResponse
-export type NotificationUpdateStatusResponse = { notificationUpdateStatus : NotificationsPreferenceUpdateStatusListType };
+// name: NotificationPreferenceUpdateStatusResponse
+export type NotificationPreferenceUpdateStatusResponse = { notificationPreferenceUpdateStatus : NotificationPreferenceUpdateStatusType };
+
+
+// type: type
+// name: NotificationUpdateResultResponse
+export type NotificationUpdateResultResponse = { notificationUpdateResult : NotificationsPreferenceUpdateStatusListType };
 
 
 // type: type
@@ -2680,6 +2664,21 @@ export type ProjectResponse = { project : ProjectType };
 
 
 // type: type
+// name: RecentsResponse
+export type RecentsResponse = { recents : RecentListType };
+
+
+// type: type
+// name: RecommendationsResponse
+export type RecommendationsResponse = { recommendations : RecommendationListType };
+
+
+// type: type
+// name: SalesforceAppsResponse
+export type SalesforceAppsResponse = { salesforceApps : SalesforceAppListType };
+
+
+// type: type
 // name: ScheduleResponse
 export type ScheduleResponse = { schedule : ScheduleType };
 
@@ -2695,8 +2694,23 @@ export type ServerSettingsResponse = { serverSettings : ServerSettings };
 
 
 // type: type
+// name: SessionResponse
+export type SessionResponse = { session : SessionType };
+
+
+// type: type
+// name: SessionsResponse
+export type SessionsResponse = { sessions : SessionsType };
+
+
+// type: type
 // name: SiteResponse
 export type SiteResponse = { site : SiteType };
+
+
+// type: type
+// name: StatusResponse
+export type StatusResponse = { status : string };
 
 
 // type: type
@@ -2730,8 +2744,8 @@ export type TasksResponse = { tasks : TaskListType };
 
 
 // type: type
-// name: UngroupedDatabasesResponse
-export type UngroupedDatabasesResponse = { ungroupedDatabases : DatabaseIdListType };
+// name: UriResponse
+export type UriResponse = { uri : string };
 
 
 // type: type
@@ -2750,16 +2764,6 @@ export type UserNotificationsPreferencesResponse = { userNotificationsPreference
 
 
 // type: type
-// name: ValueConceptCountResponse
-export type ValueConceptCountResponse = { valueConceptCount : ValueConceptCountType };
-
-
-// type: type
-// name: ValueMatchesResponse
-export type ValueMatchesResponse = { valueMatches : MatchValuesResultType };
-
-
-// type: type
 // name: ViewResponse
 export type ViewResponse = { view : ViewType };
 
@@ -2767,11 +2771,6 @@ export type ViewResponse = { view : ViewType };
 // type: type
 // name: ViewsResponse
 export type ViewsResponse = { views : ViewListType };
-
-
-// type: type
-// name: WarningsResponse
-export type WarningsResponse = { warnings : WarningListType };
 
 
 // type: type
@@ -2795,53 +2794,23 @@ export type WorkbookResponse = { workbook : WorkbookType };
 
 
 // type: type
-// name: SessionResponse
-export type SessionResponse = { session : SessionType };
-
-
-// type: type
-// name: DomainListResponse
-export type DomainListResponse = { domainList : DomainListType };
-
-
-// type: type
-// name: DomainResponse
-export type DomainResponse = { domain : DomainType };
-
-
-// type: type
 // name: DataAccelerationReportResponse
 export type DataAccelerationReportResponse = { dataAccelerationReport : DataAccelerationReportType };
 
 
 // type: type
-// name: RecentsResponse
-export type RecentsResponse = { recents : RecentlyViewedListType };
+// name: ColumnResponse
+export type ColumnResponse = { column : ColumnListType };
 
 
 // type: type
-// name: RecommendationsResponse
-export type RecommendationsResponse = { recommendations : RecommendedViewListType };
+// name: LabelListResponse
+export type LabelListResponse = { labelList : LabelListType };
 
 
 // type: type
-// name: DowngradeInfoResponse
-export type DowngradeInfoResponse = { downgradeInfo : DowngradeInfoListType };
-
-
-// type: type
-// name: NotificationUpdateResultResponse
-export type NotificationUpdateResultResponse = { notificationUpdateResult : NotificationUpdateResultType };
-
-
-// type: type
-// name: ColumnsResponse
-export type ColumnsResponse = { pagination: PaginationType, columns : ColumnListType };
-
-
-// type: type
-// name: DatabasesResponse
-export type DatabasesResponse = { pagination: PaginationType, databases : DatabaseListType };
+// name: LabelResponse
+export type LabelResponse = { label : LabelType };
 
 
 // type: type
@@ -2875,6 +2844,11 @@ export type GroupsResponse = { pagination: PaginationType, groups : GroupListTyp
 
 
 // type: type
+// name: LinkedTasksResponse
+export type LinkedTasksResponse = { pagination: PaginationType, linkedTasks : LinkedTaskListType };
+
+
+// type: type
 // name: MetricsResponse
 export type MetricsResponse = { pagination: PaginationType, metrics : MetricListType };
 
@@ -2905,11 +2879,6 @@ export type SubscriptionsResponse = { pagination: PaginationType, subscriptions 
 
 
 // type: type
-// name: TablesResponse
-export type TablesResponse = { pagination: PaginationType, tables : TableListType };
-
-
-// type: type
 // name: UsersResponse
 export type UsersResponse = { pagination: PaginationType, users : UserListType };
 
@@ -2917,4 +2886,19 @@ export type UsersResponse = { pagination: PaginationType, users : UserListType }
 // type: type
 // name: WorkbooksResponse
 export type WorkbooksResponse = { pagination: PaginationType, workbooks : WorkbookListType };
+
+
+// type: type
+// name: ColumnsResponse
+export type ColumnsResponse = { pagination: PaginationType, columns : ColumnListType };
+
+
+// type: type
+// name: DatabasesResponse
+export type DatabasesResponse = { pagination: PaginationType, databases : DatabaseListType };
+
+
+// type: type
+// name: TablesResponse
+export type TablesResponse = { pagination: PaginationType, tables : TableListType };
 

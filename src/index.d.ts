@@ -4,3 +4,4 @@ export { TableauRestApiClient } from "./client-full";
 export { FilterExpression } from "./expressions";
 export { SortExpression } from "./expressions";
 export { FieldExpression } from "./expressions";
+export * from './types';
