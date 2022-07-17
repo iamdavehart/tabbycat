@@ -53,7 +53,7 @@ function generateTsDefsFromJson() {
         }).then((ts) => {
 
             const extractMap = (o) => {
-                const regex = /\s*(.+)\s*\:\s*(.+?)\;/
+                const regex = /\s*(.+?)\s*\?*\s*\:\s*(.+?)\;/
                 const emap = o.text
                     .split("\n")
                     .map(l => l.trim())
@@ -95,6 +95,8 @@ function generateTsDefsFromJson() {
                     }  
                 })
           }
+
+
             
             const typescriptOutput = processTypescript(ts);
             const processedOutput = typescriptOutput.filter(o => o.name !== "TableauSchema");
@@ -165,6 +167,22 @@ function generateTsDefsFromJson() {
                     }
                 }
             );
+
+            fs.writeFile(
+                "./generator/out/rest-api-types.d.ts",
+                ts,
+                {
+                    encoding: "utf8",
+                    flag: "w",
+                },
+                (err) => {
+                    if (err) console.log(err);
+                    else {
+                        console.log("rest-api-types.d.ts written successfully");
+                    }
+                }
+            );
+
         });
     } catch (ex) {
         throw ex;

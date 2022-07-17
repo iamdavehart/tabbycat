@@ -42,13 +42,12 @@
                 "requestBodyExpected": false
             },
             "deleteUsersFromSiteWithCsv": {
-                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--",
-                "requestBodyType": "file",
+                "requestBody": "--boundary-string Content-Disposition: form-data; name=\"tableau_user_delete\"; filename=\"users.csv\" Content-Type: text/csv --boundary-string--",
                 "requestContentType": "multipart/mixed"
             },
             "importUsersToSiteFromCsv": {
-                "requestBody": "--12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"request_payload\" Content-Type: text/xml --12f71d3d4ae441caa0b38a5d4e0bde5e Content-Disposition: name=\"tableau_file\"; filename=\"FILE-NAME\" Content-Type: application/octet-stream <content here, with line break before boundary delimiter>                 --12f71d3d4ae441caa0b38a5d4e0bde5e--",
-                "requestBodyType": "file",
+                "requestBody": "--boundary-string Content-Disposition: name=\"tableau_user_import\" Content-Type: file path_to_csv --boundary-string Content-Disposition: name=\"request_payload\" Content-Type: text/xml <tsRequest> <user name=\"user-name\" authSetting=\"auth-setting\" /><!--    more users    --></tsRequest>--boundary-string--",
+                "requestBodyType": "users",
                 "requestContentType": "multipart/mixed"
             },
             "updateWorkbookNow": { "requestBodyType": "empty" },
@@ -96,7 +95,9 @@
             "getFlowRunTasks1": { "methodName": "getLinkedTasks"},
             "embeddingSettingsForSite": { "methodName": "getEmbeddingSettingsForSite", "responseBodyType": "site" },
             "updateSite": { "methodName": "updateEmbeddingSettingsForSite" },
-            "updateSite1": { "methodName": "updateSite" }
+            "updateSite1": { "methodName": "updateSite" },
+            "getViewRecommendations": { "uri": "/api/${apiVersion}/sites/${siteId}/recommendations/?type=view" },
+            "unhideViewRecommendation": { "uri": "/api/${apiVersion}/sites/${siteId}/recommendations/dismissals/?type=view" }
         },
         "linkReplacements": {
             "#Decrypt_Extracts": "#decrypt_extracts",
@@ -110,7 +111,102 @@
             "#get_flow_run_tasks": [ "#get_flow_run_tasks", "#get_flow_run_tasks1" ],
             "#query_dqw_triggers": [ "#query_dqw_triggers", "#query_dqw_triggers1" ]
         },
+        "uriParamsReplacements": {
+            "#delete_extracts_from_workbook": [
+                { "name": "datasource-id", "action": "delete" },
+                { "name": "workbook-id", "desc": "The LUID of the workbook containing the extract to be deleted.", "type": "path", "paramType": "string", "qsKey": "" }
+            ],
+            "#add_flow_permissions": [
+                { "name": "datasource-id", "action": "delete" },
+                { "name": "flow-id", "desc": "The ID of the flow", "type": "path", "paramType": "string", "qsKey": "" }
+            ],
+            "#get_flow_runs": [
+                { "name": "filter-expression", "type":"query", "paramType":"string", "qsKey": "filter" }
+            ],
+            "#publish_flow": [
+                { "name": "overwrite-flag", "type":"query", "paramType":"boolean", "qsKey": "overwrite" },
+                { "name": "upload-session-id", "type": "query", "paramType": "string", "qsKey": "uploadSessionId" },
+                { "name": "flow-file-type", "type": "query", "paramType": "string", "qsKey": "flowFileType" }
+            ],
+            "#query_flows_for_site": [
+                { "name": "filter-expression", "type":"query", "paramType":"string", "qsKey": "filter" },
+                { "name": "sort-expression", "type":"query", "paramType":"string", "qsKey": "sort" },
+                { "name": "page-number", "type":"query", "paramType":"number", "qsKey": "pageNumber" },
+                { "name": "page-size", "type":"query", "paramType":"number", "qsKey": "pageSize" }
+            ],
+            "#query_jobs": [
+                { "name": "filter-expression", "type":"query", "paramType":"string", "qsKey": "filter" }
+            ],
+            "#update_flow": [
+                { "name": "task-id", "action": "delete" },
+                { "name": "flow-id", "desc": "The ID of the flow to update", "type": "path", "paramType": "string", "qsKey": "" }
+             ],
+             "#add_dqw_trigger": [
+                { "name": "content-luid", "action": "delete" },
+                { "name": "content-luid1", "action": "delete" },
+                { "name": "content-luid2", "action": "delete" },
+                { "name": "content-luid3", "action": "delete" }
+             ],
+             "#delete_dqw_triggers": [
+                { "name": "content-luid", "action": "delete" },
+                { "name": "content-luid1", "action": "delete" },
+                { "name": "content-luid2", "action": "delete" },
+                { "name": "content-luid3", "action": "delete" }
+             ],
+             "#query_dqw_triggers1": [
+                { "name": "content-type", "action": "delete" }
+             ],
+             "#delete_dqw_certifications": [
+                { "name": "indicator-id", "action": "delete" }
+             ],
+             "#delete_database_perms_default": [
+                { "name": "group-id", "action": "delete" },
+                { "name": "group-luid", "desc": "The LUID of the group to remove the default permission for", "type": "path", "paramType": "string" }
+             ],
+             "#delete_default_permission": [
+                { "name": "site-id", "action": "delete" },
+                { "name": "project-id", "action": "delete" },
+                { "name": "group-id", "action": "delete" },
+                { "name": "user-id", "action": "delete" },
+                { "name": "site-luid", "type": "path", "paramType": "string" },
+                { "name": "project-luid", "type": "path", "paramType": "string" },
+                { "name": "group-luid", "type": "path", "paramType": "string" },
+                { "name": "user-luid", "type": "path", "paramType": "string" }     
+             ],
+             "#remove_user_from_site": [
+                { "name": "mapAssetsTo", "action": "delete" }
+             ],
+             "#update_group": [
+                { "name":"AsJob-value", "type": "query", "qsKey": "asJob" }
+             ],
+             "#get_view_by_path": [
+                { "name": "view-name", "action": "delete" },
+                { "name": "filter-expression", "type": "query", "paramType": "string", "qsKey": "filter" }
+             ],
+             "#list_ask_data_lens_permissionss": [
+                { "name": "lens-luid", "type": "path" }
+             ],
+             "#query_view_data": [
+                { "name": "filter-value", "action": "delete" }
+             ],
+             "#query_view_image": [
+                { "name": "filter-value", "action": "delete" }
+             ],
+             "#query_view_pdf": [
+                { "name": "filter-value", "action": "delete" }
+             ]
+        },
         "pathReplacements": {
+            "#delete_extracts_from_workbook": [
+                {
+                    "type": "text",
+                    "value": "/workbookss/",
+                    "replacements": [{
+                        "type": "text",
+                        "value": "/workbooks/"
+                    }]
+                }
+            ],
             "#LensService_createLens": [{
                 "type": "text",
                 "value": "POST {server}/api/-/askdata/lenses/import",
@@ -445,77 +541,91 @@
             }
         },
         "requestMap": {
-            "domain": "DomainType",
-            "recommendationDismissal": "RecommendationDismissalType",
-            "actions": "ActionListType",
-            "datasources": "DataSourceListType"
+            "actions": "DataUpdateActionListType",
+            "column": "ColumnListType",
+            "label": "LabelType",
+            "users": "UserListType"
         },
         "responseMap": {
-            "session": "SessionType",
-            "domainList": "DomainListType",
-            "domain": "DomainType",
             "dataAccelerationReport": "DataAccelerationReportType",
-            "recents": "RecentlyViewedListType",
-            "recommendations": "RecommendedViewListType",
-            "downgradeInfo": "DowngradeInfoListType",
-            "notificationUpdateResult": "NotificationUpdateResultType"
+            "column": "ColumnListType",
+            "labelList": "LabelListType",
+            "label": "LabelType"
+        },
+        "paginatedResponseMap": {
+            "columns": "ColumnListType",
+            "databases": "DatabaseListType",
+            "tables": "TableListType"
         },
         "definitions": {
-            "domainType": {
+            "labelListType": {
+                "additionalProperties": false,
+                "oneOf":  [
+                    { "$ref": "#/definitions/labelType" },
+                    { "type": "array", "items": { "$ref": "#/definitions/labelType" }}
+                ]
+            },
+            "labelType": {
                 "additionalProperties": false,
                 "properties": {
-                    "id": { "type": "integer" },
+                    "userDisplayName": { "type": "string" },
+                    "contentId": { "type": "string" },
+                    "contentType": { "type": "string" },
+                    "message": { "type": "string" },
+                    "value": { "type": "string" },
+                    "category": { "type": "string" },
+                    "active": { "type": "boolean" },
+                    "elevated": { "type": "boolean" },
+                    "createdAt": { "type": "boolean" },
+                    "updatedAt": { "type": "string" },
+                    "site": { "$ref": "#/definitions/siteType" },
+                    "owner": { "$ref": "#/definitions/userType" }
+                }
+            },
+
+            "columnListType": {
+                "additionalProperties": false,
+                "oneOf":  [
+                    { "$ref": "#/definitions/columnType" },
+                    { "type": "array", "items": { "$ref": "#/definitions/columnType" }}
+                ]
+            },
+            "columnType": {
+                "additionalProperties": false,
+                "properties": {
+                    "id": { "type": "string" },
                     "name": { "type": "string" },
-                    "shortName": { "type": "string" }
+                    "description": { "type": "string" },
+                    "remoteType": { "type": "string" },
+                    "parentTableId": { "type": "string" },
+                    "nullable": { "type": "boolean" },
+                    "site": { "$ref": "#/definitions/siteType" },
+                    "tags": { "$ref": "#/definitions/tagListType" }
                 }
             },
-            "domainListType": {
+
+            "databaseListType": {
                 "additionalProperties": false,
-                "properties": {
-                    "domainList": { "type": "array", "items": { "$ref": "#/definitions/domainType" } }
-                }
+                "oneOf":  [
+                    { "$ref": "#/definitions/databaseType" },
+                    { "type": "array", "items": { "$ref": "#/definitions/databaseType" }}
+                ]
             },
-            "recommendationDismissalType": {
+
+            "tableListType": {
                 "additionalProperties": false,
-                "properties": {
-                    "view": { "$ref": "#/definitions/viewType" }
-                }
+                "oneOf":  [
+                    { "$ref": "#/definitions/tableType" },
+                    { "type": "array", "items": { "$ref": "#/definitions/tableType" }}
+                ]
             },
-            "actionType": {
+
+            "dataUpdateActionListType": {
                 "additionalProperties": false,
-                "properties": {
-                    "action": { "type": "string" },
-                    "source-schema": { "type": "string" },
-                    "source-table": { "type": "string" },
-                    "target-schema": { "type": "string" },
-                    "target-table": { "type": "string" },
-                    "condition": { "type": "string" }
-                }
-            },
-            "actionListType": {
-                "additionalProperties": false,
-                "properties": {
-                    "actions": { "type": "array", "items": { "$ref": "#/definitions/actionType" } }
-                }
-            },
-            "dataSourcesListType": {
-                "additionalProperties": false,
-                "properties": {
-                    "includeAll": { "type": "boolean" },
-                    "datasources": { "type": "array", "items": { "$ref": "#/definitions/dataSourceType" } }
-                }
-            },
-            "sessionType": {
-                "additionalProperties": false,
-                "properties": {
-                    "session": {
-                        "type": "object",
-                        "properties": {
-                            "site": { "$ref": "#/definitions/siteType" },
-                            "user": { "$ref": "#/definitions/userType" }
-                        }
-                    }
-                }
+                "oneOf":  [
+                    { "$ref": "#/definitions/dataUpdateActionType" },
+                    { "type": "array", "items": { "$ref": "#/definitions/dataUpdateActionType" }}
+                ]
             },
             "dataAccelerationReportType": {
                 "additionalProperties": false,
@@ -535,70 +645,6 @@
                     "averageUnAcceleratedPLT": { "type": "number" },
                     "acceleratedSessionCount": { "type": "number" },
                     "averageAcceleratedPLT": { "type": "number" }
-                }
-            },
-            "recentlyViewedListType": {
-                "additionalProperties": false,
-                "properties": {
-                    "recents": {
-                        "type": "array",
-                        "items": { "$ref": "#/definitions/recentlyViewedType" }
-                    }
-                }
-            },
-            "recentlyViewedType": {
-                "additionalProperties": false,
-                "properties": {
-                    "view": { "$ref": "#/definitions/viewType" },
-                    "workbook": { "$ref": "#/definitions/workbookType" }
-                }
-            },
-            "recommendationListType": {
-                "additionalProperties": false,
-                "properties": {
-                    "recommendations": {
-                        "type": "array",
-                        "items": { "$ref": "#/definitions/recommendationType" }
-                    }
-                }
-            },
-            "recommendationType": {
-                "additionalProperties": false,
-                "properties": {
-                    "score": { "type": "number" },
-                    "view": { "$ref": "#/definitions/viewType" },
-                    "similarUsersExplanation": { "$ref": "#/definitions/similarUsersExplanationType" },
-                    "popularExplanation": { "type": "object" }
-                }
-            },
-            "similarUsersExplanationType": {
-                "additionalProperties": false,
-                "properties": {
-                    "users": { 
-                        "type": "array",
-                        "items": { "$ref": "#/definitions/userType" }
-                    }
-                }
-            },
-            "downgradeInfoListType": {
-                "additionalProperties": false,
-                "properties": {
-                    "downgradeInfo": {
-                        "type": "array",
-                        "items": { "$ref": "#/definitions/downgradedFeatureType" }
-                    }
-                }
-            },
-            "downgradedFeatureType": { 
-                "additionalProperties": false,
-                "properties": {
-                    "name": { "type": "string" },
-                    "severity": { "type": "string" }
-                }
-            },
-            "notificationUpdateResultType": {
-                "additionalProperties": true,
-                "properties": {
                 }
             },
             "siteEmbeddingSettingsType": {

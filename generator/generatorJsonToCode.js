@@ -198,7 +198,7 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedJS}) {
 `
 +(m.requestContentType != "application/json" ? `            .withHeaders({"Content-Type":"${m.requestContentType}"})\n` : "")
 +(Object.keys(signatureParams.query).length ? `            .withQueryParameters(queryOptions)\n` : "")
-+(bodyParams.length > 0 ? bodyParams.map(bp => `            .withBodyParameters(${bp.name === "empty" ? "{}" : bp.name})\n`).join("") : "")
++(bodyParams.length > 0 ? bodyParams.filter(bp => bp.name !== "file").map(bp => `            .withBodyParameters(${bp.name === "empty" ? "{}" : bp.name})\n`).join("") : "")
 +(params.some((p) => p.name === "file" && p.type === "body") ? `            .withFileParameters({ name: "${fileParameterName}", file: file })\n` : "") 
 +(requestType !== "AuthenticationRequest" ? `            .withAuthenticationToken(token)\n` : "") + 
 `            .build()
@@ -274,14 +274,22 @@ export function ${m.extendedMethodName ?? m.methodName}(${signatureWrappedTS}) :
             const responses = _.uniq(methods.filter(m => !!m.responseTypeJS).map(m => m.responseTypeJS));
             const imports = _.uniq([ ...requests, ...responses ]).filter(a => a.toLowerCase() !== "empty");
 
+            // some methods are in multiple areas so we can reexport those
+            const exports = areas[a].filter(m => m.areas.indexOf(a) > 0).map(x => ({ name: x.extendedMethodName ?? x.methodName, area: camel(x.areas[0].replace(/\,/g, "")) }));
+            
+
             const area_name = camel(a.replace(/\,/g, ""));
-            const apiAreaText = headerText + FILE_PER_METHOD_HEADER + methods.map(m => m.unifiedCallJS).join("\n");
+            const apiAreaText = headerText + FILE_PER_METHOD_HEADER 
+                            // + exports.map(x => `export { ${x.name} } from "tabbycat/methods/__${x.area}";`).join("\n")
+                            + methods.map(m => m.unifiedCallJS).join("\n");
             utils.writeToFile(path.join(outMethodDirectory, `__${area_name}.js`), apiAreaText);
 
             const typesText = headerText 
             + `\nimport { ClientLite } from "tabbycat/client";\n`
             + imports.map(i => `import { ${i} } from "tabbycat/types";`).join("\n")
             + "\n\n"
+            // + exports.map(x => `export { ${x.name} } from "tabbycat/types/${x.area}";`).join("\n")
+            // + "\n\n"
             + methods.map(m => m.functionTS).join("\n");
             + "\n"
             utils.writeToFile(path.join(outMethodDirectory, `__${area_name}.d.ts`), typesText);

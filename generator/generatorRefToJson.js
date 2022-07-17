@@ -1,7 +1,7 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
 const utils = require("./utils");
-const { over, pick, values, isArray, isPlainObject, extend } = require("lodash");
+const { over, pick, values, isArray, isPlainObject, extend, remove } = require("lodash");
 const camel = utils.camel;
 const stripAllWhitespace = utils.stripAllWhitespace;
 
@@ -70,38 +70,59 @@ function generateReferenceIntermediate(config) {
                     let sections = $("h4", container).toArray();
                     sections.push(...container.filter("h4").toArray());
 
+
+
+
                     // uri
                     const uris = [];
                     const urls = [];
                     const uriNode = sections.find((s) => $(s).first().text() == "URI");
                     
+                    // find our path nodes
+                    // they are sometimes nested so start with a filter and 
+                    // if that doesn't work then find them as descendents
+                    let pathNodeContents = $(uriNode).nextUntil("h2,h4");
+                    let pathNodes = pathNodeContents.filter("p.api-syntax");
+                    if (pathNodes.length === 0) pathNodes = pathNodeContents.find("p.api-syntax");
+                    if (!uriNode && sections.length === 0) {
+                        pathNodes = container.filter("p.api-syntax");
+                    }
+
 
                     
-                    // usually the path node is immediately after the H4 URI
-                    // but occasionally there's a containing paragraph that we need to
-                    // process instead
-                    let pathNode = $(uriNode).next();
-                    // the uri node might not exist if there 
-                    // are no sections so we'll look for it in the container list
-                    if (!uriNode && sections.length === 0) {
-                        pathNode = container.filter("p.api-syntax").first();
-                    }
-                    if (!pathNode.hasClass("api-syntax")) {
-                        pathNode = pathNode.find(".api-syntax").first();
-                        if (pathNode.length === 0) {
-                            const searchPathNodes = $(uriNode).nextUntil("h4");
-                            pathNode = searchPathNodes.filter(".api-syntax").first();
-                        }
-                    }
 
-                    if (pathNode.length === 0) {
-                        console.log(`No path node found for ${m.name}`);
-                    }
+                    
+                    // // usually the path node is immediately after the H4 URI
+                    // // but occasionally there's a containing paragraph that we need to
+                    // // process instead
+                    // let pathNode = $(uriNode).next();
+                    // // the uri node might not exist if there 
+                    // // are no sections so we'll look for it in the container list
+                    // if (!uriNode && sections.length === 0) {
+                    //     pathNode = container.filter("p.api-syntax").first();
+                    // }
+                    // if (!pathNode.hasClass("api-syntax")) {
+                    //     pathNode = pathNode.find(".api-syntax").first();
+                    //     if (pathNode.length === 0) {
+                    //         const searchPathNodes = $(uriNode).nextUntil("h4");
+                    //         pathNode = searchPathNodes.filter(".api-syntax").first();
+                    //     }
+                    // }
+
+                    // if (pathNode.length === 0) {
+                    //     console.log(`No path node found for ${m.name}`);
+                    // }
+
+                    if (m.link === "#publish_flow")
+                        console.log("publish flow");
 
                     // now we will keep going to find all URI path examples
                     // to make sure that we have go the proper querystring parameters
                     // out of the documentation
-                    while (pathNode.length > 0) {
+                    // while (pathNode.length > 0) {
+                    pathNodes.each((pathNodeIndex, pathNodeEl) => {
+
+                        let pathNode = $(pathNodeEl);
                         let queryString = false;
                         let urlText = pathNode.text().trim();
                         let urlQS =
@@ -142,6 +163,24 @@ function generateReferenceIntermediate(config) {
                                 };
                             })
                             .toArray();
+
+                        // the path contents should have separated out all the url query strings 
+                        // but sometimes they haven't been marked up as placeholders correctly
+                        // we can use the urlQS parts to fill in query parts
+                        // const missingUrlQS = urlQS.filter(q => !pathContents.some(pc => pc.qsKey === q[0]))
+                        //                         .map(q => ({
+                        //                             value: q[1],
+                        //                             text: q[1],
+                        //                             type: "query",
+                        //                             name: q[1],
+                        //                             variable: camel(q[1]),
+                        //                             qsKey: q[0]
+                        //                         }));
+                        
+                        //                         if (missingUrlQS.length)
+                        //                         console.log(m.link, m.methodName, missingUrlQS.map(q => q.qsKey+"="+q.value));
+
+                        // pathContents.push(...missingUrlQS);
 
                         // there are a few exceptions so check our config for path replacements
                         // they are keyed on the link selector which was evaluated above
@@ -194,8 +233,10 @@ function generateReferenceIntermediate(config) {
                             uris.push(urlObj);
                         }
 
-                        pathNode = pathNode.next(".api-syntax");
-                    }
+                        // find our next api syntax.
+                        // pathNode = pathNode.next(".api-syntax");
+
+                    });
 
                     // uri parameters
                     const paramTypes = urls.reduce((a, u) => {
@@ -248,6 +289,8 @@ function generateReferenceIntermediate(config) {
                         }
                     });
 
+
+
                     // sometimes the uri parameters table is missing or incomplete
                     // or has typos in it so make sure that any we found in our list
                     // of parseing the URLs get included
@@ -267,9 +310,25 @@ function generateReferenceIntermediate(config) {
                             }
                         });
 
+                    // process any uriParam overrides from the config
+                    const uriParamOverride = config?.reference?.uriParamsReplacements ?? {};
+                    const uriParamOverrides = uriParamOverride[linkSelector] ?? [];
+                    uriParamOverrides.forEach(u => {
+                        const found = uriParams.find(up => up.name.toLowerCase() === u.name.toLowerCase());
+                        if (found) {
+                            Object.assign(found, u);
+                            if (u.action === "delete") remove(uriParams, up => up === found);
+                        } else {
+                            if (u.action !== "delete")
+                                uriParams.push({ ...u });
+                        }
+                    })
+
+
                     // request body
                     const bodyNode = sections.find(
                         (s) => $(s).first().text().indexOf("Request Body") > -1
+                                || $(s).first().text().indexOf("Request  Body") > -1
                     );
                     const requestBodyNone = stripAllWhitespace($(bodyNode).next().text()).trim().toLowerCase() === "none" || $(bodyNode).length === 0;
                     let bodies = $(bodyNode).next().find("code");
@@ -501,22 +560,19 @@ function generateReferenceIntermediate(config) {
                         areas: methodObj.tags,
                         originalUri: path,
                         uri: path.replace(/\{/g,"${"),
-                        uriParams: methodObj.parameters.filter(prm => prm.in === "path" || prm.in === "query").map(prm => ({ name: prm.name, desc: prm.description, type: prm.in, paramType: prm.schema?.type, qsKey: prm.in === "query" ? prm.name : "" })),
+                        uriParams: methodObj.parameters.filter(prm => prm.in === "path" || prm.in === "query").map(prm => ({ name: prm.name, desc: prm.description, type: prm.in, paramType: prm.schema?.type?.replace("integer","number"), qsKey: prm.in === "query" ? prm.name : "" })),
                         method: pathMethod.toUpperCase(),
                         requestBodyExpected: !!methodRequestType,
                         requestBody: "",
                         requestBodyNamespace: methodRequestType ? methodRequestType.substring(0, String(methodRequestType).lastIndexOf(".")) : "",
                         requestBodyType: methodRequestType ? methodRequestType.split(".").pop() : "",
                         requestContentType: methodRequestContentType,
-//                        requestAttributes: [],
                         responseBodyExpected: !!methodResponseType,
                         responseBody: "",
                         responseBodyNamespace: methodResponseType ? methodResponseType.substring(0, String(methodResponseType).lastIndexOf(".")) : "",
                         responseBodyType: methodResponseType ? methodResponseType.split(".").pop() : "",
                         responseContentType: methodResponseContentType,
                         responseCode: methodResponseCode,
-//                        responsePaginated: false,
- //                       errorCodes: [],
                         version: "2020.2"                         
                      })
                      swaggerIndex++;
